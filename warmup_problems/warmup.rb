@@ -6,6 +6,8 @@
 # roll_dice(3) => 15
 # roll_dice(3) => 11
 
+module WarmUp
+
 def roll_dice( dice = 1 )
   total = 0
   die = [ 1, 2, 3, 4, 5, 6 ]
@@ -129,3 +131,7 @@ def anagrams(word)
 
   results
 end
+
+end
+
+include WarmUp
