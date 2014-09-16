@@ -100,8 +100,8 @@ end
 
 
 # Returns an array of the anagrams of a single-word string.
-# anagrams("politics") => ["COLPITIS", "POLITICS", "PSILOTIC"]
-# anagrams("relief")  => ["FERLIE", "LIEFER", "REFILE", "RELIEF"]
+# anagrams("politics") => ["COLPITIS", "PSILOTIC"]
+# anagrams("relief")  => ["FERLIE", "LIEFER", "REFILE"]
 
 def anagrams(word)
   results = []
@@ -116,6 +116,8 @@ def anagrams(word)
 
 
   dictionary.each do |entry_word|
+    next if word.strip.upcase == entry_word.strip
+    next unless entry_word.length == word.length
 
     entry_letters = entry_word.strip.split(//)
     entry_frequency = Hash.new(0)
