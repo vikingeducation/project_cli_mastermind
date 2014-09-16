@@ -1,7 +1,11 @@
 # Your code here!
 
-#returns result of a random d6 dice roll with a specified 
-#number of dice. defaults to 1.
+# returns result of a random d6 roll. defaults to one die.
+# roll_dice => 2
+# roll_dice => 4
+# roll_dice(3) => 15
+# roll_dice(3) => 11
+
 def roll_dice( dice = 1 )
   total = 0
   die = [ 1, 2, 3, 4, 5, 6 ]
@@ -11,21 +15,50 @@ def roll_dice( dice = 1 )
   total
 end
 
-def dice_outcomes (dice, rolls)
+
+# returns a visual representation of the frequency results of
+# rolling a specified number of dice a specified number of times.
+
+# dice_outcomes(3, 128)
+# 3:
+# 4:###
+# 5:####
+# 6:##
+# 7:####
+# 8:#########
+# 9:#################
+# 10:#################
+# 11:##################
+# 12:######################
+# 13:#########
+# 14:#######
+# 15:########
+# 16:#####
+# 17:#
+# 18:##
+# => nil
+
+def dice_outcomes (dice, number_of_rolls)
 
   frequency = Hash.new(0)
 
-  rolls.times do
+  number_of_rolls.times do
     result = roll_dice(dice)
     frequency[result] += 1
   end
 
-  (1..18).each do |number|
+  (dice..dice * 6).each do |number|
     print "#{number}\:"
     puts "\#" * frequency[number]
   end
 
+  nil
 end
+
+# returns an array of Fibonacci numbers of digits length
+# fibonacci(1) => [1]
+# fibonacci(2) => [1, 1]
+# fibonacci(13) => [1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233]
 
 def fibonacci(digits)
   return 0 if digits < 1
@@ -38,6 +71,11 @@ def fibonacci(digits)
 
   sequence
 end
+
+# Given an array of stock prices on consecutive days,
+# returns an array of the best days to buy and sell
+
+# stock_picker([99, 3, 4, 45, 33, 43, 23, 80, 55, 66]) => [1, 7]
 
 def stock_picker(prices)
 
@@ -61,24 +99,30 @@ def stock_picker(prices)
 end
 
 
+# Returns an array of the anagrams of a single-word string.
+# anagrams("politics") => ["COLPITIS", "POLITICS", "PSILOTIC"]
+# anagrams("relief")  => ["FERLIE", "LIEFER", "REFILE", "RELIEF"]
 
-#NOT WORKING YET
 def anagrams(word)
   results = []
+  dictionary = []
 
-  dictionary = File.readlines("TWL06.txt") #load scrabble dictionary
-
-  letters = word.upcase.split
+  file = File.readlines("TWL06.txt")
+  file.each { |line| dictionary << line.strip }
 
   frequency = Hash.new(0)
+  letters = word.upcase.split(//)
   letters.each { |letter| frequency[letter] += 1 }
 
-  dictionary.each do |test_word|
-    test_letters = test_word.split
-    test_frequency = Hash.new(0)
-    test_letters.each { |test_letter| test_frequency[test_letter] +=1 }
 
-    results << test_word.chomp if test_frequency.values == frequency.values
+  dictionary.each do |entry_word|
+
+    entry_letters = entry_word.strip.split(//)
+    entry_frequency = Hash.new(0)
+    entry_letters.each { |entry_letter| entry_frequency[entry_letter] +=1 }
+
+    results << entry_word.chomp if entry_frequency == frequency
+
   end
 
   results
