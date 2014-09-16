@@ -47,3 +47,37 @@ def roll_dice(num)
 end
 
 dice_outcomes(3,100)
+
+
+#=========================================================================
+#Warmup #3: Fibonacci
+#Write a method fibonacci which outputs the Fibonacci Sequence
+#out to the specified number of digits. For example:
+#> fibonacci(7)
+#=> [1, 1, 2, 3, 5, 8, 11]
+
+def fib(num)
+    fibs=[1,1]
+    return 0 if num == 0
+    return 1 if num == 1
+    1.upto(num-2) do |i|
+        prev,curr = fibs[-2],fibs[-1]
+       fibs<<(prev+curr) 
+    end
+    fibs    
+end
+fib(7)
+
+
+
+#=========================================================================
+#Warmup #4: Stock Picker
+#Write a method stock_picker which takes an array
+#of stock prices (prices on days 0, 1, ...) and outputs 
+#the most profitable pair of days on which to first buy
+#the stock and then sell the stock, for example:
+#> stock_picker([44, 30, 24, 32, 35, 30, 40, 38, 15]) 
+#=> [2, 6]
+
+
+
