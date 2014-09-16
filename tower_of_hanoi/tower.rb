@@ -1,6 +1,8 @@
 #Control game play
 class Hanoi
   def initialize(height)
+    @turn_count=0
+    @height=height
     @board = Board.new(height)
     @player = Player.new(@board)
   end
@@ -8,16 +10,19 @@ class Hanoi
   def play
     loop do 
       @player.get_coordinates
-      puts @board[1]
-     # break if game_over?
+      @turn_count+=1
+      break if game_over?
     end
   end
   
   def game_over?
-  #  if ((@board[1].length == height-1) || (@board[2].length == height-1))
-     # puts "Game over! You win!"
-    #  true
-   # end
+    if ((@board.board[1].length == @height) || (@board.board[2].length == @height))
+      puts "###########"
+      puts "Game over! It took you #{@turn_count} turns."
+      puts "The optimum solution for this game was #{(2**@height)-1} turns."
+      @board.render
+      true
+    end
   end
 
 end
@@ -42,8 +47,9 @@ class Player
 
   def ask_for_coordinates
     puts "Enter your move in the format: start,stop (i.e. 1,3)"
-    gets.strip.split(',').map(&:to_i)
-
+    input=gets.strip
+    exit if input.downcase == 'q'
+    input.split(',').map(&:to_i)
   end
 
   def validate_coordinates?(coords)
@@ -58,6 +64,7 @@ end
 
 #Maintains game board state
 class Board
+  attr_reader :board, :turn_count
   def initialize(height)
       @height=height
       @board = [[],[],[]]
@@ -97,8 +104,22 @@ class Board
     end
   end
 end
-
-h=Hanoi.new(3)
+puts "###################################################"
+puts "Welcome to the Tower of Hanoi!"
+puts "There is a story about an Indian temple\
+ in Kashi Vishwanath which contains a large room\
+ with three time-worn posts in it surrounded by 64 golden disks.\
+ Brahmin priests, acting out the command of an ancient prophecy,\
+ have been moving these disks, in accordance with the\
+ immutable rules of the Brahma, since that time.\
+ According to the legend, when the last move \
+ of the puzzle is completed, the world will end."
+puts "\nWill YOU be the one to make the world end? Let's find out!"
+puts "\n(At any time you may press 'q' to quit)"
+puts "###################################################"
+puts "\nChoose the tower height:"
+height=gets.chomp.to_i
+h=Hanoi.new(height)
 h.play
 
 
