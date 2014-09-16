@@ -1,6 +1,6 @@
 ## Game Center Assignment
 
-This week, you'll be building Ruby games on the Command Line for Koding for Kids.  See the [Problem Descriptions](http://vikingcodeschool.com/week-2-ruby/ramping-up-with-oop) and the [Pivotal Tracker project](https://www.pivotaltracker.com/n/projects/1158262) for more details.
+This week, you'll be building Ruby games on the Command Line for Koding for Kids.  See the [Problem Descriptions](http://vikingcodeschool.com/week-2-ruby/assignment-ramping-up-with-oop) and the [Pivotal Tracker project](https://www.pivotaltracker.com/n/projects/1158262) for more details.
 
 As always, you will:
 
