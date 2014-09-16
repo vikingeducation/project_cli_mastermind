@@ -135,6 +135,7 @@ def anagrams(word)
       anagrams << i.chomp if word.chars.sort.join == i.chomp.chars.sort.join
     end
   end
+  anagrams.delete_if {|i| i == word} #don't show the original word per the specs
   p anagrams
 end
 def doQuestionFive
