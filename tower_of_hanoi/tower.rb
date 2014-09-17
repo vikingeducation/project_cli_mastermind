@@ -63,9 +63,10 @@ class Player
 
   def take_turn
 
-    until validate_move
+    loop do 
       @board.display
       get_move
+      break if validate_move
     end
     
     @board.make_move(@move) unless quit?
