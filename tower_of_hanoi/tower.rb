@@ -19,7 +19,6 @@ class Game
 
     loop do
       player.take_turn
-      p game_over?
       break if game_over?
     end
 
