@@ -62,7 +62,8 @@ class Player
   end
 
   def take_turn
-
+    @move = nil
+    
     loop do 
       @board.display
       get_move
