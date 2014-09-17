@@ -163,6 +163,7 @@ class Board
 
   private
 
+  # prints out the position of all disks at a certain height level
   def print_level(level)
     (0..2).each do |stack|
       if @stacks[stack][level]
@@ -170,27 +171,33 @@ class Board
       else
         print "".ljust(spacing)
       end
-      puts "\n"
     end
+      puts "\n"
   end
 
+  # prints out the labels at the bottom of the display
   def print_labels
     ("1".."3").each { |label| print label.ljust(spacing) }
     puts "\n"
   end
 
+  # convenience method for the widest disk in the current game
   def max_width
     @height
   end
 
+  # convenience method for the highest possible tower array index in the current game
   def tallest
     @height - 1
   end
 
+  # convenience method for the spacing between columns(between towers)
+  # easily adjustable!
   def spacing
-    max_width + 2
+    max_width + 4
   end
 
+  #builds the towers at beginning of game according to specified height
   def build(height)
     0.upto(height-1) do |level|
       @stacks[0] << disk_of_size(height-level)
@@ -198,6 +205,7 @@ class Board
     @stacks
   end
 
+  # convenience method to spit out ASCII representation of a disk of certain size
   def disk_of_size(size)
     "o" * size
   end
