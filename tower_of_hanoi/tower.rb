@@ -115,7 +115,9 @@ end
 class Board
 
   def initialize
-    @stacks = []
+    @stacks = [[],
+               [],
+               []]
     @height = nil
   end
 
