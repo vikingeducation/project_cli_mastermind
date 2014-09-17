@@ -1,7 +1,8 @@
 # Your code here!
 
-module TowerOfHanoi
+require 'yaml'
 
+module TowerOfHanoi
 
 
 # in charge of flow control through the turn structure
@@ -13,21 +14,37 @@ class Game
     @player = Player.new
   end
 
-  def play
-
+  def start
     player.welcome
-
-    loop do
-      player.take_turn
-      break if game_over?
-    end
-
+    load if player.chose_to_load?
+    
+    play
     player.goodbye
   end
 
   private
 
+  def play
+    loop do
+      player.take_turn
+      
+      save if player.chose_to_save?
+      break if game_over?
+    end
+  end
+
+  def save
+    File.open("game.sav", 'w') {|file| file.write(YAML::dump(self))}
+  end
+
+  def load
+    loaded = YAML::load(File.read("game.sv"))
+    puts "Savegame loaded!"
+    loaded.play
+  end
+
   def game_over?
+    return true if saving?
     return true if quit?
     return true if won?
     false
@@ -40,6 +57,10 @@ class Game
   def won?
     player.won?
   end
+  
+  def saving?
+    player.chose_to_save?
+  end
 
 
 end #class over
@@ -51,13 +72,15 @@ class Player
   def initialize
     @board = Board.new
     @move = nil
+    @load_choice = "n"
   end
 
   def welcome
+    puts "Welcome to TOWER OF HANOI!"
     choose_height
-    puts "Instructions:"
-    puts "Enter where you'd like to move from and to"
-    puts "in the format [1,3]. Enter 'q' to quit."
+    prompt_load
+
+    instructions
   end
 
   def take_turn
@@ -87,6 +110,27 @@ class Player
 
   private
   
+  def instructions
+    puts "Instructions:"
+    puts "Enter where you'd like to move from and to"
+    puts "in the format [1,3]. Enter 'q' to quit."
+    puts "Enter 's' at any time to save your game"
+    puts "and play later.\n\n"
+  end
+  
+  def prompt_load
+    puts "Would you like to load the previous saved game? (Y/N) "
+    @load_choice = gets.chomp.upcase
+  end
+  
+  def chose_to_save?
+    @move.upcase == "S"
+  end
+  
+  def chose_to_load?
+    @load_choice == "Y"
+  end
+  
   def choose_height
     puts "Choose the height of your tower (3-8): "
     height = gets.chomp.to_i
@@ -97,7 +141,7 @@ class Player
     print "Please input your move: "
     input = gets.chomp
 
-    @move = parse(input) unless @move == 'q'
+    @move = parse(input) unless @move =~ ([qQsS]) #look upon my Regex and despair
 
   end
 
