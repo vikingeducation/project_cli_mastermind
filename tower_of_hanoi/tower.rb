@@ -73,6 +73,7 @@ class Player
   end
 
   def goodbye
+    puts "Congratulations! You won!" if won?
     puts "Thanks for playing!"
   end
 
