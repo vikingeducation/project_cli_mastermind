@@ -160,6 +160,7 @@ class Board
       @stacks[stack].each_with_index do |disk, level|
         return false unless disk == disk_of_size(@height-level)
       end
+      return true
     end
     false
   end
