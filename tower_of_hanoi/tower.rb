@@ -96,7 +96,7 @@ class Player
     print "Please input your move: "
     input = gets.chomp
 
-    @move = parse(input)
+    @move = parse(input) unless @move == 'q'
 
   end
 
