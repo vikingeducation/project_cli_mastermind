@@ -125,7 +125,7 @@ class Board
 
   def height=(height)
     raise "The towers must be between 3 and 8 disks high." unless (3..8) === height
-    @height = height
+    raise "Height already set" if @height
     build(height)
   end
 
@@ -203,6 +203,7 @@ class Board
 
   #builds the towers at beginning of game according to specified height
   def build(height)
+    @height = height
     0.upto(height-1) do |level|
       @stacks[0] << disk_of_size(height-level)
     end
