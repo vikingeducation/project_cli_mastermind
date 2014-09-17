@@ -89,7 +89,7 @@ class Player
   
   def choose_height
     puts "Choose the height of your tower (3-8): "
-    height = gets.chomp.to-i
+    height = gets.chomp.to_i
     @board.height = height
   end
 
