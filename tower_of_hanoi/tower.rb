@@ -61,11 +61,6 @@ class Player
     puts "in the format [1,3]. Enter 'q' to quit."
   end
 
-  def choose_height
-    #puts "Choose the height of your tower (3-8): "
-    @board.height = 3 #gets.chomp
-  end
-
   def take_turn
 
     until validate_move
@@ -89,6 +84,12 @@ class Player
   end
 
   private
+  
+  def choose_height
+    puts "Choose the height of your tower (3-8): "
+    height = gets.chomp.to-i
+    @board.height = height
+  end
 
   def get_move
     print "Please input your move: "
@@ -114,11 +115,8 @@ end
 class Board
 
   def initialize
-    @stacks = [Array.new,
-               Array.new,
-               Array.new]
+    @stacks = []
     @height = nil
-    p @stacks
   end
 
   def height=(height)
@@ -197,15 +195,17 @@ class Board
     0.upto(height-1) do |level|
       @stacks[0] << disk_of_size(height-level)
     end
+    @stacks
   end
 
   def disk_of_size(size)
     "o" * size
   end
 
-end
+end #class Board
 
-end
+
+end #module
 
 include TowerOfHanoi
 
