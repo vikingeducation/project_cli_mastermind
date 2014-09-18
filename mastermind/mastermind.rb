@@ -3,24 +3,27 @@ class Mastermind
     codebreaker()
   end
 
-  def generate_code
-    (1..4).map { ('a'..'f').to_a[rand(6)] }
-  end
-
   def codebreaker(code=generate_code)
     @attempts = 0
+    @board = Board.new
     guess = []
+    @board.render
     while @attempts < 12 && guess != code
       guess = gets.chomp.downcase.split('')
-      guess_evaluation(code, guess) if guess.length == 4
+      accuracy = guess_evaluation(code, guess) if guess.length == 4
+      @board.render(guess, accuracy)
     end
+    @board.render(code, accuracy) if @attempts == 12
   end
 
   def guess_evaluation(code, guess)
     attempt = Attempt.new
     @attempts += 1
-    accuracy = attempt.check_accuracy(code, guess)
-    puts "#{accuracy["correct"]} correct and #{accuracy["close"]} letters in wrong position."
+    attempt.check_accuracy(code, guess)
+  end
+
+  def generate_code
+    (1..4).map { ('a'..'f').to_a[rand(6)] }
   end
 end
 
@@ -67,8 +70,54 @@ class Attempt
   end
 end
 
-class Player
+class Board
+  def initialize
+    @top_border = '-'
+    @side_border = '|'
+    @correct = '!'
+    @close = '+'
+    @guess_history = []
+    @feedback = []
+  end
 
+  def render(guess=[], accuracy={})
+    history_update(guess, accuracy)
+    puts @top_border*15
+    display_rows
+    puts @top_border*15
+    puts @side_border + ' ' + display_code_bar(accuracy) + ' '*8 + @side_border
+    puts @top_border*15
+  end
+
+  def display_rows
+    12.times do |x|
+      puts @side_border + ' ' + display(@guess_history[x]) + ' ' + @side_border + ' ' + display(@feedback[x]) + ' ' + @side_border
+    end
+  end
+
+  def display_code_bar(accuracy)
+    if accuracy['correct'] == 4 || @guess_history.length > 12
+      return @guess_history.last.join
+    else
+      return '****'
+    end
+  end
+
+  def history_update(guess, accuracy)
+    @guess_history << guess if guess[0]
+    if accuracy['correct']
+      correct, close = accuracy['correct'], accuracy['close']
+      @feedback << Array.new(correct, @correct) + Array.new(close, @close) + Array.new(4 - correct - close, ' ')
+    end
+  end
+
+  def display(sequence)
+    if sequence
+      return sequence.join
+    else
+      return '    '
+    end
+  end
 end
 
 game = Mastermind.new
