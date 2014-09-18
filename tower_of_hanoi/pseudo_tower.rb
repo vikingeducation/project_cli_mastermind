@@ -1,26 +1,7 @@
-class TowerOfHanoi
-	# initialize
-		# set up the towers
-		# set up the player
+class TowersOfHanoi
+	def initialize(tower_height=3)
+		@towers = Towers.new(tower_height)
 
-	# play
-		# loop infinitely
-			# call the board rendering method
-			# ask how the player would like to move
-			# break the loop if the game is over OR if user quits
-
-	# check_game_over
-		# check_victory
-		# check_player_quit
-
-	# check_victory
-		# IF board says player successfully assembled_stack && different_tower?
-			# display a victory message
-
-	# check_player_quit
-		# IF player enters 'q' instead of move
-			# end the game
-			# break the loop
 
 end
 
@@ -48,7 +29,10 @@ class Player
 end
 
 class Towers
-	# initialize towers
+	def initialize(tower_height)
+		@towers = Array.new(2) { Array.new(tower_height, 0) }
+		first_tower = (1..tower_height).to_a.reverse
+		@towers.unshift(first_tower)
 		# set up blank data structure
 
 	# render
@@ -76,7 +60,7 @@ class Towers
 end
 
 
-
+t = TowersOfHanoi.new
 
 
 
