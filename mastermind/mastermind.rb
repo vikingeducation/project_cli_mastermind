@@ -10,7 +10,7 @@ class Mastermind
    4.times do
        code << (rand(6).ceil + 65).chr
    end
-   @code=code.to_s
+   @code=code.join('').to_s
    @code
   end
 
@@ -25,21 +25,24 @@ class Mastermind
   def check_guess(guess)
     @guess=guess
     result=[]
-    guess.split('').each_with_index do |char,index|
-      if @code.include?(char)
-          if @code[index] == guess[index]
-              result << "R"
-          else
-              result << "W"
-          end
+    0.upto(3) do |i|
+      if guess[i] == @code[i]
+        result << 'R'
+      elsif @code.include? guess[i]
+        if (result.count('R') + result.count('W') < @code.count(@code[i]))
+          result << 'W' 
+        else
+          result << ' '
+        end
       end
-      @result=result.to_s
+    end
+    @result = result
   end
 
   def gen_output(result)
-    if result == "RRRR"
-        puts "You win!\nYou guessed the correct code, #{@code} in #{13-@turns_left} turns!\n"
-        @turns_left == 0
+    if result.join('').to_s == "RRRR"
+        puts "You win!\nYou guessed the correct code in #{13-@turns_left} turns!\n"
+        @turns_left = 1
     else
         puts "Guess: #{@guess}        Result: #{result}"
     end
@@ -47,11 +50,9 @@ class Mastermind
   end
 
 
-  end
-
   def game_over?
     if @turns_left == 0
-      puts "You lose :( The code was #{@code}."
+      puts "The code was #{@code}."
       true
     end
   end
@@ -75,16 +76,13 @@ class Player
   end
 
   def ask_for_guess(turns)
-    puts "You have #{turns} turns remaining! Enter your guess: "
+    puts "You have #{turns} turns remaining! Enter your guess: #{@code} "
     gets.chomp.upcase
   end
 
   def valid_guess?(guess)
     guess.length == 4
   end
-
-
-
 end
 
 m=Mastermind.new
