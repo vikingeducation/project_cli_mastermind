@@ -4,23 +4,24 @@ module Tetris
 
 class Game
   def initialize
-    player = Player.new
-    board = Board.new
+    @board = Board.new
+    @player = Player.new(board)
+
   end
 
   def start
-    player.welcome
+    @player.welcome
 
-    play
+    @play
   end
 
   def play
     loop do
-      board.render
+      @board.render
 
-      break if board.swamped?
+      break if @board.swamped?
 
-      player.move
+      @player.move
       
       #TODO: later, if realtime, consider waiting a period of time here?
     end
@@ -36,12 +37,18 @@ class Game
 end
 
 class Player
+  
+  def initialize(board)
+    @board = board
+  end
 
   def welcome
     puts "Welcome to M-TRIS, Michael Alexander's block-based puzzle game clone."
   end
 
   #prompt for move
+  def move
+  end
 
   #get high score
 
@@ -62,10 +69,6 @@ class Board
   # displaying the pieces
   
   def render
-    #move piece the direction indicated
-
-
-    
 
     display
 
@@ -80,17 +83,26 @@ class Board
 
   end
 
-
-  #displays the board right now with piece in right place
-  #displays only the bottom 20 rows of pieces because 
-  #the top two are meant to be hidden, like real 
-  def display
+  # game end condition. returns true if a full cell is ever found
+  # on the top visible row
+  def swamped?
+    (0..num_columns-1).each do |column|
+      return true if @cells[column][num_visible_rows - 1] == :full
+    end
+    false
   end
 
 
   private
+  
+  
 
-  # a board generates pieces at the top of the board.
+  # displays the board right now with piece in right place
+  # displays only the bottom 20 rows of pieces because 
+  # the top two are meant to be hidden, like real tetrises
+  def display
+    p @cells
+  end
   
   
  # gravity: for each cell including piece 
@@ -140,6 +152,7 @@ class Board
     @cells[column][row], @cells[column][row+1] == @cells[column][row+1], @cells[column][row]
   end
   
+  # create new single-block piece at top of board in a random row
   def new_piece
     column = rand(num_columns)
     
@@ -149,9 +162,18 @@ class Board
   def num_columns
     @cells.size
   end
-  
+
   def num_rows
     @cells[0].size
+  end
+  
+    
+  def num_visible_rows
+    @cells[0].size - 2
+  end
+  
+  def num_visible_columns
+    @cells.size - 2
   end
 
 end
