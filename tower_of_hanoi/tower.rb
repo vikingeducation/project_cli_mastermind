@@ -90,6 +90,7 @@ class Player
       @board.render
       get_move
       break if other_command? || validate_move
+      puts "Invalid move. Try again!"
     end
     
     @board.make_move(@move) unless other_command?
@@ -104,7 +105,7 @@ class Player
       puts "Congratulations! You won!" 
       @board.render
     end
-    
+
     puts "Thanks for playing!"
   end
 
@@ -207,12 +208,15 @@ class Board
     @stacks[finish].push(@stacks[start].pop)
   end
 
+  #checks if one of the other two poles are an ordered stack
   def victory?
     (1..2).each do |stack|
       next unless @stacks[stack].size == @height
+
       @stacks[stack].each_with_index do |disk, level|
         return false unless disk == disk_of_size(@height-level)
       end
+
       return true
     end
     false
