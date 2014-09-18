@@ -12,7 +12,7 @@ class Game
   def start
     @player.welcome
 
-    @play
+    play
   end
 
   def play
