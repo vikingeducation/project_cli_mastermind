@@ -4,13 +4,14 @@ class Mastermind
     if game_type == 1
       gen_code
       @player=Player.new(gen_code)
-
+      @code=gen_code
       play(game_type)
     else
       @player=Player.new(nil,2)
       @code=@player.get_code
       @ai=AI.new(@code)
       play(game_type)
+      @result=[]
     end
   end
   def gen_code
@@ -19,8 +20,7 @@ class Mastermind
    4.times do
        code << (rand(6).ceil + 65).chr
    end
-   @code=code.join('').to_s
-   @code
+   code.join('').to_s
   end
 
   def play(game_type)
@@ -28,13 +28,12 @@ class Mastermind
       loop do
         check_guess(@player.make_guess(@turns_left))
         gen_output(@result)
-        break if game_over?
+        exit if game_over?
       end
     else
       loop do
-        check_guess(@ai.make_guess(@turns_left))
-        gen_output(@result)
-        break if game_over?
+        gen_output(@ai.make_guess)
+        exit if game_over?
       end
     end
   end
@@ -76,16 +75,6 @@ class Mastermind
 
 end
 
-class AI
-  def initialize(code)
-    @code=code
-  end
-  def make_guess(result)
-    guess='AAAA'
-    puts "The AI guessed #{guess}.\n"
-    guess
-  end
 
-end
 
 
