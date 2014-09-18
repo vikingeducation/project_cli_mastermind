@@ -87,6 +87,7 @@ def stock_picker(prices)
 
     prices.each_with_index do |price_a, day_a|
       prices.each_with_index do |price_b, day_b|
+        
         current_return = price_b - price_a
 
         if day_b > day_a && current_return > max_return

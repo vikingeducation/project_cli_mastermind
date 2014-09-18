@@ -1,0 +1,11 @@
+--- !ruby/object:TowerOfHanoi::Game
+player: !ruby/object:TowerOfHanoi::Player
+  board: !ruby/object:TowerOfHanoi::Board
+    stacks:
+    - - ooo
+      - oo
+    - - o
+    - []
+    height: 3
+  move: s
+  load_choice: N

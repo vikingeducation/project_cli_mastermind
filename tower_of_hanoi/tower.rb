@@ -22,8 +22,6 @@ class Game
     player.goodbye
   end
 
-  private
-
   def play
     loop do
       player.take_turn
@@ -33,12 +31,14 @@ class Game
     end
   end
 
+  private
+
   def save
     File.open("game.sav", 'w') {|file| file.write(YAML::dump(self))}
   end
 
   def load
-    loaded = YAML::load(File.read("game.sv"))
+    loaded = YAML::load(File.read("game.sav"))
     puts "Savegame loaded!"
     loaded.play
   end
@@ -77,8 +77,8 @@ class Player
 
   def welcome
     puts "Welcome to TOWER OF HANOI!"
-    choose_height
     prompt_load
+    choose_height unless chose_to_load?
 
     instructions
   end
@@ -87,16 +87,24 @@ class Player
     @move = nil
     
     loop do 
-      @board.display
+      @board.render
       get_move
-      break if validate_move
+      break if other_command? || validate_move
     end
     
-    @board.make_move(@move) unless quit?
+    @board.make_move(@move) unless other_command?
+  end
+
+  def other_command?
+    quit? || chose_to_save?
   end
 
   def goodbye
-    puts "Congratulations! You won!" if won?
+    if won?
+      puts "Congratulations! You won!" 
+      @board.render
+    end
+    
     puts "Thanks for playing!"
   end
 
@@ -108,6 +116,19 @@ class Player
     @board.victory?
   end
 
+  def prompt_load
+    puts "Would you like to load the previous saved game? (Y/N) "
+    @load_choice = gets.chomp.upcase
+  end
+  
+  def chose_to_save?
+    @move == "S" || @move  == "s"
+  end
+  
+  def chose_to_load?
+    @load_choice == "Y" || @load_choice == "y"
+  end
+  
   private
   
   def instructions
@@ -118,18 +139,6 @@ class Player
     puts "and play later.\n\n"
   end
   
-  def prompt_load
-    puts "Would you like to load the previous saved game? (Y/N) "
-    @load_choice = gets.chomp.upcase
-  end
-  
-  def chose_to_save?
-    @move.upcase == "S"
-  end
-  
-  def chose_to_load?
-    @load_choice == "Y"
-  end
   
   def choose_height
     puts "Choose the height of your tower (3-8): "
@@ -139,10 +148,9 @@ class Player
 
   def get_move
     print "Please input your move: "
-    input = gets.chomp
+    @move = gets.chomp
 
-    @move = parse(input) unless @move =~ ([qQsS]) #look upon my Regex and despair
-
+    @move = parse(@move) unless ["s", "S", "q", "Q"].include? @move
   end
 
   def validate_move
@@ -173,7 +181,7 @@ class Board
     build(height)
   end
 
-  def display
+  def render
     puts "Current Board: \n\n"
     tallest.downto(0) { |level| print_level(level) }
     print_labels
@@ -188,7 +196,7 @@ class Board
 
 
     if @stacks[finish][-1]
-      return false unless @stacks[finish][-1].length < @stacks[start][-1].length
+      return false unless @stacks[finish][-1].length > @stacks[start][-1].length
     end
 
     true
@@ -224,7 +232,7 @@ class Board
       puts "\n"
   end
 
-  # prints out the labels at the bottom of the display
+  # prints out the labels at the bottom of the render
   def print_labels
     ("1".."3").each { |label| print label.ljust(spacing) }
     puts "\n"
@@ -268,4 +276,4 @@ end #module
 include TowerOfHanoi
 
 g = Game.new
-g.play
+g.start
