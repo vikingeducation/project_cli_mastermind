@@ -149,7 +149,7 @@ class Board
   
   #swaps a cell, specified by index, with the cell above it
   def swap_cells(column, row)
-    @cells[column][row], @cells[column][row+1] == @cells[column][row+1], @cells[column][row]
+    @cells[column][row], @cells[column][row+1] = @cells[column][row+1], @cells[column][row]
   end
   
   # create new single-block piece at top of board in a random row
