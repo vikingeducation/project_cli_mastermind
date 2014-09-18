@@ -1,8 +1,8 @@
-########HOW TO RUN######
-1) clone this repo
-2) Warmup problems: cd warmup_problems; ruby warmup.rb
-3) Tower of Hanoi: cd tower_of_hanoi; ruby play.rb
-4) Mastermind: cd mastermind; ruby play.rb
+##HOW TO RUN
+*1) clone this repo
+*2) Warmup problems: cd warmup_problems; ruby warmup.rb
+*3) Tower of Hanoi: cd tower_of_hanoi; ruby play.rb
+*4) Mastermind: cd mastermind; ruby play.rb
 
 
 ## Game Center Assignment
