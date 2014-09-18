@@ -1,3 +1,10 @@
+########HOW TO RUN######
+1) clone this repo
+2) Warmup problems: cd warmup_problems; ruby warmup.rb
+3) Tower of Hanoi: cd tower_of_hanoi; ruby play.rb
+4) Mastermind: cd mastermind; ruby play.rb
+
+
 ## Game Center Assignment
 
 This week, you'll be building Ruby games on the Command Line for Koding for Kids.  See the [Problem Descriptions](http://vikingcodeschool.com/week-2-ruby/ramping-up-with-oop) and the [Pivotal Tracker project](https://www.pivotaltracker.com/n/projects/1158262) for more details.
