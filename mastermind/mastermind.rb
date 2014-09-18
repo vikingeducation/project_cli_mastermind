@@ -1,8 +1,17 @@
 class Mastermind
-  def initialize
-    gen_code
-    @player=Player.new(gen_code)
+  def initialize(game_type)
     @turns_left=12
+    if game_type == 1
+      gen_code
+      @player=Player.new(gen_code)
+
+      play(game_type)
+    else
+      @player=Player.new(nil,2)
+      @code=@player.get_code
+      @ai=AI.new(@code)
+      play(game_type)
+    end
   end
   def gen_code
    #generate the random code to start the game
@@ -14,11 +23,19 @@ class Mastermind
    @code
   end
 
-  def play 
-    loop do
-      check_guess(@player.make_guess(@turns_left))
-      gen_output(@result)
-      break if game_over?
+  def play(game_type)
+    if game_type == 1
+      loop do
+        check_guess(@player.make_guess(@turns_left))
+        gen_output(@result)
+        break if game_over?
+      end
+    else
+      loop do
+        check_guess(@ai.make_guess(@turns_left))
+        gen_output(@result)
+        break if game_over?
+      end
     end
   end
 
@@ -59,31 +76,16 @@ class Mastermind
 
 end
 
-
-
-
-class Player
-
+class AI
   def initialize(code)
     @code=code
   end
-
-  def make_guess(turns)
-    loop do 
-      guess = ask_for_guess(turns)
-      return guess if valid_guess?(guess)
-    end
+  def make_guess(result)
+    guess='AAAA'
+    puts "The AI guessed #{guess}.\n"
+    guess
   end
 
-  def ask_for_guess(turns)
-    puts "You have #{turns} turns remaining! Enter your guess: #{@code} "
-    gets.chomp.upcase
-  end
-
-  def valid_guess?(guess)
-    guess.length == 4
-  end
 end
 
-m=Mastermind.new
-m.play
+

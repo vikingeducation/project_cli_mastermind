@@ -15,6 +15,8 @@ def roll(num=1)
   puts "You rolled #{num} dice. The total is: #{num*(1+rand(6))}" 
 end
 
+
+
 def doQuestionOne
   loop do
     puts "Type quit to exit.\nEnter the number of dice to roll: "
@@ -49,6 +51,10 @@ def roll_dice(num)
     total
 end
 
+
+
+
+
 def doQuestionTwo
   puts "Enter the number of dice to throw:"
   dice=gets.chomp
@@ -67,14 +73,18 @@ end
 
 def fib(num)
     fibs=[1,1]
-    return 0 if num == 0
-    return 1 if num == 1
+    return 0 if num == 0; return 1 if num == 1
     1.upto(num-2) do |i|
         prev,curr = fibs[-2],fibs[-1]
        fibs<<(prev+curr) 
     end
     p fibs    
 end
+
+
+
+
+
 def doQuestionThree
   puts "How many terms of the Fibonacci sequence do you want?"
   terms=gets.chomp
@@ -138,6 +148,8 @@ def anagrams(word)
   anagrams.delete_if {|i| i == word} #don't show the original word per the specs
   p anagrams
 end
+
+
 def doQuestionFive
   puts "Enter a word and this will show all anagrams:\n"
   word=gets.chomp
