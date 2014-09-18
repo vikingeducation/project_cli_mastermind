@@ -60,7 +60,7 @@ class Board
     #and at least 22 cells high, with the top two hidden
     #each cell can be FULL, SPACE or have a PIECE moving through it
   def initialize
-    @cells = Array.new(10) {Array.new(22, :space)
+    @cells = Array.new(10) { Array.new(22, :space) }
     new_piece
   end
   
@@ -117,7 +117,7 @@ class Board
         next if row_num == num_rows - 1 #skip top column
       
         if cell == :space
-          swap_cells(col_num)(row_num)
+          swap_cells(col_num, row_num)
         end
       
       end
