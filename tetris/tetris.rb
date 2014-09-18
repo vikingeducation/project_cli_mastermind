@@ -5,7 +5,7 @@ module Tetris
 class Game
   def initialize
     @board = Board.new
-    @player = Player.new(board)
+    @player = Player.new(@board)
 
   end
 
