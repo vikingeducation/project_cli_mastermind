@@ -46,6 +46,7 @@ def stock_picker(stock_prices)
   buy_day = 0
   sell_day = 0
   max_profit = 0 
+
   stock_prices.each_with_index do |buy, i|
     stock_prices[i+1..-1].each_with_index do |sell, j|
       if(sell - buy > max_profit)
@@ -64,9 +65,22 @@ p stock_picker([44, 30, 24, 32, 35, 30, 40, 38, 15])
 
 def anagrams(word)
 	scrabble_words = File.readlines("TWL06.txt")
-	puts scrabble_words
+	stripped_words = scrabble_words.map { |w| w.strip }
+
+	letters = word.upcase.split('')
+	
+	anagrams = []
+
+	stripped_words.each do |word|
+		scrab_letters = word.split('')
+		if letters.sort == scrab_letters.sort
+			anagrams << word
+		end
+	end
+
+	anagrams
 
 end
 
-anagrams("word")
+p anagrams("looter")
 
