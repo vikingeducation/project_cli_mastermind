@@ -135,6 +135,8 @@ class Board
       column.each_with_index do |cell, row_num|
         if row_num == 0 && cell == :piece
           cell = :full
+        elsif row_num == 0
+          next
         elsif cell == :piece && @cells[row_num-1][col_num] == :full
           cell = :full
         end
