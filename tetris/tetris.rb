@@ -114,18 +114,17 @@ class Board
   end
   
   
-  #if piece has landed on another piece
-  #freeze piece as FULL cell
+  #if piece has landed on a :full cell
+  #freeze piece as :full cell
   #create new piece way up high
   def check_landings
     
     @cells.each_with_index do |column, col_num|
       column.each_with_index do |cell, row_num|
-        
-        if row ==  #skip top column
-      
-        if cell == :space
-          swap_cells(column)(row)
+        if row_num == 0 && cell == :piece
+          cell = :full
+        elsif cell == :piece && @cells[row_num-1][col_num] == :full
+          cell = :full
         end
       
       end
@@ -142,7 +141,7 @@ class Board
   end
   
   def new_piece
-    column = rand(rows)
+    column = rand(num_columns)
     
     @cells[column][num_rows - 1] = :piece
   end
