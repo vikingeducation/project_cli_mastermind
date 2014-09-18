@@ -14,6 +14,9 @@ class Game
     get_code
     puts "The codemaker has just devised a secret code, 4 letters long, A-F. (Example: FBCA)."
     puts "Time to match wits against the machine!"
+    puts "R means you guessed the right letter in the right place."
+    puts "W means you guessed the right letter in the wrong place."
+    puts "X means that letter is nowhere to be found in the code. \n\n"
     12.times {take_turn}
     puts codebreaker.is_a?(Human) ? "Tragically, you have failed to break the code.":"Victory! The computer failed to outthink you!"
   end
