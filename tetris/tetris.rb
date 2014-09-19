@@ -176,7 +176,7 @@ end
 
 class Board
 
-  attr_reader :score
+  attr_reader :lines_cleared
 
   def initialize
     @lines_cleared = 0
