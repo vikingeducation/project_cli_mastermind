@@ -68,6 +68,8 @@ class Game
 
     @scores << [name, my_score]
     File.open("highscores.yaml", 'w') { |file| file.write(YAML::dump(@scores)) }
+
+    puts "Thanks, #{name}! Your score of #{my_score} will go down in history!"
   end
 
   #returns scores sorted top score to lowest
