@@ -1,5 +1,7 @@
 # Your code here!
 
+require 'readline'
+
 module Tetris
 
 class Game
@@ -31,9 +33,9 @@ class Game
   end
 
   def game_over
-    #scores
 
     puts "Thanks for playing M-TRIS!"
+    puts "Good job! Your score was #{@board.score}!"
   end
 end
 
@@ -47,28 +49,48 @@ class Player
     puts `clear`
     puts "WELCOME TO M-TRIS\n\n"
     puts "This is Michael Alexander's block-based puzzle game clone."
-    puts "Currently, controls are not in realtime."
+    puts "Currently, controls are not totally in realtime."
     puts "A to move left, D for right, S to drop the piece to the bottom."
-    puts "Press Enter without a command to let gravity do its thing."
-    puts "Until I implement realtime, press Enter after each.\n\n"
+    puts "No need to press Enter for these"
+    puts "Press ENTER without a command to let gravity do its thing."
     puts "*" * 15
-    puts "Press Enter now to begin."
+    puts "Press ENTER now to begin."
     gets
   end
 
   #prompt for move, send to Board
   def move
-    direction = gets.chomp.upcase
+    direction = enterless_input
     @board.move(direction)
   end
 
   #get high score
 
+  private
+
+  #works on OSX and Linux not Windows
+  #gets a char without pressing enter
+  def enterless_input
+    begin
+      state = `stty -g`
+      `stty raw -echo -icanon isig`
+
+      input = STDIN.getc.chr
+    ensure
+      `stty #{state}`
+    end
+    input
+  end
+
+
 end
 
 class Board
 
+  attr_reader :score
+
   def initialize
+    @score = 0
     @cells = Array.new(10) { Array.new(22, :space) }
     new_piece
   end
@@ -98,11 +120,11 @@ class Board
 
   def move(direction)
     case direction
-    when "A"
+    when "a"
       move_left
-    when "D"
+    when "d"
       move_right
-    when "S"
+    when "s"
       drop_down
     end
     display
@@ -131,7 +153,6 @@ class Board
   end
 
   def drop_down
-    p "dropping down"
     col_num, row_num = coordinates(:piece)
 
     return if row_num == 0
@@ -214,8 +235,9 @@ class Board
       0.upto(num_columns-1) do |column|
         @cells[column][row] = :space
       end
+      @score += 1
 
-      #TODO: call some kind of scoring mechanism
+
 
     end
 
