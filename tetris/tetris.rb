@@ -180,7 +180,7 @@ class Board
 
   def initialize
     @lines_cleared = 0
-    @cells = Array.new(10) { Array.new(22, :space) }
+    @cells = Array.new(10) { Array.new(24, :space) }
     new_piece
   end
 
@@ -232,41 +232,74 @@ class Board
   end
 
   def move_right
-    col_num, row_num = coordinates(:piece)
-    return if col_num == num_columns - 1
+    blocks = coordinates(:piece)
 
-    if @cells[col_num+1][row_num] == :space
-      @cells[col_num+1][row_num] = :piece
-      @cells[col_num][row_num] = :space
+
+    blocks.each do |location|
+
+      col_num, row_num = location[0], location[1]
+      return if col_num == num_columns - 1
+
+      if @cells[col_num+1][row_num] == :space
+        @cells[col_num+1][row_num] = :piece
+        @cells[col_num][row_num] = :space
+      end
+    end
+  end
+
+  def move_left
+    blocks = coordinates(:piece)
+
+    blocks.sort_by! {|block| block[0]}
+
+    blocks.each do |location|
+
+      col_num, row_num = location[0], location[1]
+      return if col_num == 0
+
+      if @cells[col_num-1][row_num] == :space
+        @cells[col_num-1][row_num] = :piece
+        @cells[col_num][row_num] = :space
+      end
     end
   end
 
   def drop_down
-    col_num, row_num = coordinates(:piece)
 
-    return if row_num == 0
-    return if @cells[col_num][row_num - 1] == :full
+    blocks = coordinates(:piece)
 
-    row_num.downto(0) do |new_row|
-      if @cells[col_num][new_row] == :full
-        @cells[col_num][new_row+1] = :piece
-        @cells[col_num][row_num] = :space
-        return
+    blocks.sort_by! {|block| block[1]}
+
+    blocks.each do |location|
+
+      col_num, row_num = location[0], location[1]
+      p row_num
+      return if row_num == 0
+      return if @cells[col_num][row_num - 1] == :full
+
+      row_num.downto(0) do |new_row|
+        if @cells[col_num][new_row] == :full
+          @cells[col_num][new_row+1] = :piece
+          @cells[col_num][row_num] = :space
+          return
+        end
       end
-    end
 
-    @cells[col_num][0] = :piece
-    @cells[col_num][row_num] = :space
+      @cells[col_num][0] = :piece
+      @cells[col_num][row_num] = :space
+
+    end
 
   end
 
 
   def coordinates(element)
+    list_coordinates = []
     @cells.each_with_index do |column, col_num|
       row_num = column.index(element)
-      return col_num, row_num if row_num
+      list_coordinates << [col_num, row_num] if row_num
     end
-    nil
+    list_coordinates
   end
 
 
@@ -379,9 +412,48 @@ class Board
 
   # create new single-block piece at top of board in a random row
   def new_piece
+    piece = [:new_single_block, 
+             :new_square, 
+             :new_bar_horizontal,
+             :new_bar_vertical].sample
+    method(piece).call
+  end
+
+  def new_single_block
+
     column = rand(num_columns)
-    
-    @cells[column][num_rows - 1] = :piece
+      @cells[column][num_rows - 1] = :piece
+  end
+
+  def new_square
+    left_column = rand(num_columns - 1 )
+
+    @cells[left_column][num_rows - 1] = :piece
+    @cells[left_column + 1][num_rows - 1] = :piece
+    @cells[left_column][num_rows - 2] = :piece
+    @cells[left_column + 1][num_rows - 2] = :piece
+
+  end
+
+  def new_bar_horizontal
+    left_column = rand(num_columns - 4 )
+
+    @cells[left_column][num_rows - 1] = :piece
+    @cells[left_column + 1][num_rows - 1] = :piece
+    @cells[left_column + 2][num_rows - 1] = :piece
+    @cells[left_column + 3][num_rows - 1] = :piece
+
+  end
+
+  def new_bar_vertical
+    left_column = rand(num_columns - 1 )
+
+    @cells[left_column][num_rows - 1] = :piece
+    @cells[left_column][num_rows - 2] = :piece
+    @cells[left_column][num_rows - 3] = :piece
+    @cells[left_column][num_rows - 4] = :piece
+
+
   end
   
   def num_columns
@@ -392,9 +464,9 @@ class Board
     @cells[0].size
   end
   
-    
+  #there are 4 hidden rows above this to stage blocks
   def num_visible_rows
-    @cells[0].size-2
+    @cells[0].size-4
   end
   
   def num_visible_columns
