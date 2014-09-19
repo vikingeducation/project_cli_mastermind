@@ -11,11 +11,22 @@ class Board
   end
 
   def render
-    puts
-    p "Tower 1: #{@board[0]}"
-    p "Tower 2: #{@board[1]}"
-    p "Tower 3: #{@board[2]}"
-    puts
+    @height.downto(0) do |i|
+      0.upto(2) do |j|
+        if @board[j][i]
+          print  (':D '*@board[j][i]).to_s.ljust(10)
+        else
+          print " ".ljust(10)
+        end
+      end
+      puts ""
+    end
+    puts "--------" * @height
+    1.upto(3) do |i|
+      print "Tower #{i}".ljust(10)
+    end
+    puts ""
+
   end
 
   def move_piece(coords)
