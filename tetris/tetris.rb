@@ -1,6 +1,7 @@
 # Your code here!
 
 require 'yaml'
+require 'io/wait' #nonblocking i/o
 
 module Tetris
 
@@ -14,11 +15,11 @@ class Game
   def start
     print_scores
     @player.welcome
-    
+    difficulty = @player.difficulty
     play
   end
 
-  private 
+  private
 
   def play
     loop do
@@ -26,8 +27,10 @@ class Game
 
       break if @board.swamped?
 
+      sleep amount_set_by_difficulty
+
       @player.move
-      
+
       #TODO: later, if nonblocking realtime, consider waiting a period of time here?
     end
     @board.render
@@ -55,7 +58,7 @@ class Game
   end
 
   def my_score
-    @board.score
+    @board.lines_cleared * @player.difficulty
   end
 
   def save_score
@@ -76,12 +79,20 @@ class Game
   def top_ten
     sorted_scores[0..9]
   end
+
+  #the number of seconds delay between turns
+  def amount_set_by_difficulty
+    1 - (Math::log10(@player.difficulty))
+  end
 end
 
 class Player
   
+  attr_reader :difficulty
+
   def initialize(board)
     @board = board
+    @difficulty = 1
   end
 
   def welcome
@@ -90,20 +101,59 @@ class Player
     puts "This is Michael Alexander's block-based puzzle game clone."
     puts "Currently, controls are not totally in realtime."
     puts "A to move left, D for right, S to drop the piece to the bottom."
-    puts "No need to press Enter for these"
-    puts "Press ENTER without a command to let gravity do its thing."
+    puts "No need to press Enter for these."
+    puts "Your score will be DIFFICULTY x NUMBER OF ROWS CLEARED"
     puts "*" * 15
-    puts "Press ENTER now to begin."
     gets
+    set_difficulty
   end
 
   #prompt for move, send to Board
   def move
-    direction = enterless_input
-    @board.move(direction)
+    direction = char_if_pressed
+    @board.move(direction) if direction
   end
 
+
+
+  def char_if_pressed
+    begin
+      state = `stty -g` #turn raw input on
+      system `stty raw -echo -icanon isig`
+      c = nil
+      if $stdin.ready?
+        c = $stdin.getc
+      end
+      c.chr if c
+    ensure
+      system  `stty #{state}` # turn raw input off
+    end
+  end
+
+
   private
+
+  def set_difficulty
+    puts "Enter your difficulty level (1-10): "
+    input = gets.chomp.to_i
+
+    @difficulty = input if input.between?(1,10)
+  end
+
+  #nonblocking version!!
+  def char_if_pressed
+    begin
+      state = `stty -g` #turn raw input on
+      `stty raw -echo -icanon isig`
+      c = nil
+      if $stdin.ready?  #nonblocking input check here
+        c = $stdin.getc
+      end
+      c.chr if c
+    ensure
+      system  `stty #{state}` # turn raw input off
+    end
+  end
 
   #works on OSX and Linux not Windows
   #gets a char without pressing enter
@@ -120,6 +170,8 @@ class Player
   end
 
 
+
+
 end
 
 class Board
@@ -127,7 +179,7 @@ class Board
   attr_reader :score
 
   def initialize
-    @score = 0
+    @lines_cleared = 0
     @cells = Array.new(10) { Array.new(22, :space) }
     new_piece
   end
@@ -272,14 +324,15 @@ class Board
       0.upto(num_columns-1) do |column|
         @cells[column][row] = :space
       end
-      @score += 1
+
+
+      @lines_cleared += 1
 
 
 
     end
 
   end
-
 
 
  # gravity: for each cell including piece
