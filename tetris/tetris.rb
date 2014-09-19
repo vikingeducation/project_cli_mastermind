@@ -44,11 +44,22 @@ class Player
   end
 
   def welcome
-    puts "Welcome to M-TRIS, Michael Alexander's block-based puzzle game clone."
+    puts `clear`
+    puts "WELCOME TO M-TRIS\n\n"
+    puts "This is Michael Alexander's block-based puzzle game clone."
+    puts "Currently, controls are not in realtime."
+    puts "A to move left, D for right, S to drop the piece to the bottom."
+    puts "Press Enter without a command to let gravity do its thing."
+    puts "Until I implement realtime, press Enter after each.\n\n"
+    puts "*" * 15
+    puts "Press Enter now to begin."
+    gets
   end
 
-  #prompt for move
+  #prompt for move, send to Board
   def move
+    direction = gets.chomp.upcase
+    @board.move(direction)
   end
 
   #get high score
@@ -57,30 +68,22 @@ end
 
 class Board
 
-    #according to the game, a standard Tetris board is 10 cells wide
-    #and at least 22 cells high, with the top two hidden
-    #each cell can be FULL, SPACE or have a PIECE moving through it
   def initialize
     @cells = Array.new(10) { Array.new(22, :space) }
     new_piece
   end
-  
+
   # public method that leads to the objects getting displayed for 
   # this turn. combines the calculations for movement and actually
   # displaying the pieces
   
   def render
 
-    display
-
     clear_full_rows
     run_gravity
     check_landings
 
-    #for each full line, replace the whole thing with space
-      #give player points for it
-
-    # MAYBE: display again? still thinking about the flow here.
+    display
 
   end
 
@@ -93,9 +96,72 @@ class Board
     false
   end
 
+  def move(direction)
+    case direction
+    when "A"
+      move_left
+    when "D"
+      move_right
+    when "S"
+      drop_down
+    end
+    display
+  end
 
   private
   
+  def move_left
+    col_num, row_num = coordinates(:piece)
+    return if col_num == 0
+
+    if @cells[col_num-1][row_num] == :space
+      @cells[col_num-1][row_num] = :piece
+      @cells[col_num][row_num] = :space
+    end
+  end
+
+  def move_right
+    col_num, row_num = coordinates(:piece)
+    return if col_num == num_columns - 1
+
+    if @cells[col_num+1][row_num] == :space
+      @cells[col_num+1][row_num] = :piece
+      @cells[col_num][row_num] = :space
+    end
+  end
+
+  def drop_down
+    p "dropping down"
+    col_num, row_num = coordinates(:piece)
+
+    return if row_num == 0
+    return if @cells[col_num][row_num - 1] == :full
+
+    row_num.downto(0) do |new_row|
+      if @cells[col_num][new_row] == :full
+        @cells[col_num][new_row+1] = :piece
+        @cells[col_num][row_num] = :space
+        return
+      end
+    end
+
+    @cells[col_num][0] = :piece
+    @cells[col_num][row_num] = :space
+
+  end
+
+
+  def coordinates(element)
+    @cells.each_with_index do |column, col_num|
+      row_num = column.index(element)
+      return col_num, row_num if row_num
+    end
+    nil
+  end
+
+
+
+
   #convenience method for Unicode of a box character
   def box
     "\u25a1".encode('utf-8')
@@ -110,10 +176,10 @@ class Board
 
     (num_visible_rows-1).downto(0) do |row|
       print "#{row}".ljust(4) + "\|"
-      (num_columns-1).downto(0) do |column|
+      0.upto(num_columns-1) do |column|
         print convert_to_visible(@cells[column][row])
       end
-      puts "\n"
+      puts "\|\n"
     end
     puts "===================="
   end
@@ -169,7 +235,6 @@ class Board
     @cells.each_with_index do |column, col_num|
       column.each_with_index do |cell, row_num|
         if row_num == 0 && cell == :piece
-          puts "does this ever happen"
           @cells[col_num][row_num] = :full
         elsif row_num == 0
           next
@@ -231,4 +296,4 @@ end
 
 include Tetris
 g = Game.new
-g.play
+g.start
