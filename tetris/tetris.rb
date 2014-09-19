@@ -25,6 +25,7 @@ class Game
       
       #TODO: later, if realtime, consider waiting a period of time here?
     end
+    @board.render
 
     game_over
   end
@@ -32,7 +33,7 @@ class Game
   def game_over
     #scores
 
-    puts "Thanks for playing Tetris!"
+    puts "Thanks for playing M-TRIS!"
   end
 end
 
@@ -72,7 +73,7 @@ class Board
 
     display
 
-
+    clear_full_rows
     run_gravity
     check_landings
 
@@ -95,65 +96,110 @@ class Board
 
   private
   
+  #convenience method for Unicode of a box character
+  def box
+    "\u25a1".encode('utf-8')
+  end
   
 
   # displays the board right now with piece in right place
   # displays only the bottom 20 rows of pieces because 
   # the top two are meant to be hidden, like real tetrises
   def display
-    p @cells
+    puts `clear`
+
+    (num_visible_rows-1).downto(0) do |row|
+      print "#{row}".ljust(4) + "\|"
+      (num_columns-1).downto(0) do |column|
+        print convert_to_visible(@cells[column][row])
+      end
+      puts "\n"
+    end
+    puts "===================="
   end
   
-  
- # gravity: for each cell including piece 
+  def convert_to_visible(cell)
+    case cell
+      when :space
+        " "
+      when :piece
+        "M"
+      when :full
+        box
+      end
+  end
+
+
+  def clear_full_rows
+
+    #check each row top to bottom
+    num_visible_rows.downto(0) do |row|
+
+      #for each row, check if it's full
+      row_full = true
+      0.upto(num_columns-1) do |column|
+        unless @cells[column][row] == :full
+          row_full = false
+        end
+      end
+
+      next unless row_full
+      #if so, clear the whole row
+      0.upto(num_columns-1) do |column|
+        @cells[column][row] = :space
+      end
+
+      #TODO: call some kind of scoring mechanism
+
+    end
+
+  end
+
+
+
+ # gravity: for each cell including piece
  # (starting at the bottom and working up the screen)
  # if there is space below it, move it down by 1
 
-  def run_gravity
-    
-    @cells.each_with_index do |column, col_num|
-      column.each_with_index do |cell, row_num|
-        
-        next if row_num == num_rows - 1 #skip top column
-      
-        if cell == :space
-          swap_cells(col_num, row_num)
-        end
-      
-      end
-    end
-      
-  end
-  
-  
   #if piece has landed on a :full cell
   #freeze piece as :full cell
   #create new piece way up high
   def check_landings
-    
+
     @cells.each_with_index do |column, col_num|
       column.each_with_index do |cell, row_num|
         if row_num == 0 && cell == :piece
-          cell = :full
+          puts "does this ever happen"
+          @cells[col_num][row_num] = :full
         elsif row_num == 0
           next
-        elsif cell == :piece && @cells[row_num-1][col_num] == :full
-          cell = :full
+        elsif cell == :piece && @cells[col_num][row_num-1] == :full
+          @cells[col_num][row_num] = :full
         end
-      
-      end
-    end    
 
-    
+      end
+    end
+
     new_piece if @cells.none? { |column| column.include? (:piece) }
-  
+  end
+
+  def run_gravity
+
+    @cells.each_with_index do |column, col_num|
+      column.each_with_index do |this_cell, row_num|
+        next if row_num == 0
+        if @cells[col_num][row_num-1] == :space
+          @cells[col_num][row_num-1] = this_cell
+          @cells[col_num][row_num] = :space
+        end
+
+      end
+    end
+
   end
   
-  #swaps a cell, specified by index, with the cell above it
-  def swap_cells(column, row)
-    @cells[column][row], @cells[column][row+1] = @cells[column][row+1], @cells[column][row]
-  end
   
+
   # create new single-block piece at top of board in a random row
   def new_piece
     column = rand(num_columns)
@@ -171,14 +217,18 @@ class Board
   
     
   def num_visible_rows
-    @cells[0].size - 2
+    @cells[0].size-2
   end
   
   def num_visible_columns
-    @cells.size - 2
+    @cells.size
   end
 
 end
 
 
 end
+
+include Tetris
+g = Game.new
+g.play
