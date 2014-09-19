@@ -1,95 +1,150 @@
-class TowerOfHanoi
-	# initialize
-		# set up the towers
-		# set up the player
+# Maintains Game State
 
-	# play
-		# loop infinitely
-			# call the board rendering method
-			# ask how the player would like to move
+class TowersOfHanoi
+	def initialize(tower_height=3)
+		@towers = Towers.new(tower_height)
+		
+		@player = Player.new(@towers)
+	end
+		
+
+	def play
+
+		puts "Welcome to Towers of Hanoi!"
+
+		loop do
+		
+			@towers.render
+			
+			@player.get_move
+
 			# break the loop if the game is over OR if user quits
+			break if check_game_over 
 
-	# check_game_over
-		# check_victory
-		# check_player_quit
+		end
+	end
 
-	# check_victory
-		# IF board says player successfully assembled_stack && different_tower?
-			# display a victory message
+	def check_game_over
+		check_victory # || check_player_quit
+	end
 
-	# check_player_quit
-		# IF player enters 'q' instead of move
-			# end the game
-			# break the loop
-
+	def check_victory
+		if @towers.tower_assembled?
+			puts "Congratulations, you've won!"
+			true
+		else
+			false
+		end
+	end
+		
 end
 
-
+# Player Class which maintains player
 class Player
-	# initialize
-		# ask player tower height (3-5)
+	
+	def initialize(towers)
 		# pass parameters to towers
+		@towers = towers
+	end
 
-	# get_move
-		# loop inifinitely
-		# ask_for_move
-		# IF validate_move_format is true
-			# IF piece can be moved
-				# break the loop
+	def get_move
+		
+		loop do
 
-	# ask_for_move
-		# Display message asking for move
-		# Pull move from command line
+			move = ask_for_move
+		
+			if validate_move_format(move)
+				if @towers.move_piece(move)
+					break
+				end
+			end
 
-	# validate_move
-		# UNLESS move places bigger piece on smaller piece
-			# display error message
+		end
+
+	end
+	
+	def ask_for_move
+		puts "Instructions:"
+		puts "Enter where you'd like to move from and to in the format '1,3'. Enter 'q' to quit"
+		# gets move from command line
+
+		input = gets.strip
+		exit if input == 'q'
+
+		input.split(",").map(&:to_i)
+	end
+
+	def validate_move_format(move)
+		if move.is_a?(Array) && move.size == 2
+			true
+		else
+			puts "Your move is in an improper format!"
+		end
+	end
 
 end
+
+# Maintains tower's state
 
 class Towers
-	# initialize towers
-		# set up blank data structure
+	def initialize(tower_height)
+		# sets up 2 empty towers 
+		@towers = Array.new(2) { Array.new }
 
-	# render
-		# loop through data structure
-		 # display existing pieces and positions
+		# generates and shifts in first tower based on tower_height
+		first_tower = (1..tower_height).to_a.reverse
+		@towers.unshift(first_tower)
+		@tower_height = tower_height
+	end
 
-	# movie_piece
-		# IF move_valid?
-			# move piece
-		# ELSE
-			# display error message
+	def render
+		@towers.each do |tower|
+			p tower
+		end
+	end
 
-	# move_valid?
-		# is piece_smaller?
+	def move_piece(move)
+		if move_valid?(move)
+			@towers[move[1]-1].push(@towers[move[0]-1].pop)
+		else
+			false
+		end
+	end
 
-	# piece_smaller?
-		# UNLESS piece is smaller
-			# display error message
+	def move_valid?(move)
+		if selected_correct_towers?(move)
+			move_available?(move)
+		end
+	end
 
-	# tower_assembled?
-		# check if pieces assembled in correct order
+	def selected_correct_towers?(move)
+		if (1..3).include?(move[0]) && (1..3).include?(move[1])
+			true
+		else
+			puts "Please choose towers 1-3 for moves"
+		end
+	end
 
-	# different_tower?
-	 # check current_tower different than original_tower
+	def move_available?(move)
+		if @towers[move[1]-1].empty?
+			true
+		elsif @towers[move[0]-1][-1] < @towers[move[1]-1][-1] 
+			true
+		else
+			puts "You can't place a bigger piece ontop of a smaller piece."
+		end
+	end
+
+	def tower_assembled?
+		 @towers[1].size == @tower_height || 
+		 @towers[2].size == @tower_height
+	end
+
 end
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+puts "How many pieces would you like to play with? (3-8)"
+tower_height = gets.chomp.to_i
+t = TowersOfHanoi.new(tower_height)
+t.play
 
