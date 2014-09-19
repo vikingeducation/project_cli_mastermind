@@ -1,4 +1,6 @@
-# Maintains Game State
+# Towers of Hanoi
+
+# ------------ The Game -------------------------------------------------------
 
 class TowersOfHanoi
 	def initialize(tower_height=3)
@@ -13,37 +15,34 @@ class TowersOfHanoi
 		puts "Welcome to Towers of Hanoi!"
 
 		loop do
-		
-			@towers.render
 			
+			@towers.render
 			@player.get_move
-
-			# break the loop if the game is over OR if user quits
+			
 			break if check_game_over 
 
 		end
 	end
 
 	def check_game_over
-		check_victory # || check_player_quit
-	end
-
-	def check_victory
 		if @towers.tower_assembled?
+			puts " "
+			@towers.render
+			puts " "
 			puts "Congratulations, you've won!"
 			true
 		else
 			false
 		end
 	end
-		
+
 end
 
-# Player Class which maintains player
+# ------------ Player ---------------------------------------------------------
+
 class Player
 	
 	def initialize(towers)
-		# pass parameters to towers
 		@towers = towers
 	end
 
@@ -64,10 +63,10 @@ class Player
 	end
 	
 	def ask_for_move
+		puts " "
 		puts "Instructions:"
 		puts "Enter where you'd like to move from and to in the format '1,3'. Enter 'q' to quit"
-		# gets move from command line
-
+	
 		input = gets.strip
 		exit if input == 'q'
 
@@ -84,7 +83,8 @@ class Player
 
 end
 
-# Maintains tower's state
+
+# ------------ Towers ---------------------------------------------------------
 
 class Towers
 	def initialize(tower_height)
@@ -98,9 +98,12 @@ class Towers
 	end
 
 	def render
+		puts " "
+		puts " "
 		@towers.each do |tower|
 			p tower
 		end
+		puts " "
 	end
 
 	def move_piece(move)
@@ -145,6 +148,13 @@ end
 
 puts "How many pieces would you like to play with? (3-8)"
 tower_height = gets.chomp.to_i
+loop do
+	break if (3..8).to_a.include?(tower_height)
+	
+	puts "Please pick a tower height from 3-8"
+	tower_height = gets.chomp.to_i
+end
+
 t = TowersOfHanoi.new(tower_height)
 t.play
 
