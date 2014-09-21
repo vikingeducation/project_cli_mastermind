@@ -11,7 +11,6 @@ class Player
     puts `clear`
     puts "WELCOME TO M-TRIS\n\n"
     puts "This is Michael Alexander's block-based puzzle game clone."
-    puts "Currently, controls are not totally in realtime."
     puts "A to move left, D for right, S to drop the piece to the bottom."
     puts "No need to press Enter for these."
     puts "Your score will be DIFFICULTY x NUMBER OF ROWS CLEARED"

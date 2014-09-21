@@ -24,7 +24,6 @@ class Game
 
       @player.move
 
-      #TODO: later, if nonblocking realtime, consider waiting a period of time here?
     end
     @board.render
 

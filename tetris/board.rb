@@ -9,7 +9,7 @@ class Board
     draw_piece
   end
 
-  # public method that leads to the objects getting displayed for 
+  # public method that leads to the objects getting displayed for
   # this turn. combines the calculations for movement and actually
   # displaying the pieces
   
