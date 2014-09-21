@@ -1,5 +1,5 @@
 class Player
-  
+
   attr_reader :difficulty
 
   def initialize(board)

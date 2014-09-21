@@ -4,15 +4,15 @@ class Board
 
   def initialize
     @lines_cleared = 0
-    @cells = Array.new(10) { Array.new(24, :space) }
+    @cells = Array.new(10) { Array.new( 24, :space ) }
     @current_piece = :block
-    draw_piece
+    create_piece
   end
 
   # public method that leads to the objects getting displayed for
   # this turn. combines the calculations for movement and actually
   # displaying the pieces
-  
+
   def render
 
     clear_full_rows
@@ -22,10 +22,6 @@ class Board
     display
 
   end
-
-
-
-
 
   # game end condition. returns true if a full cell is ever found
   # on the top visible row
@@ -50,16 +46,6 @@ class Board
 
   private
   
-  def move_left
-    col_num, row_num = coordinates(:piece)
-    return if col_num == 0
-
-    if @cells[col_num-1][row_num] == :space
-      @cells[col_num-1][row_num] = :piece
-      @cells[col_num][row_num] = :space
-    end
-  end
-
   def move_right
     blocks = coordinates(:piece)
 
@@ -216,27 +202,64 @@ class Board
       end
     end
 
-    draw_piece if @cells.none? { |column| column.include? (:piece) }
+    create_piece if @cells.none? { |column| column.include? (:piece) }
   end
 
- # gravity: for each cell including piece
- # (starting at the bottom and working up the screen)
- # if there is space below it, move it down by 1
+ # gravity: delete the piece and redraw it one step down if possible
+ # if not possible, freezes the piece as a :full
+ # implementation detail: uses the top left corner of said piece
+ # as anchor
+
   def run_gravity
 
-    @cells.each_with_index do |column, col_num|
-      column.each_with_index do |this_cell, row_num|
-        next if row_num == 0
-        if @cells[col_num][row_num-1] == :space
-          @cells[col_num][row_num-1] = this_cell
-          @cells[col_num][row_num] = :space
-        end
+    old_blocks = coordinates(:piece)
+    #location[0] is col_num, #location[1] is row_num
+    #loop through all pieces. map all their coordinates down by one
+    new_blocks = old_blocks.map { |location| [location[0], location[1] - 1] }
 
-      end
+    if can_draw?(new_blocks)
+      clear_all_pieces
+      draw_piece(new_blocks)
     end
 
   end
-  
+
+  # takes array of coordinates in form [[col_num_a, row_num_a],
+  # [col_num_b, row_num_b], ...etc]
+  # returns true if no :full blocks are already in those spaces
+  def can_draw?(blocks)
+    blocks.none? { |block| @cells[block[0]][block[1]] == :full }
+  end
+
+
+  # clears the board @cells at each of those coordinates to :space
+  def clear_all_pieces
+
+    @cells.each_with_index do |column, col_num|
+      column.each_with_index do |cell, row_num|
+        @cells[col_num][row_num] = :space if cell == :piece
+      end
+    end
+  end
+
+  def draw_piece(blocks)
+    blocks.each { |block| @cells[block[0]][block[1]] = :piece }
+  end
+
+
+  #def gravity (old)
+    # @cells.each_with_index do |column, col_num|
+    #   column.each_with_index do |this_cell, row_num|
+    #     next if row_num == 0
+    #     if @cells[col_num][row_num-1] == :space
+    #       @cells[col_num][row_num-1] = this_cell
+    #       @cells[col_num][row_num] = :space
+    #     end
+
+    #   end
+    # end
+
+  #end
   
 
 
@@ -247,7 +270,7 @@ class Board
   # draw a randomly-selected piece;
   #defaults to top of board in a random row
   # 
-  def draw_piece(row = num_rows - 1)
+  def create_piece(row = num_rows - 1)
     piece = [:single_block,
              :square,
              :bar_horizontal,
