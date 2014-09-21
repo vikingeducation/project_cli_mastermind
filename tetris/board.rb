@@ -359,7 +359,9 @@ class Board
     piece = [:single_block,
              :square,
              :bar_horizontal,
-             :bar_vertical].sample
+             :bar_vertical,
+             :horizontal_left_l,
+             :horizontal_right_l].sample
 
     method(piece).call(row)
   end
@@ -398,7 +400,22 @@ class Board
     @cells[left_column][row - 2] = :piece
     @cells[left_column][row - 3] = :piece
 
+  end
 
+  def horizontal_left_l(row)
+    left_column = rand(num_columns - 3 )
+    @cells[left_column][row] = :piece
+    @cells[left_column][row-1] = :piece
+    @cells[left_column+1][row-1] = :piece
+    @cells[left_column+2][row-1] = :piece
+  end
+
+  def horizontal_right_l(row)
+    left_column = rand(num_columns - 3 )
+    @cells[left_column][row-1] = :piece
+    @cells[left_column+1][row-1] = :piece
+    @cells[left_column+2][row-1] = :piece
+    @cells[left_column+3][row] = :piece
   end
   
   def num_columns
