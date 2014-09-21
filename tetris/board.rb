@@ -172,9 +172,27 @@ class Board
         @cells[column][row] = :space
       end
 
-
       @lines_cleared += 1
 
+      display
+
+      row.upto(num_visible_rows) do |row_num|
+        0.upto(num_columns-1) do |col_num|
+          @cells[col_num][row_num] = @cells[col_num][row_num + 1]
+        end
+      end
+
+
+      #column.each_with_index do |this_cell, row_num|
+      # @cells.each_with_index do |column, col_num|
+      #     next if row_num == 0
+      #     if @cells[col_num][row_num-1] == :space
+      #       @cells[col_num][row_num-1] = this_cell
+      #       @cells[col_num][row_num] = :space
+      #     end
+
+      #   end
+      # end
 
 
     end
