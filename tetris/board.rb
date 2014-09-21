@@ -17,7 +17,6 @@ class Board
 
     clear_full_rows
     run_gravity
-    check_landings
 
     display
 
@@ -189,21 +188,43 @@ class Board
   #create new piece way up high
   def check_landings
 
+    #new_check_landings: search the whole matrix
+    #set a true value if any piece is above a full
+    # if so, freeze all :pieces
+
+
+    # piece_has_landed = false
+    # @cells.each_with_index do |column, col_num|
+    #   column.each_with_index do |cell, row_num|
+    #     if row_num == 0 && cell == :piece
+    #       landed = true
+    #     elsif cell == :piece && @cells[col_num][row_num-1] == :full
+    #       landed = true
+    #     end
+    #   end
+    # end
+
+    # if piece_has_landed?
+    #   freeze_all_pieces
+    #   create_piece
+    # end
+  end
+
+
+  def piece_has_landed?
+    landed = false
     @cells.each_with_index do |column, col_num|
       column.each_with_index do |cell, row_num|
         if row_num == 0 && cell == :piece
-          @cells[col_num][row_num] = :full
-        elsif row_num == 0
-          next
+          landed = true
         elsif cell == :piece && @cells[col_num][row_num-1] == :full
-          @cells[col_num][row_num] = :full
+          landed = true
         end
-
       end
     end
-
-    create_piece if @cells.none? { |column| column.include? (:piece) }
+    landed
   end
+
 
  # gravity: delete the piece and redraw it one step down if possible
  # if not possible, freezes the piece as a :full
@@ -222,6 +243,11 @@ class Board
       draw_piece(new_blocks)
     end
 
+    if piece_has_landed?
+      freeze_all_pieces
+      create_piece
+    end
+
   end
 
   # takes array of coordinates in form [[col_num_a, row_num_a],
@@ -238,6 +264,16 @@ class Board
     @cells.each_with_index do |column, col_num|
       column.each_with_index do |cell, row_num|
         @cells[col_num][row_num] = :space if cell == :piece
+      end
+    end
+  end  
+
+  # freeze all :pieces into :full
+  def freeze_all_pieces
+
+    @cells.each_with_index do |column, col_num|
+      column.each_with_index do |cell, row_num|
+        @cells[col_num][row_num] = :full if cell == :piece
       end
     end
   end

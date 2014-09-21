@@ -52,6 +52,7 @@ class Player
   end
 
   #nonblocking version!!
+  #doesn't work on Windows
   def char_if_pressed
     begin
       state = `stty -g` #turn raw input on
@@ -65,22 +66,5 @@ class Player
       system  `stty #{state}` # turn raw input off
     end
   end
-
-  #works on OSX and Linux not Windows
-  #gets a char without pressing enter
-  def enterless_input
-    begin
-      state = `stty -g`
-      `stty raw -echo -icanon isig`
-
-      input = STDIN.getc.chr
-    ensure
-      `stty #{state}`
-    end
-    input
-  end
-
-
-
 
 end
