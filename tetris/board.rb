@@ -102,7 +102,8 @@ class Board
 
   
 
-
+ #not working for this version of pieces currently. 
+ #TODO: rewrite
   def drop_down
 
     blocks = coordinates(:piece)
@@ -156,7 +157,7 @@ class Board
   def display
     puts `clear`
 
-    (num_visible_rows-1).downto(0) do |row|
+    (num_rows-1).downto(0) do |row|
       print "#{row}".ljust(4) + "\|"
       0.upto(num_columns-1) do |column|
         print convert_to_visible(@cells[column][row])
@@ -312,7 +313,7 @@ class Board
 
     @cells.each_with_index do |column, col_num|
       column.each_with_index do |cell, row_num|
-        @cells[col_num][row_num] = :space if cell == :piece
+        @cells[col_num][row_num] = :space if @cells[col_num][row_num] == :piece
       end
     end
   end  
@@ -322,7 +323,7 @@ class Board
 
     @cells.each_with_index do |column, col_num|
       column.each_with_index do |cell, row_num|
-        @cells[col_num][row_num] = :full if cell == :piece
+        @cells[col_num][row_num] = :full if @cells[col_num][row_num] == :piece
       end
     end
   end
@@ -415,7 +416,7 @@ class Board
     @cells[left_column][row-1] = :piece
     @cells[left_column+1][row-1] = :piece
     @cells[left_column+2][row-1] = :piece
-    @cells[left_column+3][row] = :piece
+    @cells[left_column+2][row] = :piece
   end
   
   def num_columns
