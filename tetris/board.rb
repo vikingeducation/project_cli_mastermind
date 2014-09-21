@@ -62,21 +62,46 @@ class Board
   end
 
   def move_left
-    blocks = coordinates(:piece)
 
-    blocks.sort_by! {|block| block[0]}
+    old_blocks = coordinates(:piece)
+    #location[0] is col_num, #location[1] is row_num
+    #loop through all pieces. map all their coordinates right by one
+    new_blocks = old_blocks.map { |location| [location[0]-1, location[1]] }
 
-    blocks.each do |location|
-
-      col_num, row_num = location[0], location[1]
-      return if col_num == 0
-
-      if @cells[col_num-1][row_num] == :space
-        @cells[col_num-1][row_num] = :piece
-        @cells[col_num][row_num] = :space
-      end
+    if can_draw?(new_blocks)
+      clear_all_pieces
+      draw_piece(new_blocks)
     end
+
+    if piece_has_landed?
+      freeze_all_pieces
+      create_piece
+    end
+
   end
+
+
+  def move_right
+
+    old_blocks = coordinates(:piece)
+    #location[0] is col_num, #location[1] is row_num
+    #loop through all pieces. map all their coordinates right by one
+    new_blocks = old_blocks.map { |location| [location[0]+1, location[1]] }
+
+    if can_draw?(new_blocks)
+      clear_all_pieces
+      draw_piece(new_blocks)
+    end
+
+    if piece_has_landed?
+      freeze_all_pieces
+      create_piece
+    end
+
+  end
+
+  
+
 
   def drop_down
 
@@ -271,8 +296,14 @@ class Board
   # takes array of coordinates in form [[col_num_a, row_num_a],
   # [col_num_b, row_num_b], ...etc]
   # returns true if no :full blocks are already in those spaces
+  # returns false if any block is outside of the range of cells
   def can_draw?(blocks)
-    blocks.none? { |block| @cells[block[0]][block[1]] == :full }
+    return false unless blocks.all? do |block|
+      col_num, row_num = block[0], block[1]
+      col_num.between?(0, num_columns-1) && row_num.between?(0, num_rows-1)
+    end
+
+    blocks.none? {|block| @cells[block[0]][block[1]] == :full }
   end
 
 
