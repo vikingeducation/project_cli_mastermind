@@ -1,5 +1,6 @@
 class Board
 
+  require 'byebug'
   attr_reader :lines_cleared
 
   def initialize
@@ -39,6 +40,8 @@ class Board
       move_right
     when "s"
       drop_down
+    when "w"
+      rotate_piece
     end
     display
   end
@@ -67,6 +70,66 @@ class Board
     #location[0] is col_num, #location[1] is row_num
     #loop through all pieces. map all their coordinates right by one
     new_blocks = old_blocks.map { |location| [location[0]-1, location[1]] }
+
+    if can_draw?(new_blocks)
+      clear_all_pieces
+      draw_piece(new_blocks)
+    end
+
+    if piece_has_landed?
+      freeze_all_pieces
+      create_piece
+    end
+
+  end
+
+  def rotate_piece
+
+    old_blocks = coordinates(:piece)
+
+    col_coordinates = old_blocks.map {|block| block[0]}
+    row_coordinates = old_blocks.map {|block| block[1]}
+
+    #get minimum and maximum col_num, row_num
+    #add min_col + max_col, divide by 2, add 1 => avg_col
+    #add min_row + max_row, divide by 2, add 1 => avg_row
+
+    pivot_col = col_coordinates.inject(:+) / col_coordinates.length + 1
+    pivot_row = row_coordinates.inject(:+) / row_coordinates.length + 1
+
+    relative_pivot_col = pivot_col - col_coordinates.min
+    relative_pivot_row = pivot_row - row_coordinates.min
+    #for each coordinate pair of old_blocks, 
+    #subtract [avg_col, avg_row] to create an array of 
+    #RELATIVE coordinates for each piece around an artificial
+    #center of gravity
+
+    block_height = [col_coordinates.max - col_coordinates.min, row_coordinates.max - row_coordinates.min].max
+    
+
+    # x2 = (y1 + px - py)
+    # y2 = (px + py - x1 - q)
+
+    relative_blocks = old_blocks.map do |block|
+      [block[0]-pivot_col, block[1]-pivot_row]
+    end
+
+    #use rotation formulas to find relative rotation positions for these blocks
+    rotated = relative_blocks.map do |block|
+      [block[1]+relative_pivot_col-relative_pivot_row, relative_pivot_col+relative_pivot_row-block[0]]
+    end
+
+
+    #now, add these changes back to the original coordinates, pair by pair
+    #to produce new_blocks
+    new_blocks = []
+
+    0.upto(old_blocks.length-1) do |index|
+      new_blocks << [old_blocks[index][0]+rotated[index][0], old_blocks[index][1]+rotated[index][1]]
+    end
+
+
+    #FINALLY, do the normal can_draw test
 
     if can_draw?(new_blocks)
       clear_all_pieces
