@@ -2,9 +2,7 @@ class Game
   def initialize
     @board = Board.new
     @player = Player.new(@board)
-    #TODO: create a new highschores.yaml if it doesn't yet exist
-    #rather than halting with File Not Found
-    @scores = YAML.load(File.read("highscores.yaml"))
+    @scores = File.file?("highscores.yaml") ? YAML.load(File.read("highscores.yaml")) : []
   end
 
   def start
