@@ -359,13 +359,14 @@ class Board
   # draw a randomly-selected piece;
   #defaults to top of board in a random row
   # 
-  def create_piece(row = num_rows - 2)
+  def create_piece(row = num_rows - 1)
     piece = [:single_block,
              :square,
              :bar_horizontal,
              :bar_vertical,
              :horizontal_left_l,
-             :horizontal_right_l].sample
+             :horizontal_right_l,
+             :vertical_right_l].sample
 
     method(piece).call(row)
   end
@@ -422,6 +423,22 @@ class Board
     @cells[left_column+2][row] = :piece
   end
   
+  def vertical_right_l(row)
+    left_column = rand(num_columns - 2)
+    @cells[left_column][row] = :piece
+    @cells[left_column][row-1] = :piece
+    @cells[left_column][row-2] = :piece
+    @cells[left_column+1][row] = :piece
+  end
+
+  def vertical_left_l(row)
+    left_column = rand(num_columns - 2)
+    @cells[left_column][row] = :piece
+    @cells[left_column+1][row] = :piece
+    @cells[left_column+1][row-1] = :piece
+    @cells[left_column+1][row-2] = :piece
+  end
+
   def num_columns
     @cells.size
   end
