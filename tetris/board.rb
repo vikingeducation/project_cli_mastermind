@@ -136,8 +136,9 @@ class Board
   def coordinates(element)
     list_coordinates = []
     @cells.each_with_index do |column, col_num|
-      row_num = column.index(element)
-      list_coordinates << [col_num, row_num] if row_num
+      column.each_with_index do |cell, row_num|
+        list_coordinates << [col_num, row_num] if cell == element
+      end
     end
     list_coordinates
   end
@@ -157,7 +158,7 @@ class Board
   def display
     puts `clear`
 
-    (num_rows-1).downto(0) do |row|
+    (num_visible_rows-1).downto(0) do |row|
       print "#{row}".ljust(4) + "\|"
       0.upto(num_columns-1) do |column|
         print convert_to_visible(@cells[column][row])
@@ -276,12 +277,14 @@ class Board
  # as anchor
 
   def run_gravity
-
     old_blocks = coordinates(:piece)
+    #handle bottom blocks first, sorting by row
+    old_blocks.sort_by! {|block| block[1]}
+    p old_blocks
     #location[0] is col_num, #location[1] is row_num
     #loop through all pieces. map all their coordinates down by one
     new_blocks = old_blocks.map { |location| [location[0], location[1] - 1] }
-
+    p new_blocks
     if can_draw?(new_blocks)
       clear_all_pieces
       draw_piece(new_blocks)
@@ -356,7 +359,7 @@ class Board
   # draw a randomly-selected piece;
   #defaults to top of board in a random row
   # 
-  def create_piece(row = num_rows - 1)
+  def create_piece(row = num_rows - 2)
     piece = [:single_block,
              :square,
              :bar_horizontal,
