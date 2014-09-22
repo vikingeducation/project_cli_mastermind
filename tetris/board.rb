@@ -106,31 +106,50 @@ class Board
  #TODO: rewrite
   def drop_down
 
-    blocks = coordinates(:piece)
+    old_blocks = coordinates(:piece)
+    #location[0] is col_num, #location[1] is row_num
+    #loop through all pieces. map all their coordinates right by one
 
-    blocks.sort_by! {|block| block[1]}
+    drop_distance = 0
 
-    blocks.each do |location|
+    0.upto(num_rows-1) do |distance|
+      new_blocks = old_blocks.map { |location| [location[0], location[1]-distance] }
 
-      col_num, row_num = location[0], location[1]
-      p row_num
-      return if row_num == 0
-      return if @cells[col_num][row_num - 1] == :full
-
-      row_num.downto(0) do |new_row|
-        if @cells[col_num][new_row] != :space
-          @cells[col_num][new_row+1] = :piece
-          @cells[col_num][row_num] = :space
-          return
-        end
-      end
-
-      @cells[col_num][0] = :piece
-      @cells[col_num][row_num] = :space
-
+      break unless can_draw?(new_blocks)
+      drop_distance = distance
     end
 
+    new_blocks = old_blocks.map { |location| [location[0], location[1]-drop_distance] }
+    clear_all_pieces
+    draw_piece(new_blocks)
+    freeze_all_pieces
+    create_piece
   end
+    # OLD DROP_DOWN
+    # blocks = coordinates(:piece)
+
+    # blocks.sort_by! {|block| block[1]}
+
+    # blocks.each do |location|
+
+    #   col_num, row_num = location[0], location[1]
+    #   p row_num
+    #   return if row_num == 0
+    #   return if @cells[col_num][row_num - 1] == :full
+
+    #   row_num.downto(0) do |new_row|
+    #     if @cells[col_num][new_row] != :space
+    #       @cells[col_num][new_row+1] = :piece
+    #       @cells[col_num][row_num] = :space
+    #       return
+    #     end
+    #   end
+
+    #   @cells[col_num][0] = :piece
+    #   @cells[col_num][row_num] = :space
+
+    # end
+
 
 
   def coordinates(element)
