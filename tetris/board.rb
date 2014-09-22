@@ -94,17 +94,17 @@ class Board
     #add min_col + max_col, divide by 2, add 1 => avg_col
     #add min_row + max_row, divide by 2, add 1 => avg_row
 
-    pivot_col = col_coordinates.inject(:+) / col_coordinates.length + 1
-    pivot_row = row_coordinates.inject(:+) / row_coordinates.length + 1
+    #pivot_col = col_coordinates.inject(:+)/col_coordinates.length
+    #pivot_row = row_coordinates.inject(:+)/row_coordinates.length
 
-    relative_pivot_col = pivot_col - col_coordinates.min
-    relative_pivot_row = pivot_row - row_coordinates.min
+    pivot_col = col_coordinates.min
+    pivot_row = row_coordinates.max
     #for each coordinate pair of old_blocks, 
     #subtract [avg_col, avg_row] to create an array of 
     #RELATIVE coordinates for each piece around an artificial
     #center of gravity
 
-    block_height = [col_coordinates.max - col_coordinates.min, row_coordinates.max - row_coordinates.min].max
+    block_height = 4
     
 
     # x2 = (y1 + px - py)
@@ -113,19 +113,19 @@ class Board
     relative_blocks = old_blocks.map do |block|
       [block[0]-pivot_col, block[1]-pivot_row]
     end
+    
 
     #use rotation formulas to find relative rotation positions for these blocks
     rotated = relative_blocks.map do |block|
-      [block[1]+relative_pivot_col-relative_pivot_row, relative_pivot_col+relative_pivot_row-block[0]]
+      [block[1]+1, -block[0]+1]
     end
-
 
     #now, add these changes back to the original coordinates, pair by pair
     #to produce new_blocks
     new_blocks = []
 
     0.upto(old_blocks.length-1) do |index|
-      new_blocks << [old_blocks[index][0]+rotated[index][0], old_blocks[index][1]+rotated[index][1]]
+      new_blocks << [pivot_col+rotated[index][0], pivot_row+rotated[index][1]]
     end
 
 
