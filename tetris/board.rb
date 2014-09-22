@@ -442,21 +442,15 @@ class Board
   #defaults to top of board in a random row
   # 
   def create_piece(row = num_rows - 1)
-    piece = [:single_block,
-             :square,
-             :bar_horizontal,
-             :bar_vertical,
-             :horizontal_left_l,
-             :horizontal_right_l,
-             :vertical_right_l].sample
+    piece = [:square,
+             :bar,
+             :left_l,
+             :right_l,
+             :left_s,
+             :right_s].sample
 
     method(piece).call(row)
-  end
-
-  def single_block(row)
-
-    column = rand(num_columns)
-    @cells[column][row] = :piece
+    rand(4).times {rotate_piece}
   end
 
   def square(row)
@@ -469,7 +463,7 @@ class Board
 
   end
 
-  def bar_horizontal(row)
+  def bar(row)
     left_column = rand(num_columns - 4 )
 
     @cells[left_column][row] = :piece
@@ -478,34 +472,8 @@ class Board
     @cells[left_column + 3][row] = :piece
 
   end
-
-  def bar_vertical(row)
-    left_column = rand(num_columns - 1 )
-
-    @cells[left_column][row] = :piece
-    @cells[left_column][row -1] = :piece
-    @cells[left_column][row - 2] = :piece
-    @cells[left_column][row - 3] = :piece
-
-  end
-
-  def horizontal_left_l(row)
-    left_column = rand(num_columns - 3 )
-    @cells[left_column][row] = :piece
-    @cells[left_column][row-1] = :piece
-    @cells[left_column+1][row-1] = :piece
-    @cells[left_column+2][row-1] = :piece
-  end
-
-  def horizontal_right_l(row)
-    left_column = rand(num_columns - 3 )
-    @cells[left_column][row-1] = :piece
-    @cells[left_column+1][row-1] = :piece
-    @cells[left_column+2][row-1] = :piece
-    @cells[left_column+2][row] = :piece
-  end
   
-  def vertical_right_l(row)
+  def right_l(row)
     left_column = rand(num_columns - 2)
     @cells[left_column][row] = :piece
     @cells[left_column][row-1] = :piece
@@ -513,12 +481,28 @@ class Board
     @cells[left_column+1][row] = :piece
   end
 
-  def vertical_left_l(row)
+  def left_l(row)
     left_column = rand(num_columns - 2)
     @cells[left_column][row] = :piece
     @cells[left_column+1][row] = :piece
     @cells[left_column+1][row-1] = :piece
     @cells[left_column+1][row-2] = :piece
+  end
+
+  def right_s(row)
+    left_column = rand(num_columns - 3)
+    @cells[left_column][row-1] = :piece
+    @cells[left_column+1][row-1] = :piece
+    @cells[left_column+1][row] = :piece
+    @cells[left_column+2][row] = :piece
+  end
+
+  def left_s(row)
+    left_column = rand(num_columns - 3)
+    @cells[left_column][row] = :piece
+    @cells[left_column+1][row] = :piece
+    @cells[left_column+1][row-1] = :piece
+    @cells[left_column+2][row-1] = :piece
   end
 
   def num_columns
