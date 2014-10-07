@@ -5,7 +5,6 @@
 class TowersOfHanoi
 	def initialize(tower_height=3)
 		@towers = Towers.new(tower_height)
-		
 		@player = Player.new(@towers)
 	end
 		
@@ -19,12 +18,11 @@ class TowersOfHanoi
 			@towers.render
 			@player.get_move
 			
-			break if check_game_over 
-
+			break if game_over? 
 		end
 	end
 
-	def check_game_over
+	def game_over?
 		if @towers.tower_assembled?
 			puts " "
 			@towers.render
@@ -57,9 +55,7 @@ class Player
 					break
 				end
 			end
-
 		end
-
 	end
 	
 	def ask_for_move
@@ -124,7 +120,7 @@ class Towers
 		if (1..3).include?(move[0]) && (1..3).include?(move[1])
 			true
 		else
-			puts "Please choose towers 1-3 for moves"
+			puts "Please choose towers 1-3 for moves."
 		end
 	end
 
@@ -148,12 +144,13 @@ end
 
 puts "How many pieces would you like to play with? (3-8)"
 tower_height = gets.chomp.to_i
-loop do
-	break if (3..8).to_a.include?(tower_height)
+
+until (3..8).to_a.include?(tower_height)
 	
 	puts "Please pick a tower height from 3-8"
 	tower_height = gets.chomp.to_i
 end
+
 
 t = TowersOfHanoi.new(tower_height)
 t.play
