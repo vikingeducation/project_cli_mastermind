@@ -8,8 +8,8 @@ class Game
 	def play 
     @player = Player.new
     @score = 0
-    puts"Welcome to Rock, Paper, Scissors! You know the deal, just don't get beat too badly\n\n\n"
-    
+    puts"Welcome to Rock, Paper, Scissors! You know the deal, just don't get beat too badly.\n\n\n"
+
     loop do
     	@comp_choice = Computer.new.comp_choice
     	@player_choice = @player.player_choice
@@ -20,20 +20,18 @@ class Game
   def evaluate_winner(player_choice, comp_choice)
 			case [player_choice, comp_choice]
 
-			when %w{ p r }, %w{ s p }, %w{ r s }
+			when %w{ p rock }, %w{ s paper }, %w{ r scissors }
 				@score += 1
-				puts "You win! You've beaten the computer #{@score} time(s)!"
+				puts "The computer chose #{comp_choice}, you win!" 
+				puts "You've beaten the computer #{@score} time(s)!\n\n"
 
-			when %w{ r p }, %w{ p s }, %w{ s r }
-				puts "Darn, you lost."
+			when %w{ r paper }, %w{ p scissors }, %w{ s rock }
+				puts "Darn, the computer chose #{comp_choice}. You lose.\n\n"
 			
 			else
-			  puts "It was a tie!"
+			  puts "It was a tie!\n\n"
 			end
 	end
-
-
-
 end
 
 
@@ -57,7 +55,7 @@ class Computer
 	attr_reader :comp_choice
 
 	def comp_choice
-		%w{r p s}.sample
+		%w{rock paper scissors}.sample
   end
 end
 
