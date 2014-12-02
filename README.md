@@ -6,7 +6,7 @@ Requires Ruby 2.0.0+
 
 To play:
 
-`cd /tetris`
+`cd tetris`
 
 `ruby tetris.rb`
 
