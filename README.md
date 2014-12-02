@@ -7,6 +7,7 @@ Requires Ruby 2.0.0+
 To play:
 
 `cd /tetris`
+
 `ruby tetris.rb`
 
 Other folders include games of Tower of Hanoi and Mastermind written as regular assignments during that week.
