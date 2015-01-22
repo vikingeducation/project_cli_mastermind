@@ -1,3 +1,7 @@
+#need to roll in classes to mastermind superclass and inherit
+#need codemaker to render board in between turns
+#consider better A.I.
+
 class MasterMind
 end
 
