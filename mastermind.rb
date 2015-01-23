@@ -51,6 +51,7 @@ class Codebreaker
   def guess_checker
     turn_check
     puts "What is your guess? (enter four colors separately) You are on turn # #{@turn_count}"
+    #COMMENT OF DESTRUCTION
     @user_guess1 = gets.chomp.to_i
     @user_guess2 = gets.chomp.to_i
     @user_guess3 = gets.chomp.to_i
