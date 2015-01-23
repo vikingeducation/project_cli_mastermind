@@ -4,6 +4,7 @@
 require './pegset.rb'
 require './code.rb'
 require './configuration.rb'
+require './donald.rb'
 
 class MastermindGame
   attr_reader :code_length, :number_of_turns, :past_turns, :master_code, :human_player
@@ -11,10 +12,12 @@ class MastermindGame
   def initialize
     set_instance_variables
     player_orientation
+    # initialize_donald
     until game_over? do
       take_a_turn
     end
     game_ending_sequence
+    nil
   end
 
   def set_instance_variables
@@ -33,7 +36,7 @@ class MastermindGame
         @human_player = true
         input_valid = true
       elsif input == "M"
-        @human_player == false
+        @human_player = false
         input_valid = true
       else
         print "Please enter 'B' or 'M'.\n > "
@@ -44,6 +47,10 @@ class MastermindGame
   def intro_message
     "\nWELCOME TO MASTERMIND\nDo you have what it takes to break the code?\n\nHow would you like to play?\nas CODE BREAKER: 'B'\nas CODE MAKER:   'M'\n > "
   end
+
+  # def initialize_donald
+    # @donald = Donald.new
+  # end
 
   def take_a_turn
     player_code = turn_code
@@ -56,7 +63,7 @@ class MastermindGame
     if human_player
       ManualCode.new
     else
-      RandomCode.new
+      RandomCode.new # @donald.ask(past_turns)
     end
   end
 
@@ -69,12 +76,28 @@ class MastermindGame
   end
 
   def game_ending_sequence
+    if human_player
+      code_breaker_ending
+    else
+      code_maker_ending
+    end
+    puts "GAME OVER"
+  end
+
+  def code_breaker_ending
     if past_turns[-1][:pegs].winning?
       puts "CONGRATULATIONS! You broke the code in #{past_turns.count} tries."
     else
       puts "Sorry, you did not break the code."
     end
-    puts "GAME OVER"
+  end
+
+  def code_maker_ending
+    if past_turns[-1][:pegs].winning?
+      puts "Sorry, Donald was able to break your code in #{past_turns.count} tries."
+    else
+      puts "Congratulations, Donald could not break your code."
+    end
   end
 
   def count_exact_matches(player_code)

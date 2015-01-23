@@ -11,6 +11,82 @@ Apply minimax technique to find a next guess as follows: For each possible guess
 Repeat from step 3.
 =end
 
+require './configuration.rb'
+
+class Donald
+  include Configuration
+  attr_accessor :code_length,
+                :duplicates_allowed,
+                :number_of_possible_letters,
+                :all_possible_combinations,
+                :remaining_combinations
+
+  def initialize
+    @code_length = Configuration::CODE_LENGTH
+    @number_of_possible_letters = Configuration::NUMBER_OF_POSSIBLE_LETTERS
+    @duplicates_allowed = Configuration::DUPLICATES_ALLOWED
+    @all_possible_combinations = combination_creator [],all_possible_letters
+    @remaining_combinations = @all_possible_combinations.dup
+  end
+
+  def last_letter
+    (64 + NUMBER_OF_POSSIBLE_LETTERS).chr
+  end
+
+  def all_possible_letters
+    ("A"..last_letter).to_a
+  end
+
+  def first_turn
+    self.remaining_combinations.delete ["A","A","B","B"]
+    "AABB"
+  end
+
+  def ask(past_turns)
+    if past_turns.empty?
+      first_turn
+    end
+  end
+
+  def combination_creator(input,possible_letters)
+    if input.length == code_length - 1
+      add_one_letter input, possible_letters
+    else
+      add_many_letters input, possible_letters
+    end
+  end
+
+  def add_one_letter(input,possible_letters)
+    new_combos = []
+    possible_letters.each do |letter|
+      combo = input + [letter]
+      new_combos << combo
+    end
+    new_combos
+  end
+
+  def add_many_letters(input, possible_letters)
+    all_new_combos = []
+    possible_letters.each do |letter|
+      longer_combo = input + [letter]
+      letters_left = letters_reducer(possible_letters,letter)
+      new_combos = combination_creator(longer_combo,letters_left)
+      all_new_combos += new_combos
+    end
+    all_new_combos
+  end
+
+  def letters_reducer(possible_letters,letter)
+    if duplicates_allowed
+      possible_letters
+    else
+      possible_letters - [letter]
+    end
+  end
+end
+
 # Create the set of all possible codes.
 
 # Send guess of "AABB"
+
+#

@@ -67,7 +67,7 @@ class RandomCode < Code
     code = []
     until code.length == code_length do
       letter = generate_random_letter
-      unless code.include? letter
+      if duplicates_allowed || !(code.include? letter)
         code << letter
       end
     end
