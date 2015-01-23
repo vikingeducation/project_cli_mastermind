@@ -12,6 +12,7 @@ class MastermindGame
   def initialize
     set_instance_variables
     player_orientation
+    create_master_code
     # initialize_donald
     until game_over? do
       take_a_turn
@@ -24,7 +25,14 @@ class MastermindGame
     @code_length = Configuration::CODE_LENGTH
     @number_of_turns = Configuration::NUMBER_OF_TURNS
     @past_turns = []
-    @master_code = RandomCode.new
+  end
+
+  def create_master_code
+    @master_code =  if human_player
+                      RandomCode.new
+                    else
+                      ManualCode.new
+                    end
   end
 
   def player_orientation
