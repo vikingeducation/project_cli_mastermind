@@ -1,6 +1,3 @@
-#need to roll in classes to mastermind superclass and inherit
-#need codemaker to render board in between turns
-#consider better A.I.
 require './codebreaker.rb'
 require './codemaker.rb'
 

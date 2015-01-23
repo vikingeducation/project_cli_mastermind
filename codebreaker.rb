@@ -65,9 +65,12 @@ class Codebreaker
   end
   
   def past_guesses
+    puts "Past guesses! \n\n"
+    sleep 1
     @full_board << @user_guess
+    i = 1
     @full_board.each do |guesses|
-      p guesses
+      puts "#{i}. #{guesses}"
     end
   end
   

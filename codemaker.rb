@@ -18,7 +18,7 @@ class Codemaker
   
   def lets_play
     puts "Great, the computer has 12 turns, it must guess the correct color combo. Enter your code. 1 means red, 2 means blue, 3 means green, 4 means yellow, 5 means purple, and 6 means taupe."
-    sleep 1.5
+    sleep 0.8
     board_maker
     while true
       guess_checker
@@ -70,9 +70,12 @@ class Codemaker
   end
   
   def past_guesses
-    @full_board << @computer_guess
+    puts "Past guesses! \n\n"
+    sleep 1
+    @full_board << @computer_board
+    i = 1
     @full_board.each do |guesses|
-      p guesses
+      puts "#{i}. #{guesses}"
     end
   end
   
