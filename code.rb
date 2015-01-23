@@ -1,6 +1,7 @@
 load 'configuration.rb'
 
 class Code
+  include Configuration
   attr_reader :code
 
   def initialize(string)
