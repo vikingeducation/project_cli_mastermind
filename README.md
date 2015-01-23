@@ -10,3 +10,6 @@ As always, you will:
 4. Perform code review on your partner for the week
 
 This is designed as an individual assignment, but feel free to collaborate with your classmates on these problems as much as you'd like.  What matters is that you learn.
+
+
+Boris Shporkin
