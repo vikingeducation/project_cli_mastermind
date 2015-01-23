@@ -1,0 +1,6 @@
+module Configuration
+  CODE_LENGTH = 4
+  NUMBER_OF_POSSIBLE_LETTERS = 6
+  # DUPLICATES_ALLOWED = false
+  NUMBER_OF_TURNS = 12
+end
