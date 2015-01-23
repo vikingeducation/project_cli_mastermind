@@ -2,7 +2,7 @@ load 'configuration.rb'
 
 class Code
   include Configuration
-  attr_reader :code
+  attr_accessor :code
 
   def initialize(string)
     @code = string.split(//)
@@ -19,14 +19,46 @@ class Code
   def to_s
     code.join('')
   end
+
+  def duplicates_allowed
+    DUPLICATES_ALLOWED
+  end
 end
 
 class ManualCode < Code
   def initialize
     puts "Enter a #{code_length}-character code using the letters A through #{last_letter}."
-    puts "Duplicates are not allowed."
-    string = gets.chomp.upcase
-    @code = string.split(//)
+    puts "Duplicates are #{'not ' unless duplicates_allowed}allowed."
+    input_is_valid = false
+    until input_is_valid
+      string = gets.chomp.upcase
+      code_input = string.split(//)
+      if validate_input(code_input)
+        @code = code_input
+        input_is_valid = true
+      else
+        puts "That is not a valid code."
+      end
+    end
+  end
+
+  def validate_input(code_input)
+    all_letters_in_range(code_input) &&
+    duplicate_analysis(code_input) &&
+    correct_length(code_input)
+  end
+
+  def all_letters_in_range(code_input)
+    code_input.all? { |letter| ("A"..last_letter).include? letter }
+  end
+
+  def duplicate_analysis(code_input)
+    duplicates_allowed ||
+    code_input == code_input.uniq
+  end
+
+  def correct_length(code_input)
+    code_input.count == code_length
   end
 end
 

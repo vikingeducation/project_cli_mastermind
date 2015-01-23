@@ -6,10 +6,11 @@ require './code.rb'
 require './configuration.rb'
 
 class MastermindGame
-  attr_reader :code_length, :number_of_turns, :past_turns, :master_code
+  attr_reader :code_length, :number_of_turns, :past_turns, :master_code, :human_player
 
   def initialize
     set_instance_variables
+    player_orientation
     until game_over? do
       take_a_turn
     end
@@ -23,11 +24,40 @@ class MastermindGame
     @master_code = RandomCode.new
   end
 
+  def player_orientation
+    print intro_message
+    input_valid = false
+    until input_valid
+      input = gets.chomp.upcase
+      if input == "B"
+        @human_player = true
+        input_valid = true
+      elsif input == "M"
+        @human_player == false
+        input_valid = true
+      else
+        print "Please enter 'B' or 'M'.\n > "
+      end
+    end
+  end
+
+  def intro_message
+    "\nWELCOME TO MASTERMIND\nDo you have what it takes to break the code?\n\nHow would you like to play?\nas CODE BREAKER: 'B'\nas CODE MAKER:   'M'\n > "
+  end
+
   def take_a_turn
-    player_code = ManualCode.new
+    player_code = turn_code
     pegs = PegSet.new(turn_scorer player_code)
     past_turns << { code: player_code, pegs: pegs }
     print_game_board
+  end
+
+  def turn_code
+    if human_player
+      ManualCode.new
+    else
+      RandomCode.new
+    end
   end
 
   def turn_scorer(player_code)
@@ -107,4 +137,4 @@ class MastermindGame
   end
 end
 
-game = MastermindGame.new
+# game = MastermindGame.new
