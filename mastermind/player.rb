@@ -13,7 +13,9 @@ class Player
 		4.times do
 			puts "Enter guess for slot #{i}"
 			value = gets.chomp
-			until validate_entry {puts "Invalid Selection!\n You must select red, green, yellow, violet, black, or white"}
+			until validate_entry do
+				puts "Invalid Selection!\n You must select red, green, yellow, violet, black, or white"
+			end
 			@guess.push(value)
 			i+=1
 		end
@@ -26,6 +28,7 @@ class Player
 
 	def generate_code
 		code = @@colors.sample(4)
+		code
 	end
 
 	def manually_generate_code
@@ -34,7 +37,10 @@ class Player
 		4.times do
 			puts "Enter value for slot #{i} of code:"
 			value = gets.chomp
-			until validate_entry {puts "Invalid Selection!\n You must select red, green, yellow, violet, black, or white"}
+			until validate_entry do 
+				puts "Invalid Selection!\n You must select red, green, yellow, violet, black, or white"
+				value = gets.chomp
+			end
 			code.push(value)
 			i+=1
 		end

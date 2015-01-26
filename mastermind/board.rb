@@ -8,7 +8,11 @@ class Board
 	def render
 		@board.each do |row|
 			row.each do |column|
-				column.nil? ? print "-" : print(column.to_s)
+				if column.nil?
+					print "-"
+				else
+					print(column.to_s)
+				end
 			end
 			puts
 		end
@@ -20,7 +24,11 @@ class Board
 	end
 
 	def ntd(val) # ntd = nils to dash
-		val==nil ? print "-": print val
+		if val.nil
+			print "-"
+		else
+			print val
+		end
 	end
 
 	def rerender(counter, gh, fh)
