@@ -1,6 +1,8 @@
 require './board.rb'
 require './player.rb'
 
+require 'better_errors'
+
 class Game
 
 	@num_players=0
@@ -16,7 +18,7 @@ class Game
 
 	def number_of_players
 		puts "How many players (1 or 2)? "
-		@num_players=gets.chomp
+		@num_players=gets.chomp.to_i
 		# @num_players.to_i!
 		# print @snum_players
 		# until validate_num_players(@num_players) do
@@ -24,17 +26,26 @@ class Game
 		# end
 		until validate_num_players(@num_players) do
 			puts "Invalid selection!\nHow many players (1 or 2)?"
-			@num_players=gets.chomp
-			@num_players.to_i!
+			@num_players=gets.chomp.to_i!
 		end
 	end
 
 	def validate_num_players(num)
-		[1,2].include?(num.to_i) ? true : false
+		[1,2].include?(num) ? true : false
 	end
 
 	def validate_role(num)
 		@num_players.to_downcase==["codebreaker","codemaker"].any? ? true : false
+	end
+
+	def get_role
+		puts "Are you codemaker or codebreaker?"
+		role=gets.chomp
+		until validate_role(role) do
+			print "Invalid selection. You must select 'codebreaker' or 'codemaker'.\nPlease reenter:"
+			role=gets.chomp
+		end
+		role
 	end
 
 	def evaluate_guess(guess)
@@ -60,27 +71,28 @@ class Game
 		guess[j]==@code[j] ? true : false
 	end
 
-	def win(guess)
-		guess=@code ? true : false
+	def win?(guess)
+		guess==@code ? true : false
 	end
 
 	def play
 		welcome
 		# ask if 1-player or 2-player
 		@num_players=number_of_players
+		# puts @num_players
 		# break if quit?
 		codebreaker = Player.new("codebreaker")
 		codemaker = Player.new("codemaker")
-		if number_of_players==1
-			puts "are you codemaker or codebreaker?"
-			role = gets.chomp
-			until validate_role(role) do
-				put "Invalid selection!\nYou must select either \"codemaker\" or \"codebreaker\": "
-			end
+		if @num_players==1
+			# puts "Are you codemaker or codebreaker?"
+			role = get_role
+			# until validate_role(role) do
+			# 	put "Invalid selection!\nYou must select either \"codemaker\" or \"codebreaker\": "
+			# end
 			role=="codebreaker" ? @code = codemaker.generate_code : @code=codemaker.manually_set_code
 		else
 		# if 2-player
-			@code=codemaker.manually_set_code
+			@code=codemaker.manually_generate_code
 		end
 
 		counter = 0

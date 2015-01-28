@@ -24,7 +24,7 @@ class Board
 	end
 
 	def ntd(val) # ntd = nils to dash
-		if val.nil
+		if val==nil
 			print "-"
 		else
 			print val
@@ -39,6 +39,7 @@ class Board
 		i=0
 		gh.count.times do
 			print "#{ntd(gh[i])}\t#{ntd(fh[i])}"
+			i+=1
 		end
 	end
 end

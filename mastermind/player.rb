@@ -1,11 +1,11 @@
 class Player
 	attr_accessor :role, :guess 
 
-	@guess=[]
 	# @role
 	@@colors=%w(red green yellow violet black white)
 	def initialize (role)
 		@role = role
+		@guess=[]
 	end
 
 	def ask_for_guess
@@ -13,8 +13,8 @@ class Player
 		4.times do
 			puts "Enter guess for slot #{i}"
 			value = gets.chomp
-			until validate_entry do
-				puts "Invalid Selection!\n You must select red, green, yellow, violet, black, or white"
+			until validate_entry(value) do
+				puts "Invalid Selection!\n You must select red, green, yellow, violet, black, or white:"
 			end
 			@guess.push(value)
 			i+=1
@@ -37,8 +37,8 @@ class Player
 		4.times do
 			puts "Enter value for slot #{i} of code:"
 			value = gets.chomp
-			until validate_entry do 
-				puts "Invalid Selection!\n You must select red, green, yellow, violet, black, or white"
+			until validate_entry(value) do 
+				puts "Invalid Selection!\n You must select red, green, yellow, violet, black, or white.\nPlease reenter: "
 				value = gets.chomp
 			end
 			code.push(value)
