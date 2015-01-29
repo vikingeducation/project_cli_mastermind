@@ -1,7 +1,7 @@
 require './board.rb'
 require './player.rb'
 
-require 'better_errors'
+
 
 class Game
 
@@ -26,7 +26,7 @@ class Game
 		# end
 		until validate_num_players(@num_players) do
 			puts "Invalid selection!\nHow many players (1 or 2)?"
-			@num_players=gets.chomp.to_i!
+			@num_players=gets.chomp.to_i
 		end
 	end
 
@@ -34,8 +34,8 @@ class Game
 		[1,2].include?(num) ? true : false
 	end
 
-	def validate_role(num)
-		@num_players.to_downcase==["codebreaker","codemaker"].any? ? true : false
+	def validate_role(role)
+		role.downcase==["codebreaker","codemaker"].any? ? true : false
 	end
 
 	def get_role
@@ -102,17 +102,24 @@ class Game
 		@board.render
 		12.times do
 			# get guess from codebreaker
+			gh=[]
+			gh.clear # guess history array
+			fh=[] # feedback history array
+			fh.clear
 			guess=codebreaker.ask_for_guess
-			guess_history.push(guess)
+			gh.push(guess)
+			guess_history.push(gh)
+			gh.clear
 			counter+=1
 			# compare code vs guess
 			feedback=evaluate_guess(guess)
-			feedback_history.push(feedback)
+			fh.push(feedback)
+			feedback_history.push(fh)
 				break if win?(guess)
-			@board.give_feedback(feedback)
+			# @board.give_feedback(feedback)
 			# rerender board
-			@board.rerender(counter, guess_history, feedback_history)
 			counter+=1
+			@board.rerender(counter, guess_history, feedback_history, guess, feedback)
 		end
 		if counter == 12
 			puts "You lost!"

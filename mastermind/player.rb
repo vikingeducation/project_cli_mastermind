@@ -11,10 +11,11 @@ class Player
 	def ask_for_guess
 		i = 1
 		4.times do
-			puts "Enter guess for slot #{i}"
-			value = gets.chomp
+			puts "\nEnter guess for slot #{i}:"
+			value = gets.chomp.downcase
 			until validate_entry(value) do
 				puts "Invalid Selection!\n You must select red, green, yellow, violet, black, or white:"
+				value = gets.chomp.downcase
 			end
 			@guess.push(value)
 			i+=1
@@ -36,7 +37,7 @@ class Player
 		i = 1
 		4.times do
 			puts "Enter value for slot #{i} of code:"
-			value = gets.chomp
+			value = gets.chomp.downcase
 			until validate_entry(value) do 
 				puts "Invalid Selection!\n You must select red, green, yellow, violet, black, or white.\nPlease reenter: "
 				value = gets.chomp
