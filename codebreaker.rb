@@ -34,6 +34,9 @@ class Codebreaker
   def fail_message
     puts ""
     puts "Sorry, you lost!"
+    puts ""
+    puts "The correct code was: #{@computer_board}"
+    puts ""
     exit
   end
   
