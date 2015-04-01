@@ -9,8 +9,7 @@ class Codebreaker
 
   def play
     generate_board
-    puts ""
-    puts "Welcome to Mastermind! Please type four numbers between 1 and 6 separated by commas at each prompt."
+    welcome_message
     loop do
       if @turn_number > 12
         fail_message
@@ -23,6 +22,11 @@ class Codebreaker
         @turn_number += 1
       end
     end
+  end
+  
+  def welcome_message
+    puts ""
+    puts "Welcome to Mastermind! Please type four numbers between 1 and 6 separated by commas at each prompt."
   end
   
   def generate_board

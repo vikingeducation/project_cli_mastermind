@@ -1,5 +1,6 @@
 require './codebreaker.rb'
+require './codemaker.rb'
 
-test = Codebreaker.new
+test = Codemaker.new
 
 test.play
