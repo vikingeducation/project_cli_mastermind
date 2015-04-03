@@ -10,12 +10,73 @@ class Mastermind
 		# Create a new codebreaker
 		@codebreaker = Codebreaker.new
 
+		# Create a new codemaker
+		@codemaker = Codemaker.new
+
 		# Get code for the game from the codemaker
 		@master_code = Codemaker.new.create_code
+
+		# Start the game up
+		start
 	end
 	
-	# Play Mastermind!!
-	def play
+	# Ask if user wants to be codemaker or codebreaker?
+	def start
+		error_message = nil
+		loop do
+			@board.render
+			puts error_message || "Enter 1 for codemaker, 2 for codebreaker:"
+			input = gets.chomp.to_i
+			if input == 1
+				self.play_codemaker
+				break
+			elsif input == 2
+				self.play_codebreaker
+				break
+			else
+				error_message = "Invalid input, please try again"
+				redo
+			end
+		end
+	end
+
+	def play_codemaker
+		# Set the ending type as a loss by default
+		ending_type = "loss"
+
+		# Ask the codemaker to set the code
+		@master_code = @codemaker.set_code
+		
+		# Start the loop 12 times
+		12.times do
+			# Render board
+			@board.render
+
+			# Get guess
+			@guess = []
+			4.times do
+				@guess << (rand * 6).ceil
+			end
+
+			# Guess needs to be a string
+			@guess = @guess.join(' ')
+
+			# Add guess to output
+			@board.add_output(@guess + " | ")
+
+			# Test the guess
+			if check_guess(@guess)
+				ending_type = "victory"
+				break
+			end
+		end
+
+		# End the game and send the ending type
+		@board.end_game(ending_type, @master_code)
+	end
+
+	# Play Mastermind as codebreaker!!
+	def play_codebreaker
 		# Set the ending type as a loss by default
 		ending_type = "loss"
 
@@ -127,8 +188,24 @@ class Codemaker
 		4.times do 
 			code << (rand * 6).ceil
 		end
-		binding.pry
 		code
+	end
+
+	# Prompt user to enter code
+	def set_code
+		@codebreaker = Codebreaker.new
+		error_message = nil
+		loop do
+			puts error_message || "Please enter your four-digit code.\nAccepts #'s 1-6 as input, comma separated\nExample: 1,2,3,4\n"
+			input = gets.chomp.split(',').map(&:to_i)
+			if @codebreaker.valid_input?(input)
+				return input
+				break
+			else
+				error_message = "Invalid input. Please enter code again."
+				redo
+			end
+		end
 	end
 end
 
@@ -179,4 +256,3 @@ Good luck!
 end
 
 a = Mastermind.new
-a.play
