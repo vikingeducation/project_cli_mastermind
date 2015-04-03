@@ -1,5 +1,3 @@
-require "pry"
-
 # Controls the overall game
 class Mastermind
 	# Setup initial instance variables
