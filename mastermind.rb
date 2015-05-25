@@ -1,6 +1,7 @@
 class Mastermind
 
   def initialize
+
     load "board.rb"
     load "player.rb"
     #welcome player
@@ -19,7 +20,8 @@ class Mastermind
     @codemaker.get_code
 
     #turn loop
-    12.times do |turn_number|
+    3.times do |turn_number|
+      puts "Turn ##{turn_number+1}"
       #prompt codebreaker for guess
       @codebreaker.get_guess
       #check guess vs board
@@ -28,6 +30,9 @@ class Mastermind
       #render board
       @board.render
     end
+
+    puts "Good try, but you failed to break the code!  The actual solution was:"
+    @board.display_solution
   end
 
 
