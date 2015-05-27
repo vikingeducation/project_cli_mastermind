@@ -1,29 +1,29 @@
+require "./board.rb"
+require "./player.rb"
+
+
 class Mastermind
 
   def initialize
-
-    load "board.rb"
-    load "player.rb"
     #welcome player
     puts "Welcome!"
     #create new board
     @board = Board.new
     #set up players
-    @codemaker = CodeMaker.new("codemaker", @board)
-    @codebreaker = CodeBreaker.new("codebreaker", @board)
-
+    @codemaker = Player.new("codemaker", @board)
+    @codebreaker = Player.new("codebreaker", @board)
   end
 
 
   def play
     #prompt codemaker for code
-    @codemaker.get_code
+    @codemaker.input_prompt("codemaker")
 
     #turn loop
     3.times do |turn_number|
       puts "Turn ##{turn_number+1}"
       #prompt codebreaker for guess
-      @codebreaker.get_guess
+      @codebreaker.input_prompt("codebreaker")
       #check guess vs board
       #display board feedback
 

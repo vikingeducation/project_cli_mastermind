@@ -20,9 +20,26 @@ class Board
 
 
   def check_exact_matches(guess)
-    guess.each_with_index do |guess_peg, index|
-      @feedback << "exact" if guess_peg == @code[index]
+    current_feedback = Array.new(4)
+
+    # check all for exact matches first
+    @code.each_with_index do |code_peg, index|
+      if code_peg == guess[index]
+        current_feedback[index] = "exact match"
+        guess[index] = nil
+      end
     end
+
+    # then check for near matches
+    @code.each_with_index do |code_peg, index|
+      if current_feedback[index] != "exact match" && guess.include?(code_peg)
+        current_feedback[guess.index(code_peg)] = "wrong place"
+        guess[guess.index(code_peg)] = nil
+      end
+    end
+
+    @feedback << current_feedback
+    p current_feedback
   end
 
   def check_near_matches(guess)
@@ -39,7 +56,7 @@ class Board
     else
       check_exact_matches(guess)
         # check near matches?
-      print @feedback
+      #print @feedback
       puts "Try again..."
     end
 

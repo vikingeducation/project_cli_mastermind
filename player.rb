@@ -1,5 +1,5 @@
 class Player
-  attr_accessor :role
+  #attr_accessor :role
 
   def initialize(role, board)
 
@@ -18,6 +18,7 @@ class Player
 
     loop do
       input = gets.strip.split(",").map(&:to_i)
+
       if is_valid?(input)
         break
       else
@@ -30,31 +31,7 @@ class Player
   end
 
 
-
-
-  # to check if a code or guess is formatted properly
-  def is_valid?(submitted)
-
-    if  submitted.is_a?(Array) &&   # guess is an array
-        submitted.size == 4 &&      # guess array is size 4
-        submitted.max <= 6 &&       # each value is between 1 and 6
-        submitted.min >= 1
-      true
-    else
-      false
-    end
-
-  end
-
-
-end
-
-
-
-
-class CodeMaker < Player
-
-  def get_code
+  def get_maker_code
     puts "Codemaker, submit your secret code:"
 
     # for human CodeMaker
@@ -67,21 +44,45 @@ class CodeMaker < Player
 ### for testing only!!!
     print code.to_s + "\n"
 ###
-
     @board.add_secret_code(code)
   end
 
-end
 
-
-
-
-class CodeBreaker < Player
-
-  def get_guess
+  def get_breaker_code
     puts "Codebreaker, submit your guess:"
     guess = get_input
     @board.process_guess(guess)
+  end
+
+
+  def input_prompt(role)
+    if role == "codemaker"
+      get_maker_code
+    else
+      get_breaker_code
+    end
+  end
+
+
+
+
+
+
+  # to check if a code or guess is formatted properly
+
+  def is_valid_length?(submitted)
+    # each value is between 1 and 6
+    submitted.max <= 6 && submitted.min >= 1
+  end
+
+
+  def is_valid_range?(submitted)
+    submitted.size == 4   # guess array is size 4
+  end
+
+
+  def is_valid?(submitted)
+    submitted.is_a?(Array) && is_valid_length?(submitted) && is_valid_range?(submitted)
   end
 
 end
