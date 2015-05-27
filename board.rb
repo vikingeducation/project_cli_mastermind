@@ -49,7 +49,6 @@ class Board
     end
 
     @feedback << current_feedback
-    p current_feedback
   end
 
 
@@ -57,14 +56,18 @@ class Board
 
   def process_guess(guess = [])
     @attempts << guess.dup
+    check_answer(guess)
+  end
 
-    if guess == @code
+
+  def win_check(turn_number)
+    if @feedback.last == ["X","X","X","X"]
       puts "The Codebreaker has won!"
       exit
     else
-      check_answer(guess)
-      puts "Not the secret code.  Please try again:"
+      puts "The code has not yet been cracked..." if turn_number < 12
     end
+
   end
 
 

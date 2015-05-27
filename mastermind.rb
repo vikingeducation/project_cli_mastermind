@@ -1,6 +1,6 @@
 require "./board.rb"
 require "./player.rb"
-
+system("clear")
 
 class Mastermind
 
@@ -32,14 +32,16 @@ class Mastermind
 
     #turn loop
     system("clear")
-    12.times do |turn_number|
-      puts "Turn ##{turn_number+1}"
+    12.times do |turn_index|
+
+      puts "Turn ##{turn_index + 1}"
       @codebreaker.input_prompt("codebreaker")
 
       @board.render
+      @board.win_check(turn_index + 1)
     end
 
-    puts "Good try, but you failed to break the code!"
+    puts "The Codebreaker has failed to crack the code!"
     @board.display_solution
   end
 
