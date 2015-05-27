@@ -10,7 +10,15 @@ class Board
 
 
   def render
-    puts @attempts
+    system("clear")
+    @attempts.size.times do |index|
+      attempt = @attempts[index].join("-")
+      feedback = @feedback[index].join(" ")
+      puts "#{index + 1}) #{attempt} : #{feedback}"
+    end
+    puts "\nX - correct number and placement"
+    puts "O - correct number but incorrect placement \n\n"
+
   end
 
 
@@ -19,21 +27,23 @@ class Board
   end
 
 
-  def check_exact_matches(guess)
-    current_feedback = Array.new(4)
+
+
+  def check_answer(guess)
+    current_feedback = Array.new(4) { "_" }
 
     # check all for exact matches first
     @code.each_with_index do |code_peg, index|
       if code_peg == guess[index]
-        current_feedback[index] = "exact match"
+        current_feedback[index] = "X" # exact match = X
         guess[index] = nil
       end
     end
 
     # then check for near matches
     @code.each_with_index do |code_peg, index|
-      if current_feedback[index] != "exact match" && guess.include?(code_peg)
-        current_feedback[guess.index(code_peg)] = "wrong place"
+      if current_feedback[index] != "X" && guess.include?(code_peg)
+        current_feedback[guess.index(code_peg)] = "O" # near match = O
         guess[guess.index(code_peg)] = nil
       end
     end
@@ -42,28 +52,25 @@ class Board
     p current_feedback
   end
 
-  def check_near_matches(guess)
 
-  end
 
 
   def process_guess(guess = [])
+    @attempts << guess.dup
 
-    @attempts << guess
     if guess == @code
-      puts "WIN!"
+      puts "The Codebreaker has won!"
       exit
     else
-      check_exact_matches(guess)
-        # check near matches?
-      #print @feedback
-      puts "Try again..."
+      check_answer(guess)
+      puts "Not the secret code.  Please try again:"
     end
-
   end
+
 
   def display_solution
-    print @code
+    puts "The actual solution was: #{@code}!"
   end
+
 
 end

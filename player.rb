@@ -1,14 +1,19 @@
 class Player
-  #attr_accessor :role
 
-  def initialize(role, board)
+  def initialize(role, ai, board)
 
     @role = role
+    @ai = ai
     @board = board
 
   end
 
 
+  def ai_enter_code
+    code = []
+    4.times { code << rand(1..6) }
+    code
+  end
 
 
   # generic loop to get player input
@@ -17,7 +22,11 @@ class Player
     input = []
 
     loop do
-      input = gets.strip.split(",").map(&:to_i)
+      if @ai
+        input = ai_enter_code
+      else
+        input = gets.strip.split(",").map(&:to_i)
+      end
 
       if is_valid?(input)
         break
@@ -33,17 +42,7 @@ class Player
 
   def get_maker_code
     puts "Codemaker, submit your secret code:"
-
-    # for human CodeMaker
-    #code = get_input
-
-    # for "AI" CodeMaker
-    code = []
-    4.times { code << rand(1..6) }
-
-### for testing only!!!
-    print code.to_s + "\n"
-###
+    code = get_input
     @board.add_secret_code(code)
   end
 
@@ -62,8 +61,6 @@ class Player
       get_breaker_code
     end
   end
-
-
 
 
 
