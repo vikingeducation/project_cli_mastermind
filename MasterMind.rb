@@ -1,3 +1,5 @@
+require 'colorize'
+
 class MasterMind
   def initialize
     # Create secret code
@@ -120,3 +122,15 @@ class Board
   
   
 end
+
+def colors_test
+  colors = {r: :red, b: :blue, g: :green, y: :yellow}
+  items = gets.chomp
+  array = items.split("")
+  array.each do |i|
+    print "[]".colorize((colors[(i.to_sym)]))
+  end
+  print "\n"
+end
+
+colors_test
