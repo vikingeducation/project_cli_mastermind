@@ -80,26 +80,33 @@ class SecretCode
     end
 
     # Check through the colors constant and see if the remaining
-    # guess and code contain the same number of a color, if so
-    # we pack an array with a number of white pegs equal to the count
+    # guess and code contain the same color.
+    #
+    # If so we need to return a number of white pegs equal to the number
+    # of that color in the guess if the code contains more of that color
+    # or a number of white pegs equal to the number of that color in the code.
+    # This fixes issues that come up when there's duplicates of a color
+    # in the guess or in the code.
     COLORS.each do |color|
-      if remaining_guess.count(color) == remaining_code.count(color)
-        temp_array = Array.new((remaining_guess.count(color)), :w)
-        feedback << temp_array
+      if remaining_guess.include?(color) && remaining_code.include?(color)
+        if remaining_code.count(color) > remaining_guess.count(color)
+          (remaining_guess.count(color)).times { feedback << :w }
+        else
+          (remaining_code.count(color)).times { feedback << :w }
+        end
       end
     end
 
     # Feedback is gross, is an array of arrays and contains nil arrays.
-    return feedback.compact.flatten
+    return feedback
   end
 
   private
 
   def create_secret_code
-    array = Array.new(4)
-    array.map do |i|
-      COLORS.sample
-    end
+    array = []
+    4.times { array << COLORS.sample }
+    array
   end
   
 end
