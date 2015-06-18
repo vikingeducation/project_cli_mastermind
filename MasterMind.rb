@@ -1,4 +1,5 @@
 require 'colorize'
+require 'pry'
 
 class MasterMind
   def initialize
@@ -47,24 +48,58 @@ class MasterMind
 end
 
 class SecretCode
-  # Constant array of colors
+  #attr_reader :code
+
+  COLORS = [:r, :g, :b, :y, :c, :m]
 
   def initialize
-    # create secret_code 
+    @code = create_secret_code
   end
 
-  def check_code(guess)
-    # return true if guess == code
+  def correct_code?(guess)
+    if guess == @code
+      return true
+    end 
   end
 
   def feedback(guess)
-    # return an array of feedback on the guess
+    feedback = []
+    remaining_guess = []
+    remaining_code = []
+
+    # Add black pegs to feedback, if guess is exactly correct
+    # if not, add guess value, and code value of the same index
+    # to "remaining" arrays.
+    guess.each_with_index do |guess_v, guess_i|
+      if guess[guess_i] == @code[guess_i]
+        feedback << :b
+      else
+        remaining_code << @code[guess_i]
+        remaining_guess << guess_v        
+      end
+    end
+
+    # Check through the colors constant and see if the remaining
+    # guess and code contain the same number of a color, if so
+    # we pack an array with a number of white pegs equal to the count
+    COLORS.each do |color|
+      if remaining_guess.count(color) == remaining_code.count(color)
+        temp_array = Array.new((remaining_guess.count(color)), :w)
+        feedback << temp_array
+      end
+    end
+
+    # Feedback is gross, is an array of arrays and contains nil arrays.
+    return feedback.compact.flatten
   end
 
   private
 
   def create_secret_code
-    # sample the array of colors, 4 times 
+    array = Array.new(4)
+    array.map do |i|
+      COLORS.sample
+    end
   end
   
 end
@@ -124,11 +159,19 @@ class Board
 end
 
 def colors_test
-  colors = {r: :red, b: :blue, g: :green, y: :yellow}
-  items = gets.chomp
+  colors = {r: :light_red, 
+            b: :light_blue, 
+            g: :light_green, 
+            y: :light_yellow, 
+            m: :light_magenta, 
+            c: :light_cyan}
+  items = "rbgymc"
   array = items.split("")
   array.each do |i|
-    print "[]".colorize((colors[(i.to_sym)]))
+    print "(*)".colorize(
+                        :color => (colors[(i.to_sym)])
+                        #:background => :light_black
+                        )
   end
   print "\n"
 end
