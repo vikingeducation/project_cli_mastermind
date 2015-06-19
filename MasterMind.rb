@@ -114,24 +114,44 @@ end
 class CodeBreaker
 
   def initialize
-    # guesses = 12
+    @guesses = 12
     
   end
 
   def get_guess
-    # loop forever
-    # ask for guess
-    # validate guess format
-    # break if guess in valid format
+    input = ""
+    loop do
+      puts "#{@guesses} remain!"
+      puts "Guess the code using 4 of the following colors"
+      print "'r' for red, ".colorize(:light_red)
+      print "'g' for green, ".colorize(:light_green)
+      print "'b' for blue, ".colorize(:light_blue)
+      print "\n"
+      print "'y' for yellow, ".colorize(:light_yellow)
+      print "'c' for cyan, ".colorize(:light_cyan)
+      print "'m' for magenta.".colorize(:light_magenta)
+      print "\n"
+      print "Enter your guess (e.g. 'ryby') > "
+      input = gets.chomp
+      break if guess_valid?(input)
+    end
+    increment_guesses
+    return input
   end
 
-  def validate_guess
+  def guess_valid?(guess)
+    guess = guess.split("").keep_if { |chr| chr =~ /[rgbymc]/ }
+    if guess.length == 4
+      true
+    else 
+      puts "Invalid Format!"
+      false
+    end
     # return true if guess is correct format
   end  
 
   def increment_guesses
-   # guesses -= 1
-    
+   @guesses -= 1 
   end
   
 end
