@@ -3,10 +3,6 @@ class SecretCode
 
   COLORS = [:r, :g, :b, :y, :c, :m]
 
-  def initialize
-    @code = create_secret_code
-  end
-
   def correct_code?(guess)
     if guess == @code
       return true
@@ -18,9 +14,6 @@ class SecretCode
     remaining_guess = []
     remaining_code = []
 
-    # Add black pegs to feedback, if guess is exactly correct
-    # if not, add guess value, and code value of the same index
-    # to "remaining" arrays.
     guess.each_with_index do |guess_v, guess_i|
       if guess[guess_i] == @code[guess_i]
         feedback << :black
@@ -30,14 +23,6 @@ class SecretCode
       end
     end
 
-    # Check through the colors constant and see if the remaining
-    # guess and code contain the same color.
-    #
-    # If so we need to return a number of white pegs equal to the number
-    # of that color in the guess if the code contains more of that color
-    # or a number of white pegs equal to the number of that color in the code.
-    # This fixes issues that come up when there's duplicates of a color
-    # in the guess or in the code.
     COLORS.each do |color|
       if remaining_guess.include?(color) && remaining_code.include?(color)
         if remaining_code.count(color) > remaining_guess.count(color)
@@ -48,7 +33,6 @@ class SecretCode
       end
     end
 
-    # Feedback is gross, is an array of arrays and contains nil arrays.
     return feedback
   end
 
@@ -112,10 +96,11 @@ class CodeBreaker
 end
 
 class AI
-  attr_reader :guesses
+  attr_reader :guesses, :possibles
 
   def initialize
     @guesses = 12
+    @possibles = possibles
   end
 
   def get_guess
@@ -125,11 +110,27 @@ class AI
     sleep 1
     array
   end
+
+  def possibles
+    possibles = []
+    until possibles.length == 1296
+      possible = []
+      4.times do
+          possible << SecretCode::COLORS.sample
+      end
+      unless possibles.include?(possible)
+        possibles << possible
+        puts possibles.length
+      end
+    end  
+    possibles
+  end
   
-  
-end
+end; 
 
 class Board
+  attr_reader :feedbacks, :guesses
+
   def initialize
     @turn_number = 1
     @feedbacks = {}

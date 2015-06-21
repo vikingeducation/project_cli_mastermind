@@ -4,27 +4,24 @@ require './sub_classes.rb'
 
 class MasterMind
   def initialize
-    # @secret_code = SecretCode.new
     @secret_code = SecretCode.new
     @board = Board.new
-    # @player = CodeBreaker.new
   end
 
   def maker_or_breaker
     mode = game_mode_input
     if mode == "2"
       @player = CodeBreaker.new
+      @secret_code.code = @secret_code.create_secret_code
       main_loop(:human)
     elsif mode == "1"
+      @player = AI.new
       @maker = CodeBreaker.new
       @secret_code.code = @maker.get_guess
-      @player = AI.new
       main_loop(:computer)
     else 
       exit 
     end
-
-    
   end
 
   def game_mode_input
@@ -35,6 +32,7 @@ class MasterMind
       puts "Would you like to make or break the code?"
       print "Press 1 for maker, 2 for breaker > "
       input = gets.chomp
+      print "\n"
       break if mode_input_valid?(input)
     end
     return input
@@ -91,4 +89,4 @@ class MasterMind
 end
 
 go = MasterMind.new
-go.maker_or_breaker
+#go.maker_or_breaker
