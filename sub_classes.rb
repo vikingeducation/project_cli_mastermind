@@ -36,13 +36,11 @@ class SecretCode
     return feedback
   end
 
-  private
-
   def create_secret_code
     # [:r, :r, :r, :r]
     array = []
     4.times { array << COLORS.sample }
-    array
+    @code = array
   end
   
 end
@@ -54,7 +52,7 @@ class CodeBreaker
     @guesses = 12
   end
 
-  def get_guess
+  def get_guess(*args)
     input = ""
     loop do
       input_printer
@@ -100,18 +98,38 @@ class AI
 
   def initialize
     @guesses = 12
-    @possibles = possibles
+    @possibles = make_possibles
+    @aicode = SecretCode.new
   end
 
-  def get_guess
-    array = []
-    4.times { array << SecretCode::COLORS.sample }
-    @guesses -= 1
-    sleep 1
-    array
+  # def get_guess
+  #   array = []
+  #   4.times { array << SecretCode::COLORS.sample }
+  #   @guesses -= 1
+  #   sleep 1
+  #   array
+  # end
+
+  def get_guess(last_feedback=nil)
+    if last_feedback == nil
+      @last_guess = [:r, :r, :g, :g]
+    else
+      @aicode.code = @last_guess
+      @possibles.keep_if do |p|
+        @aicode.feedback(p).count(:black) >=
+        last_feedback.count(:black) &&
+        @aicode.feedback(p).count(:white) >=
+        last_feedback.count(:white) &&
+        p != @last_guess
+      end
+      sleep 2
+      @guesses -= 1
+      @last_guess = possibles.sample
+    end
+
   end
 
-  def possibles
+  def make_possibles
     possibles = []
     until possibles.length == 1296
       possible = []
@@ -120,13 +138,18 @@ class AI
       end
       unless possibles.include?(possible)
         possibles << possible
-        puts possibles.length
+        #puts possibles.length
       end
     end  
     possibles
   end
+
+  def cull_possibles
+
+
+  end
   
-end; 
+end 
 
 class Board
   attr_reader :feedbacks, :guesses

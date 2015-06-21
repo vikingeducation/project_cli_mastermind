@@ -6,6 +6,7 @@ class MasterMind
   def initialize
     @secret_code = SecretCode.new
     @board = Board.new
+    @last_feedback = nil
   end
 
   def maker_or_breaker
@@ -47,11 +48,12 @@ class MasterMind
   def main_loop(playertype)
     loop do
       @board.render_board
-      @guess = @player.get_guess
+      @guess = @player.get_guess(@last_feedback)
       player_quit? if @player.is_a?(CodeBreaker)
       @board.store_guess(@guess)
       feedback = @secret_code.feedback(@guess)
       @board.store_guess_feedback(feedback)
+      @last_feedback = feedback
       game_end?
     end
   end
@@ -72,7 +74,8 @@ class MasterMind
   def guess_correct?
     if @secret_code.correct_code?(@guess)
       @board.render_board(@secret_code.code)
-      puts "You Win!"
+      puts "Code Broken in #{(13 - @player.guesses)} guesses!"
+      puts "Code Breaker WINS!"
       exit
     end
   end
@@ -89,4 +92,4 @@ class MasterMind
 end
 
 go = MasterMind.new
-#go.maker_or_breaker
+go.maker_or_breaker
