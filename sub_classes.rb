@@ -1,5 +1,5 @@
 class SecretCode
-  attr_reader :code
+  attr_accessor :code
 
   COLORS = [:r, :g, :b, :y, :c, :m]
 
@@ -55,10 +55,10 @@ class SecretCode
   private
 
   def create_secret_code
-    [:r, :r, :r, :r]
-    # array = []
-    # 4.times { array << COLORS.sample }
-    # array
+    # [:r, :r, :r, :r]
+    array = []
+    4.times { array << COLORS.sample }
+    array
   end
   
 end
@@ -81,6 +81,7 @@ class CodeBreaker
     return input.split("").map { |char| char.to_sym }
   end
 
+
   def input_valid?(input)
     if input == "q"
       true
@@ -96,7 +97,7 @@ class CodeBreaker
   end  
 
   def input_printer
-    puts "Guess the code using 4 of the following colors"
+    puts "Enter the code using 4 of the following colors"
     print "'r' for red, ".colorize(:light_red)
     print "'g' for green, ".colorize(:light_green)
     print "'b' for blue, ".colorize(:light_blue)
@@ -105,8 +106,26 @@ class CodeBreaker
     print "'c' for cyan, ".colorize(:light_cyan)
     print "'m' for magenta.".colorize(:light_magenta)
     print "\n"
-    print "Enter your guess (e.g. 'ryby') or 'q' to quit > "
+    print "Enter your code (e.g. 'ryby') or 'q' to quit > "
   end
+  
+end
+
+class AI
+  attr_reader :guesses
+
+  def initialize
+    @guesses = 12
+  end
+
+  def get_guess
+    array = []
+    4.times { array << SecretCode::COLORS.sample }
+    @guesses -= 1
+    sleep 1
+    array
+  end
+  
   
 end
 
@@ -119,7 +138,7 @@ class Board
 
   def render_board(code=nil)
     system 'clear'
-    puts "Welcome to Master Mind!  Can you guess the S3cr3t c0d3?"
+    puts "Welcome to Master Mind!  Can you guess the secret code?"
     print "\n"
     print ">> "
     code.nil? ? (print "(*)(*)(*)(*)") : colors(code)
@@ -152,40 +171,18 @@ class Board
   end
 
   def colors(array)
-      colors = {r: :light_red, 
-                b: :light_blue, 
-                g: :light_green, 
-                y: :light_yellow, 
-                m: :light_magenta, 
-                c: :light_cyan,
-                black: :light_black,
-                white: :light_white}
+    colors = {r: :light_red, 
+              b: :light_blue, 
+              g: :light_green, 
+              y: :light_yellow, 
+              m: :light_magenta, 
+              c: :light_cyan,
+              black: :light_black,
+              white: :light_white}
 
     array.each do |peg|
       print "(*)".colorize(:color => colors[peg])
     end
-    
   end
   
-  
 end
-
-def colors_test
-  colors = {r: :light_red, 
-            b: :light_blue, 
-            g: :light_green, 
-            y: :light_yellow, 
-            m: :light_magenta, 
-            c: :light_cyan}
-  items = "rbgymc"
-  array = items.split("")
-  array.each do |i|
-    print "(*)".colorize(
-                        :color => (colors[(i.to_sym)])
-                        #:background => :light_black
-                        )
-  end
-  print "\n"
-end
-
-colors_test

@@ -4,20 +4,57 @@ require './sub_classes.rb'
 
 class MasterMind
   def initialize
+    # @secret_code = SecretCode.new
     @secret_code = SecretCode.new
     @board = Board.new
-    @player = CodeBreaker.new
+    # @player = CodeBreaker.new
   end
 
-  def main_loop
+  def maker_or_breaker
+    mode = game_mode_input
+    if mode == "2"
+      @player = CodeBreaker.new
+      main_loop(:human)
+    elsif mode == "1"
+      @maker = CodeBreaker.new
+      @secret_code.code = @maker.get_guess
+      @player = AI.new
+      main_loop(:computer)
+    else 
+      exit 
+    end
+
+    
+  end
+
+  def game_mode_input
+    input = ""
+    loop do 
+      system 'clear'
+      puts "Welcome to Master Mind!"
+      puts "Would you like to make or break the code?"
+      print "Press 1 for maker, 2 for breaker > "
+      input = gets.chomp
+      break if mode_input_valid?(input)
+    end
+    return input
+  end
+
+  def mode_input_valid?(input)
+    if input == "1" || input == "2" || input == "q"
+      return true
+    end
+  end
+
+  def main_loop(playertype)
     loop do
-    @board.render_board
-    @guess = @player.get_guess
-    player_quit?
-    @board.store_guess(@guess)
-    feedback = @secret_code.feedback(@guess)
-    @board.store_guess_feedback(feedback)
-    game_end?
+      @board.render_board
+      @guess = @player.get_guess
+      player_quit? if @player.is_a?(CodeBreaker)
+      @board.store_guess(@guess)
+      feedback = @secret_code.feedback(@guess)
+      @board.store_guess_feedback(feedback)
+      game_end?
     end
   end
 
@@ -54,4 +91,4 @@ class MasterMind
 end
 
 go = MasterMind.new
-go.main_loop
+go.maker_or_breaker
