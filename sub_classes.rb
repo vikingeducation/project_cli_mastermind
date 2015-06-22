@@ -117,13 +117,20 @@ class AI
         feedback(p).count(:black) >=
         last_feedback.count(:black) &&
         feedback(p).count(:white) >=
-        last_feedback.count(:white) &&
-        p != @last_guess
+        last_feedback.count(:white)
       end
-      sleep 2
+      sleep 1
       @guesses -= 1
-      @last_guess = possibles.sample
+      @last_guess = optimal_guess
     end
+  end
+
+  def optimal_guess
+    @possibles.sort do |px,py|
+      (feedback(px).count(:black) + feedback(px).count(:white)) <=>
+      (feedback(py).count(:black) + feedback(py).count(:white))
+    end
+    @possibles.pop
   end
 
   private
