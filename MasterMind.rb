@@ -2,6 +2,7 @@ require 'colorize'
 require 'pry'
 require './sub_classes.rb'
 
+
 class MasterMind
   def initialize
     @secret_code = SecretCode.new
@@ -9,21 +10,17 @@ class MasterMind
     @last_feedback = nil
   end
 
-  def maker_or_breaker
+  def setup_game
     mode = game_mode_input
-    if mode == "2"
-      @player = CodeBreaker.new
-      @secret_code.code = @secret_code.create_secret_code
-      main_loop(:human)
-    elsif mode == "1"
-      @player = AI.new
-      @maker = CodeBreaker.new
-      @secret_code.code = @maker.get_guess
-      main_loop(:computer)
-    else 
-      exit 
+    case mode
+      when "2"
+        player_is_breaker
+      when "1"
+        player_is_maker
     end
   end
+
+  private
 
   def game_mode_input
     input = ""
@@ -40,16 +37,29 @@ class MasterMind
   end
 
   def mode_input_valid?(input)
-    if input == "1" || input == "2" || input == "q"
+    if input == "1" || input == "2"
       return true
     end
   end
 
-  def main_loop(playertype)
+  def player_is_breaker
+    @breaker = Player.new
+    @secret_code.code = @secret_code.create_secret_code
+    main_loop
+  end
+
+  def player_is_maker
+    @breaker = AI.new
+    @maker = Player.new
+    @secret_code.code = @maker.get_guess
+    main_loop
+  end
+
+  def main_loop
     loop do
       @board.render_board
-      @guess = @player.get_guess(@last_feedback)
-      player_quit? if @player.is_a?(CodeBreaker)
+      @guess = @breaker.get_guess(@last_feedback)
+      player_quit? if @breaker.is_a?(Player)
       @board.store_guess(@guess)
       feedback = @secret_code.feedback(@guess)
       @board.store_guess_feedback(feedback)
@@ -74,22 +84,22 @@ class MasterMind
   def guess_correct?
     if @secret_code.correct_code?(@guess)
       @board.render_board(@secret_code.code)
-      puts "Code Broken in #{(13 - @player.guesses)} guesses!"
+      puts "Code Broken in #{(13 - @breaker.guesses)} guesses!"
       puts "Code Breaker WINS!"
       exit
     end
   end
 
   def player_out_of_guesses?
-    if @player.guesses == 0
+    if @breaker.guesses == 0
       @board.render_board(@secret_code.code)
-      puts "No more guesses!"
+      puts "Code Breaker is out of guesses!"
+      puts "Game Over!"
       exit
     end
   end
-  
-  
 end
 
+
 go = MasterMind.new
-go.maker_or_breaker
+go.setup_game

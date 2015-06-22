@@ -1,13 +1,6 @@
-class SecretCode
-  attr_accessor :code
+module MasterMindHelper
 
   COLORS = [:r, :g, :b, :y, :c, :m]
-
-  def correct_code?(guess)
-    if guess == @code
-      return true
-    end 
-  end
 
   def feedback(guess)
     feedback = []
@@ -35,6 +28,18 @@ class SecretCode
 
     return feedback
   end
+end
+
+
+class SecretCode
+  include MasterMindHelper
+  attr_accessor :code
+
+  def correct_code?(guess)
+    if guess == @code
+      return true
+    end 
+  end
 
   def create_secret_code
     # [:r, :r, :r, :r]
@@ -42,10 +47,10 @@ class SecretCode
     4.times { array << COLORS.sample }
     @code = array
   end
-  
 end
 
-class CodeBreaker
+
+class Player
   attr_reader :guesses
 
   def initialize
@@ -63,6 +68,7 @@ class CodeBreaker
     return input.split("").map { |char| char.to_sym }
   end
 
+  private
 
   def input_valid?(input)
     if input == "q"
@@ -90,35 +96,27 @@ class CodeBreaker
     print "\n"
     print "Enter your code (e.g. 'ryby') or 'q' to quit > "
   end
-  
 end
 
+
 class AI
+  include MasterMindHelper
   attr_reader :guesses, :possibles
 
   def initialize
     @guesses = 12
     @possibles = make_possibles
-    @aicode = SecretCode.new
   end
-
-  # def get_guess
-  #   array = []
-  #   4.times { array << SecretCode::COLORS.sample }
-  #   @guesses -= 1
-  #   sleep 1
-  #   array
-  # end
 
   def get_guess(last_feedback=nil)
     if last_feedback == nil
       @last_guess = [:r, :r, :g, :g]
     else
-      @aicode.code = @last_guess
+      @code = @last_guess
       @possibles.keep_if do |p|
-        @aicode.feedback(p).count(:black) >=
+        feedback(p).count(:black) >=
         last_feedback.count(:black) &&
-        @aicode.feedback(p).count(:white) >=
+        feedback(p).count(:white) >=
         last_feedback.count(:white) &&
         p != @last_guess
       end
@@ -126,33 +124,27 @@ class AI
       @guesses -= 1
       @last_guess = possibles.sample
     end
-
   end
+
+  private
 
   def make_possibles
     possibles = []
     until possibles.length == 1296
       possible = []
       4.times do
-          possible << SecretCode::COLORS.sample
+          possible << COLORS.sample
       end
       unless possibles.include?(possible)
         possibles << possible
-        #puts possibles.length
       end
     end  
     possibles
   end
+end
 
-  def cull_possibles
-
-
-  end
-  
-end 
 
 class Board
-  attr_reader :feedbacks, :guesses
 
   def initialize
     @turn_number = 1
@@ -177,7 +169,8 @@ class Board
       print "\n"
     end
     print "\n"
-    puts "You're given 12 guesses, feedback will be given for each."
+    puts "Code Breaker is given 12 guesses, feedback"
+    puts "will be given for each."
     print "(*)".colorize(:color => :light_black)
     puts " - Correct color in the correct position!"  
     print "(*)".colorize(:color => :light_white)
@@ -194,6 +187,8 @@ class Board
     @turn_number +=1
   end
 
+  private
+
   def colors(array)
     colors = {r: :light_red, 
               b: :light_blue, 
@@ -208,5 +203,4 @@ class Board
       print "(*)".colorize(:color => colors[peg])
     end
   end
-  
 end
