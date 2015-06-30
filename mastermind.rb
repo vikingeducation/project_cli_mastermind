@@ -42,8 +42,8 @@ class Mastermind #Game flow
           break
         else
           @board.update(guess, tries)
+          @board.match_history (hints(guess))
           @board.render
-          hints(guess)
           tries -=1
         end
       end
@@ -52,9 +52,8 @@ class Mastermind #Game flow
     end
   end
 
-  def hints(guess)
-    # p @code_maker.solution
-    puts compare_exact_match(guess)
+  def hints(guess) #peg hash
+    compare_exact_match(guess)
   end
 
   def compare_exact_match(guess)
@@ -76,15 +75,12 @@ class Mastermind #Game flow
   end
 
   def compare_color_match(code, guess)
-    p code
     result = {:color_match => 0}
 
     guess.each_with_index do |color, index|
       if code.include?(color)
         result[:color_match] += 1
         code[code.index(color)] = nil
-        puts color
-        puts index
       end
 
     end
@@ -127,10 +123,20 @@ class Board #Game logic
 
   def initialize
     @board = Array.new(12) { |row| row = ["-","-","-","-"] }
+    @pegs =[]
+  end
+
+  def match_history(hint)
+    @pegs << hint
   end
 
   def render
-    p @board
+    #p @board
+    @board.each_with_index do |row, index|
+      print row
+      print @pegs[index]
+      print "\n" #also matches
+    end
   end
 
   def update(guess, tries)
