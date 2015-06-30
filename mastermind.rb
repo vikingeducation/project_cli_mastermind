@@ -30,13 +30,20 @@ class Mastermind
     @code_breaker = Player.new(@board)
   end
 
+  def welcome
+    puts "Welcome to Mastermind!"
+    puts "Enter guesses in the form of bbbb "
+    puts "The code consists of any combination of (b)lue, (g)reen, (y)ellow, (o)range, (p)urple, or (r)ed."
+    puts "You have 12 tries. Good luck!"
+  end
+
 	# play
   def play
-
+    welcome
     @code_maker.get_code
 		# loop indefinitely
     loop do
-      p "You have #{guess_count} guesses left!"
+      
 			# call board rendering method
       @board.render
 			# ask for guess from codebreaker
@@ -46,7 +53,13 @@ class Mastermind
       break if check_game_over
     end
 
-    puts "Game over."
+    if @code_breaker.guess_count > 12
+      puts "You lose." 
+      print "The code is: "
+      @board.show_code
+    end
+
+    puts "You win." if @board.check_victory?
   end
 
 	def check_game_over
@@ -90,16 +103,23 @@ class Board
 
   def generate_feedback_key(guess)
     @feedback_key = []
+    code_dup = @code.dup
+    index_black_list = []
     guess.each_with_index do |p, i|
-      if p == @code[i]
+
+      if p == code_dup[i]
         @feedback_key << "b"
-      elsif @code.include?(p)
-        @feedback_key << "w"
-      else
-        @feedback_key << "x"
+        code_dup[i] = "q"
+        index_black_list << i
       end
     end
-    @feedback_key
+
+    guess.each_with_index do |p, i|
+      if code_dup.include?(p) && !index_black_list.include?(i)
+        @feedback_key << "w"
+      end
+    end
+    @feedback_key.sort
   end
 
 end
@@ -196,8 +216,20 @@ class Computer < CodeMaker
 
 end
 
-class Player < CodeBreaker
-end
 
+class AI < CodeBreaker
+
+  def get_guess
+    @board.add_guess(guess)
+    add_guess_count
+  end
+
+  #create all posible codes
+  #start with initial guess 1122
+  #if guess==code break
+  #
+  def generate_guess
+  end
+end 
 
 
