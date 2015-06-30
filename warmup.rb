@@ -1,4 +1,4 @@
-#deep dup
+#deep dup only 2D array
 
 class Array
 
@@ -16,15 +16,17 @@ class Array
 
 end
 
-arr = [ [1,2, ['q']], [3,4,['a']]]
-duper = arr.deep_dup
-p duper.object_id
-p arr.object_id
-puts
-print duper
-p duper[0].object_id
-p duper[3].object_id
-puts
-print arr
-p arr[0].object_id
-p arr[3].object_id
+
+
+# arr = [ [1,2, ['q']], [3,4,['a']]]
+# duper = arr.deep_dup
+# p duper.object_id
+# p arr.object_id
+# puts
+# print duper
+# p duper[0].object_id
+# p duper[3].object_id
+# puts
+# print arr
+# p arr[0].object_id
+# p arr[3].object_id
