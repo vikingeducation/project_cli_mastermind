@@ -1,6 +1,6 @@
 
 COLORS = ["green","red","blue","purple","orange","yellow"]
-PEGS =["white","black"]
+PEGS =["o","*"]
 
 
 class Game
@@ -37,14 +37,10 @@ class Game
 
     12.times do |x|
 
-      @turn = x + 1
-
       puts "\n"
       puts "This is your turn #{x+1}" 
 
-      answer = @codebreaker.guess
-
-      
+      answer = @codebreaker.guess  
       check_win(answer)
 
       @play_board.add_to_board(answer)
@@ -56,16 +52,17 @@ class Game
 
     end
 
+    end_game
+  end
+
+  def end_game
     puts "\n"
     if @codemaker.is_a? Human
       puts "Computer lost. You won. The answer is #{@code}"
     else
       puts "You lost. The answer is #{@code}"
     end
-  
-
   end
-
   def check_win(input)
     if @code == input 
       puts "You won!" 
@@ -78,21 +75,21 @@ end
 class Player
 
   def feedback(answer, code)  
-    #blacks
+    
     pegs=[]
     
     for i in (0..3) do
       if answer[i]==code[i] 
-        pegs << "black" 
+        pegs << PEGS[1] 
       elsif code.any? {|color| color==answer[i]}
-        pegs << "white" 
+        pegs << PEGS[0] 
       else
-        pegs << 0
+        pegs << "-"
       end
     end
 
     puts "#{pegs} - pegs"
-    pegs
+    pegs.shuffle
   end
   
 end
@@ -114,23 +111,18 @@ end
 class Computer < Player
 
   def generate
-
     new_code = []
 
     4.times do 
       new_code.push(COLORS.sample) 
     end
-    new_code
-    
+    new_code    
   end
 
 
-  def guess
-    
+  def guess   
     gets
-
     self.generate
-    
   end
 
 end
@@ -151,11 +143,15 @@ class Board
   def display_board 
 
     for i in (0..@current_board.size)
-      i.odd? ? (print "#{@current_board[i]}\n") : (print "#{@current_board[i]}")
+      if i.odd? 
+        @current_board[i].each {|el| print "#{el} "}
+        puts
+      else
+        print("#{@current_board[i]}")
+      end
     end
-  end
 
-  
+  end
 
 end
 
