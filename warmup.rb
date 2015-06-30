@@ -1,9 +1,22 @@
 def deep_dup(arr)
   new_arr = []
 
-  arr.each do |item|
-    new_arr << item
+arr.each do |top|
+
+  top.each do |item|
+
+      new_arr[top][0] = item
+      p top
+      p new_arr
+    
+    p ("Item is #{item}")
+    p ("Top is #{top}")
+
+
+    # p top
   end
+
+end
   new_arr 
 end
 
@@ -20,3 +33,10 @@ end
 => 3
 =end
 
+arr = [[1,2],[3,4]]
+
+copy = deep_dup(arr)
+
+p arr
+
+p copy
