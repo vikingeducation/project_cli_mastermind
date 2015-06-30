@@ -25,9 +25,9 @@ class Mastermind
 		# set up the board
     @board = Board.new
 		# set up codemaker
-    @code_maker = CodeMaker.new(@board)
+    @code_maker = Computer.new(@board)
 		# set up codebreaker
-    @code_breaker = CodeBreaker.new(@board)
+    @code_breaker = Player.new(@board)
   end
 
 	# play
@@ -36,11 +36,11 @@ class Mastermind
     @code_maker.get_code
 		# loop indefinitely
     loop do
+      p "You have #{guess_count} guesses left!"
 			# call board rendering method
       @board.render
 			# ask for guess from codebreaker
       @code_breaker.get_guess
-
 
 			# break the loop IF game is over
       break if check_game_over
@@ -64,7 +64,10 @@ class Board
 
 	def render
 		@board.each do |guess|
+      feedback = generate_feedback_key(guess)
       print guess
+      print "     "
+      print feedback
       print "\n"
     end
   end
@@ -73,7 +76,7 @@ class Board
     @board << guess
   end
 
-  def get_code(code)
+  def add_code(code)
     @code = code
   end
 
@@ -85,9 +88,19 @@ class Board
     @board[-1] == @code
   end
 
-  # check_correct_guesses
-
-  # check_correct_places
+  def generate_feedback_key(guess)
+    @feedback_key = []
+    guess.each_with_index do |p, i|
+      if p == @code[i]
+        @feedback_key << "b"
+      elsif @code.include?(p)
+        @feedback_key << "w"
+      else
+        @feedback_key << "x"
+      end
+    end
+    @feedback_key
+  end
 
 end
 
@@ -117,6 +130,10 @@ class CodeBreaker
   end
 
   def is_valid_guess?(guess)
+    if guess.length != 4
+      p "Guess must exactly be 4 colors."
+      return false
+    end
     guess.each do |p|
       unless PEG_COLORS.include?(p)
         p "#{p} is not a valid color."
@@ -141,10 +158,10 @@ class CodeMaker
 
   # get_codes
   def get_code
-    loop do
+    loop do # until or while
       code = ask_for_code
       if is_valid_code?(code)
-        @board.get_code(code)
+        @board.add_code(code)
         break
       end
     end
@@ -165,6 +182,21 @@ class CodeMaker
     end
   end
 
+end
+
+class Computer < CodeMaker
+
+  def get_code
+    code = []
+    4.times do
+      code << PEG_COLORS.sample
+    end
+    @board.add_code(code)
+  end
+
+end
+
+class Player < CodeBreaker
 end
 
 
