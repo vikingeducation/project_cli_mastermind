@@ -26,25 +26,31 @@ class Mastermind #Game flow
   end
 
   def play
-    @tries = 12
+    tries = 12
     @board.render
     keep_playing = true
     while keep_playing #All the games - until player quits
-      while @tries >= 0 #Single game
-        #player guess
-        @code_breaker.guess
-        #board compares guess to solution
-        if @guess == @solution
+      while tries > 0 #Single game
+
+        guess = @code_breaker.guess
+
+        if guess_correct?(guess)
           win_game
           break
         else
-          @tries -=1
+          @board.update(guess, tries)
+          @board.show_hints(guess, @code_maker.solution)
           @board.render #colored pegs hints
+          tries -=1
         end
       end
-      lose_game if @tries <= 0
-      keep_playing = play_again?
+      lose_game if tries <= 0
+      keep_playing = play_again? #need to reset board
     end
+  end
+
+  def guess_correct?(guess)
+    guess == @code_maker.solution
   end
 
   def win_game
@@ -53,7 +59,7 @@ class Mastermind #Game flow
 
   def lose_game
     puts "Sorry! The solutions was:"
-    @board.show_solution
+    puts @code_maker.solution
   end
 
   def play_again?
@@ -78,24 +84,24 @@ class Board #Game logic
 
   def initialize(solution)
     @board = Array.new(12) { |row| row = ["-","-","-","-"] }
-    @solution = solution
+#    @solution = solution
   end
 
   def render
     p @board
   end
 
-  def compare_solution
-
+  def update(guess, tries)
+    @board[12 - tries]= guess
   end
 
-  def show_hints
-
+  def show_hints (guess, solution)
+    #
   end
 
-  def show_solution
-    puts @solution
-  end
+  # def show_solution
+  #   puts @solution
+  # end
 
 
 end
@@ -115,12 +121,13 @@ class Player #Inputs
       raw_input = gets.strip
       move = raw_input.split(",")
       input_valid = is_input_valid?(move)
+      puts "Input is invalid. Please try again." unless input_valid
     end
     return move #might not work - check scope
   end
 
   def is_input_valid?(input)
-    VALID_OPTIONS.include?(input)
+    input.all?{ |item| VALID_OPTIONS.include?(item)}
   end
 
 end
@@ -144,3 +151,5 @@ class Computer #as code maker
 
 end
 
+a = Mastermind.new
+a.play
