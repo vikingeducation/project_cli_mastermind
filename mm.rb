@@ -55,7 +55,7 @@ class Board
 
     @board = Array.new(12) { Array.new(4) {"X"} }
 
-    @pieces = ["R".red, "G".green, "B".blue, "T".cyan, "O".light_red, "M".magenta, "K".yellow, "E".black]
+    @pieces = ["R", "G", "B", "T", "O", "M", "K", "E"]
 
     set_solution
 
@@ -79,26 +79,28 @@ class Board
 
   end
 
+  def place_pin(input)
+  
+      
+     board[0] = input
+     board.rotate!
+
+  end
+
+
   def set_solution
 
     # @solution = ["R", "G", "B", "T", "O", "M", "K", "E"].sample(4)
 
     # @solution = @pieces.sample(4)
 
-    @solution = ["R".red, "G".green, "B".blue, "T".cyan]
+    @solution = ["R", "G", "B", "T"]
 
 
   end
 
   def victory?
-
-
-    if board[0] == @solution
-      then true
-    else
-      false
-
-
+    board[11] == @solution
   end
 
 
@@ -124,14 +126,10 @@ class Human < Player
   end
 
   def place_pin (board)
-     input = get_input
-      puts board[0]
-      
-     board[0] = input
-     board.rotate!
+  
   end
 
-  def get_input
+  def take_turn
 
     input = ""
 
@@ -140,7 +138,7 @@ class Human < Player
       input = gets.chomp.upcase
       break
     end  
-   input.chars
+   @board.place_pin(input.chars)
   end
 
 end
@@ -160,16 +158,16 @@ class Mastermind
    
     12.times do
       game.render
-      human.place_pin(game.board)
+      human.take_turn
       if game.victory?
         puts "You Won!"
         break
       end
     end
 
-    game.render
+    
 
-    unless victory?
+    unless game.victory?
       puts "You no win"
       print "The solution was \t"
       4.times do |i|
@@ -177,9 +175,6 @@ class Mastermind
       end
     end
   end
-
-
- end
 
 end
 
