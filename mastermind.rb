@@ -139,6 +139,7 @@ class Player
   def play
     raise NotImplemented
   end
+
 end
 
 class Human < Player
@@ -198,11 +199,8 @@ class Renderer
       # p @hints[val]
     end
   end
+
 end
-
-
-
-
 
 # Runs game loop
 # Game
@@ -218,6 +216,7 @@ end
 #   end
 
 class Game
+
   def initialize
     @board = Board.new
     #@input = Input.new
@@ -265,6 +264,7 @@ class Game
 
     @board.set_win_condition(new_code)
   end
+  
 end
 
 game = Game.new
