@@ -47,7 +47,7 @@ require 'colorize'
 
 
 class Board
-  attr_reader :board, :solution
+  attr_reader :board, :solution, :pieces
 
 
   def initialize
@@ -165,14 +165,39 @@ class Human < Player
 
   def take_turn
 
-    input = ""
+    input = []
 
-    loop do
+    until valid_turn?(input)
       puts "Enter a piece."
-      input = gets.chomp.upcase
-      break
+      input = gets.chomp.upcase.chars
+        unless valid_turn?(input)
+          puts "Invalid Input"
+        end
+      
     end  
-   @board.place_pin(input.chars)
+   @board.place_pin(input)
+  end
+
+  def valid_turn?(input)
+
+    # p input.uniq.length
+    # p input.length
+    # p @board.pieces
+    # p (input & @board.pieces).length
+
+    input.uniq.length == 4 && input.length == 4 && (input & @board.pieces).length == 4
+
+  #   4.times do |i|
+  #     if 
+
+  #     end
+
+  #   end
+
+  #   if 
+
+  #   end
+
   end
 
 end
