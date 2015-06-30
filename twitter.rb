@@ -12,10 +12,10 @@ class Twitter
   end
 
 
-
   def initialize
     @tweets = []
   end
+
 
   def tweet(message)
     @tweets << message[0..143]
@@ -29,4 +29,5 @@ t.tweet("first message")
 t.tweet("second message")
 
 t.each{|msg| puts msg}
+
 p t.map{|msg| msg.upcase}
