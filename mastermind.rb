@@ -22,10 +22,25 @@ require 'pry-byebug'
 class Mastermind #Game flow
 
   def initialize
- #  binding.pry
-    @code_breaker = Player.new
-    @code_maker = Computer.new
+    if select_mode == 1
+      @code_maker = Computer.new
+      @code_breaker = Player.new
+    else
+      @code_maker = Player.new
+      @code_breaker = Computer.new
+    end
     @board = Board.new
+  end
+
+  def select_mode
+    is_valid = false
+    until is_valid
+      print "Do you want to be the (1) code breaker or the (2) code maker? "
+      input = gets.chomp.to_i
+      is_valid = [1,2].include?(input)
+      puts "Try 1 or 2" unless is_valid
+    end
+    input
   end
 
   def play
@@ -34,6 +49,7 @@ class Mastermind #Game flow
     keep_playing = true
     while keep_playing #All the games - until player quits
       while tries > 0 #Single game
+        puts "This is the code breaker's attempt No. #{13 - tries}"
 
         guess = @code_breaker.guess
 
@@ -137,6 +153,7 @@ class Board #Game logic
       print @pegs[index]
       print "\n" #also matches
     end
+    puts
   end
 
   def update(guess, tries)
@@ -151,26 +168,35 @@ end
 
 class Player #Inputs
 
-  VALID_OPTIONS = %w(b r y p g o)
+  CODE_COLORS = %w(b r y p g o)
 
   def initialize
+    @solution = make_code
+  end
 
+  def make_code
+    guess
+  end
+
+  def solution
+    @solution
   end
 
   def guess
     input_valid = false
     until input_valid
-      print "Enter your guess (e.g. b,r,y,g): "
+      puts "The color options are [b]lue, [r]ed, [p]urple, [o]range, [y]ellow, and [g]reen"
+      print "Enter your code in the format r,b,g,y : "
       raw_input = gets.strip
       move = raw_input.split(",")
       input_valid = is_input_valid?(move)
       puts "Input is invalid. Please try again." unless input_valid
     end
-    return move #might not work - check scope
+    return move
   end
 
   def is_input_valid?(input)
-    input.all?{ |item| VALID_OPTIONS.include?(item)}
+    input.all?{ |item| CODE_COLORS.include?(item)}
   end
 
 end
@@ -194,6 +220,10 @@ class Computer #as code maker
       code << CODE_COLORS.sample
     end
     code
+  end
+
+  def guess
+    make_code
   end
 
 end
