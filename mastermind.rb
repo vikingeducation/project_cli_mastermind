@@ -2,11 +2,20 @@
 COLORS = ["green","red","blue","purple","orange","yellow"]
 PEGS =["white","black"]
 
+
 class Game
 
-  def initialize
+  def initialize ()
     @code = []
     @play_board = Board.new
+  end
+
+  def new_game?
+    puts "Do you want to start a new game or open a saved game (n/s)"
+
+    if gets.chomp = "s"
+      @saved_game
+    end
   end
 
   def create_players
@@ -19,35 +28,41 @@ class Game
       @codebreaker = Computer.new
     end
   end
+
     
   def play
-
     create_players
 
     @code = @codemaker.generate
-    #puts "#{@code} - Code generated"
-
 
     12.times do |x|
 
+      @turn = x + 1
+
+      puts "\n"
       puts "This is your turn #{x+1}" 
 
       answer = @codebreaker.guess
+
       
       check_win(answer)
 
       @play_board.add_to_board(answer)
-      puts "#{@play_board.current_board} - your guess"
+      puts "#{answer} - your guess"
 
       @play_board.add_to_board(@codemaker.feedback(answer, @code))
-      #puts "#{@play_board.current_board} - board"
       puts "Our board"
       @play_board.display_board
 
     end
-    puts "You lost. The answer is #{@code}"
-    
 
+    puts "\n"
+    if @codemaker.is_a? Human
+      puts "Computer lost. You won. The answer is #{@code}"
+    else
+      puts "You lost. The answer is #{@code}"
+    end
+  
 
   end
 
@@ -80,13 +95,9 @@ class Player
     pegs
   end
   
-
 end
 
 class Human < Player
-  def initialize
-
-  end
 
   def generate
     puts "Please enter the code"
@@ -114,13 +125,11 @@ class Computer < Player
   end
 
 
-  def guess 
-    new_code = []
+  def guess
+    
+    gets
 
-    4.times do 
-      new_code.push(COLORS.sample) 
-    end
-    new_code
+    self.generate
     
   end
 
