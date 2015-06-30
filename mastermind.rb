@@ -75,14 +75,23 @@ class Board
 
     def count_pegs(guess)
       black_pegs = white_pegs = 0
+      sort_guess = guess.sort
+      sorted_win_condition = @winning_condition.sort
 
       guess.each_with_index do |val, index|
         if val == @winning_condition[index]
           black_pegs += 1
-        elsif @winning_condition.include? val
+        end
+      end
+
+      sort_guess.each_with_index do |val, index|
+        if val == sorted_win_condition[index]
           white_pegs += 1
         end
       end
+
+      white_pegs = white_pegs - black_pegs
+
       return black_pegs, white_pegs
     end
 
@@ -182,11 +191,11 @@ class Renderer
   end
 
   def draw
+    puts "The Board"
     @guesses.length.times do |val|
-      print "Guesses: "
-      p @guesses[val]
-      print "Hints: "
-      p @hints[val]
+      puts "#{@guesses[val]}  #{@hints[val]}"
+      # print "Hints: "
+      # p @hints[val]
     end
   end
 end
@@ -204,6 +213,8 @@ end
 #     see if lost
 #       (award points)
 #     redraw
+
+#switch players if won or turns  = 12 
 #   end
 
 class Game
@@ -229,6 +240,13 @@ class Game
       @renderer.draw
     end
   end
+
+  def check_win
+    if @board.check_win?
+      pass
+    end
+  end
+
 
   def start_play
     puts "Do you want to be the breaker, or the maker? Input Y to be the breaker."
