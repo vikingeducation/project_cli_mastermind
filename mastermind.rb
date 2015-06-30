@@ -5,33 +5,58 @@ PEGS =["white","black"]
 class Game
 
   def initialize
-    @@code = []
+
+    @code = []
+    @board = Board.new
+    #define variables
+    #randomly choosen code
   end
-#define variables
-#randomly choosen code
-codemaker = Codemaker.new
-@@code=codemaker.generate
 
-#Game loop started (12 times)
-player=Player.new
+  def create_players
 
-12.times do
-  @@board << player.guess
-  puts @@board
-end
+    @codemaker = Computer.new
+    @codebreaker = Human.new
 
-#render a board
+  end
+    
+  def play
+    @code = @codemaker.generate
 
-#player tries to guess
-#gives a feedback
-#player want to exit or wins?
+    #Game loop started (12 times)
+    12.times do
+      @board.add_to_board(@codemaker.guess)
+      puts @board
+    end
 
-#After loop ends player loses
-#show the code
+  end
+
+    #render a board
+
+    #player tries to guess
+    #gives a feedback
+    #player want to exit or wins?
+
+    #After loop ends player loses
+    #show the code
 
 end
 
 class Player
+
+
+  
+
+end
+
+class Human < Player
+  def initialize
+
+  end
+
+  def generate
+
+  end
+
   def guess
     puts "Enter 4 colors from #{COLORS} (like this #{green red blue purple})"
     gets.chomp.split(" ")
@@ -39,31 +64,45 @@ class Player
 
 end
 
-class Codemaker < Player
-  def initialize
-
-  end
+class Computer < Player
 
   def generate
+
+    new_code = []
+
     4.times do 
-      @@code << COLORS.sample
+      new_code << COLORS.sample
     end
-    @@code
+
+    new_code
+    
   end
-end
 
-class Codebreaker < Player
 
+  def guess
+  end
 
 end
 
 class Board
+
+  attr_reader :board
+
   def initialize
 
-    @@board=[]
+    @board=[]
     #[[4 colors, 4 pegs],[]...12]
+
   end
 
+  def add_to_board (input)
 
+    @board << input
+
+  end
+
+  def display_board
+
+  end
 
 end
