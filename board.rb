@@ -1,3 +1,5 @@
+require 'yaml'
+
 class Board
 
   attr_reader :guesses, :hints
@@ -24,6 +26,21 @@ class Board
     new_hint = calculate_hint(guess)
     @guesses << guess
     @hints << new_hint
+  end
+
+  def save_game
+    save_string = YAML.dump(self)
+    game_file = File.new("./save.yaml", "w")
+    game_file.write(save_string)
+    game_file.close
+    puts "saving game"
+  end
+
+  def load_game
+    game_file = File.new("./save.yaml", "r")
+    yaml = game_file.read
+    YAML.load(yaml)
+    game_file.close
   end
 
   private

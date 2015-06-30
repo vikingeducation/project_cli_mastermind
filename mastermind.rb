@@ -23,11 +23,20 @@ class Game
 
   private
 
+    def check_if_save(input)
+      if input.is_a? Array
+        @board.accept_guess(input)
+      elsif input.is_a? String
+        @board.save_game
+      end
+    end
+
     def play_round
       until(game_won || game_lost)
         # Get a guess from the breaker player
         new_guess = breaker.play
-        @board.accept_guess(new_guess)
+
+        check_if_save(new_guess)
         teach_if_ai
         check_breaker_win
         @renderer.draw

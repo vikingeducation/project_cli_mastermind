@@ -95,7 +95,7 @@ class AI < Player
       choice << COLORS.sample
     end
 
-    sleep 2
+  
 
     choice
   end
