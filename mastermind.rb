@@ -20,36 +20,40 @@
 class Mastermind #Game flow
 
   def initialize
-    @board = Board.new
     @code_breaker = Player.new
     @code_maker = Computer.new
+    @board = Board.new(@code_maker.solution)
   end
 
   def play
     @tries = 12
     @board.render
-    while @tries >= 0
-      #player guess
-      #board compares guess to solution
-      if @guess == @solution
-        win_game
-        break
-      else
-        @tries -=1
-        @board.render #colored pegs hints
+    keep_playing = true
+    while keep_playing #All the games - until player quits
+      while @tries >= 0 #Single game
+        #player guess
+        @code_breaker.guess
+        #board compares guess to solution
+        if @guess == @solution
+          win_game
+          break
+        else
+          @tries -=1
+          @board.render #colored pegs hints
+        end
       end
+      lose_game if @tries <= 0
+      keep_playing = play_again?
     end
-    lose_game
   end
 
   def win_game
     puts "Congratulations! Your code was correct!"
-    play_again?
   end
 
   def lose_game
     puts "Sorry! The solutions was:"
-    @solution.display
+    @board.show_solution
   end
 
   def play_again?
@@ -72,8 +76,25 @@ end
 
 class Board #Game logic
 
-  def initialize
-    @board = 12.times {|row| row = []}
+  def initialize(solution)
+    @board = Array.new(12) { |row| row = ["-","-","-","-"] }
+    @solution = solution
+  end
+
+  def render
+    p @board
+  end
+
+  def compare_solution
+
+  end
+
+  def show_hints
+
+  end
+
+  def show_solution
+    puts @solution
   end
 
 
@@ -81,22 +102,44 @@ end
 
 class Player #Inputs
 
+  VALID_OPTIONS = %w(b r y p g o)
+
   def initialize
 
+  end
+
+  def guess
+    input_valid = false
+    until input_valid
+      print "Enter your guess (e.g. b,r,y,g): "
+      raw_input = gets.strip
+      move = raw_input.split(",")
+      input_valid = is_input_valid?(move)
+    end
+    return move #might not work - check scope
+  end
+
+  def is_input_valid?(input)
+    VALID_OPTIONS.include?(input)
   end
 
 end
 
 class Computer #as code maker
 
-  def initialize
+  CODE_COLORS = %w(b r y p g o)
 
+  def initialize
+    @solution = make_code
+  end
+
+  def solution
+    @solution
   end
 
   def make_code
-    CODE_COLORS = [:orange, :red, :yellow, :purple, :green, :blue]
     #generate random code of 6 colors
-    solution = colors.sample(4)
+    CODE_COLORS.sample(4)
   end
 
 end
