@@ -21,18 +21,29 @@ start game loop (Mastermind)
 class Mastermind
 
 	# initialize
+  def initialize
 		# set up the board
+    @board = Board.new
 		# set up codemaker
+    @code_maker = CodeMaker.new
 		# set up codebreaker
+    @code_breaker = CodeBreaker.new
+  end
 
 	# play
-		# get code from codemaker
+  def play
 
 		# loop indefinitely
+    loop do
 			# call board rendering method
+      @board.render
 			# ask for guess from codebreaker
+      @code_breaker.guess
 			# add guess to codebreakerr guess count
+
 			# break the loop IF game is over
+      break if check_game_over
+    end
 
 		# display winner
 
@@ -49,11 +60,44 @@ end
 
 # Manages all board functionality
 class Board
+  PEG_COLORS = %w( b g o r p y)
 
 	# initialize
 		# create empty board
 
 	# render
-		# 
+		# display codebreaker's guess and keys and guess count
+
+  # add_guess
+
+  # is_valid_guess?
+
+  # check_victory
+
+  # check_correct_guesses
+
+  # check_correct_places
 
 end
+
+class CodeBreaker
+
+  # initialize
+    @guess_count = 0
+
+  # guess
+
+  # is_valid_guess?
+
+end
+
+class CodeMaker
+
+  # get_codes
+
+  # is_valid_codes?
+
+end
+
+
+
