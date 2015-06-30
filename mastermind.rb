@@ -22,7 +22,7 @@ class Mastermind #Game flow
   def initialize
     @code_breaker = Player.new
     @code_maker = Computer.new
-    @board = Board.new(@code_maker.solution)
+    @board = Board.new
   end
 
   def play
@@ -39,7 +39,7 @@ class Mastermind #Game flow
           break
         else
           @board.update(guess, tries)
-          @board.show_hints(guess, @code_maker.solution)
+          hints(guess)
           @board.render #colored pegs hints
           tries -=1
         end
@@ -48,6 +48,24 @@ class Mastermind #Game flow
       keep_playing = play_again? #need to reset board
     end
   end
+
+  def hints(guess)
+    compare_near_match(guess)
+  end
+
+  def compare_near_match(guess)
+    code = @code_maker.solution.dup
+    result = {:near_match => 0, :exact_match => 0}
+    guess.each do |color|
+      if @code_maker.solution.include?(color)
+        result[:color_match] += 1
+        code[code.index(color)] = nil
+      end
+    end
+    compare_exact_match(guess) if result[:color_match] > 0
+  end
+
+  def compare_exact_match(guess)
 
   def guess_correct?(guess)
     guess == @code_maker.solution
@@ -82,9 +100,8 @@ end
 
 class Board #Game logic
 
-  def initialize(solution)
+  def initialize
     @board = Array.new(12) { |row| row = ["-","-","-","-"] }
-#    @solution = solution
   end
 
   def render
@@ -98,11 +115,6 @@ class Board #Game logic
   def show_hints (guess, solution)
     #
   end
-
-  # def show_solution
-  #   puts @solution
-  # end
-
 
 end
 
@@ -145,8 +157,11 @@ class Computer #as code maker
   end
 
   def make_code
+    code = []
     #generate random code of 6 colors
-    CODE_COLORS.sample(4)
+    4.times do
+      code << CODE_COLORS.sample
+    end
   end
 
 end
