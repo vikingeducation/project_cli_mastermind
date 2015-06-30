@@ -130,10 +130,20 @@ class Player
 
   include Input
 
+  attr_reader :player_num
+
   def initialize(player_num)
     @score = 0
     @is_breaker = false
     @player_num = player_num
+  end
+
+  def is_breaker?
+    @is_breaker
+  end
+
+  def set_role(val = true)
+    @is_breaker = val
   end
 
   def play
@@ -143,15 +153,8 @@ end
 
 class Human < Player
 
-  def inititalize
-  end
-
   def play
     @is_breaker? code_breaker : code_maker
-  end
-
-  def is_breaker?
-    @is_breaker
   end
 
   def code_breaker
@@ -166,19 +169,40 @@ class Human < Player
     return new_condition
   end
 
-  def set_role(val = true)
-    @is_breaker = val
-  end
-
 end
 
 class AI < Player
 
+  def play
+    @is_breaker? code_breaker : code_maker
+  end
+
   def code_breaker
+    choice = []
+
+    puts "The computer is selecting a move!"
+    4.times do
+      choice << COLORS.sample
+    end
+
+    sleep 1
+
+    choice
   end
 
 
   def code_maker
+    choice = []
+
+    puts "The computer is making a code!"
+
+    4.times do
+      choice << COLORS.sample
+    end
+
+    sleep 2
+
+    choice
   end
 
 end
@@ -191,7 +215,8 @@ class Renderer
   end
 
   def draw
-    puts "The Board"
+    puts (" " * 16) + "The  Board"
+    puts (" " * 7) + ("Choice") + (" " * 17) + ("Hint")
     @guesses.length.times do |val|
       puts "#{@guesses[val]}  #{@hints[val]}"
       # print "Hints: "
@@ -223,48 +248,75 @@ class Game
     #@input = Input.new
     @renderer = Renderer.new(@board)
     @player1 = Human.new(1)
-    @player2 = Human.new(2)
+    @player2 = AI.new("COMPUTER")
     @players = [@player1, @player2]
   end
 
   def play
+
     start_play
-
     get_win_condition
+    play_round
 
-    while(@board.num_guesses < 12)
-      # Get a guess from the breaker player
-      new_guess = @players.select{|player| player.is_breaker?}[0].play
-      @board.accept_guess(new_guess)
-      @board.check_win?
-      @renderer.draw
+  end
+
+  private
+
+    def play_round
+      until(game_won || game_lost)
+        # Get a guess from the breaker player
+        new_guess = breaker.play
+        @board.accept_guess(new_guess)
+        check_breaker_win
+        @renderer.draw
+      end
     end
-  end
 
-  def check_win
-    if @board.check_win?
-      pass
+    def game_lost
+      if @board.num_guesses > 11
+        puts "Player #{breaker.player_num} lost!"
+        return true
+      end
     end
-  end
 
-
-  def start_play
-    puts "Do you want to be the breaker, or the maker? Input Y to be the breaker."
-    choice = gets.chomp.upcase
-    if choice == "Y"
-      @player1.set_role(true)
-      @player2.set_role(false)
-    else
-      @player1.set_role(false)
-      @player2.set_role(true)
+    def game_won
+      if @game_won
+        puts "Player #{breaker.player_num} won!"
+      end
     end
-  end
 
-  def get_win_condition
-    new_code = @players.reject{|player| player.is_breaker?}[0].play
+    # Handles finding if the player won or not
+    def check_breaker_win
+      if @board.check_win?
+        @game_won = true
+      end
+    end
 
-    @board.set_win_condition(new_code)
-  end
+    def start_play
+      puts "Do you want to be the breaker, or the maker? Input Y to be the breaker."
+      choice = gets.chomp.upcase
+      if choice == "Y"
+        @player1.set_role(true)
+        @player2.set_role(false)
+      else
+        @player1.set_role(false)
+        @player2.set_role(true)
+      end
+    end
+
+    def get_win_condition
+      new_code = maker.play
+
+      @board.set_win_condition(new_code)
+    end
+
+    def breaker
+      @players.select{|player| player.is_breaker?}[0]
+    end
+
+    def maker
+      @players.reject{|player| player.is_breaker?}[0]
+    end
 end
 
 game = Game.new
