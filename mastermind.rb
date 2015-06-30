@@ -17,9 +17,12 @@
   #show actual solution [board]
   #replay [mastermind]
 
+require 'pry-byebug'
+
 class Mastermind #Game flow
 
   def initialize
+ #  binding.pry
     @code_breaker = Player.new
     @code_maker = Computer.new
     @board = Board.new
@@ -50,22 +53,26 @@ class Mastermind #Game flow
   end
 
   def hints(guess)
-    compare_near_match(guess)
+    puts compare_match(guess)
   end
 
-  def compare_near_match(guess)
+  def compare_match(guess)
     code = @code_maker.solution.dup
-    result = {:near_match => 0, :exact_match => 0}
-    guess.each do |color|
-      if @code_maker.solution.include?(color)
-        result[:color_match] += 1
-        code[code.index(color)] = nil
-      end
-    end
-    compare_exact_match(guess) if result[:color_match] > 0
-  end
+    result = {:color_match => 0, :exact_match => 0}
 
-  def compare_exact_match(guess)
+    guess.each_with_index do |color, index|
+      if guess[index]==code[index]
+        result[:exact_match] +=1      #code: ggrb guess: bgrb
+        code[index] = nil
+      elsif code.include?(color)
+        result[:color_match] += 1
+        code[code.index(color)] = nil #code: g, g, r, nil
+      end
+
+    end
+
+    result
+  end
 
   def guess_correct?(guess)
     guess == @code_maker.solution
@@ -162,6 +169,7 @@ class Computer #as code maker
     4.times do
       code << CODE_COLORS.sample
     end
+    code
   end
 
 end
