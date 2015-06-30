@@ -44,6 +44,7 @@
 
 
 class Board
+  attr_reader :board, :pieces
 
   def initialize
 
@@ -85,6 +86,8 @@ class Board
 
   end
 
+
+
 end
 
 
@@ -102,23 +105,28 @@ end
 class Human < Player
 
   def initialize(board)
-
+      @board = board
   end
 
-  def place_pin
+  def place_pin (board)
+     input = get_input
+      puts board
+      puts board[0]
+      
+     board[0] = input
+     board.rotate!
   end
 
-  def get_imput
+  def get_input
 
     input = ""
 
     loop do
       puts "Enter a piece."
       input = gets.chomp.upcase
-      if @board.pieces.include?(input)
-        break
-      end
-    end      
+      break
+    end  
+   input.chars
   end
 
 end
@@ -129,11 +137,16 @@ end
 
 
 class Mastermind
+  
+  def play
+    board = Board.new
+    human = Human.new(board)
+   
+    board.render
+    human.place_pin(board)
 
-  board = Board.new
-  @human = Human.new(board)
-
-
+    board.render
+ end
 
 end
 
