@@ -47,7 +47,9 @@ require 'colorize'
 
 
 class Board
-  attr_reader :board # :pieces
+  attr_reader :board, :solution
+
+
   def initialize
 
     # "X" is a blank space
@@ -84,14 +86,37 @@ class Board
   def place_pin(input)
   
       
-     board[0] = input
+     @board[0] = input
+     @clues[0] = new_clue
 
-     board.rotate!
+     @board.rotate!
+     @clues.rotate!
+
 
   end
 
-  def clues
-    
+  #keeps track of clues
+
+  def new_clue
+  
+  asterisks = 0
+  bangs = 0
+  new_clue = []
+
+    4.times do |i|
+      if @solution[i] == @board[0][i]
+        asterisks += 1
+      elsif @solution.include?(@board[0][i])
+        bangs += 1
+      end
+    end
+
+    asterisks.times {new_clue << "*" }
+    bangs.times {new_clue << "!" }
+    (4 - asterisks - bangs).times { new_clue << "-" }
+
+    new_clue
+
   end
 
 
@@ -167,6 +192,7 @@ class Mastermind
       game.render
       human.take_turn
       if game.victory?
+        game.render
         puts "You Won!"
         break
       end
@@ -176,10 +202,11 @@ class Mastermind
 
     unless game.victory?
       puts "You no win"
-      print "The solution was \t"
+      print "The solution was: \s"
       4.times do |i|
-        print (@game.solution[i] + "\s")
+        print (game.solution[i] + "\s")
       end
+      puts
     end
   end
 
