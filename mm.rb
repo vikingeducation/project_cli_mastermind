@@ -59,9 +59,7 @@ class Board
 
     set_solution
 
-
-
-    
+   
 
   end
 
@@ -85,7 +83,9 @@ class Board
 
     # @solution = ["R", "G", "B", "T", "O", "M", "K", "E"].sample(4)
 
-    @solution = @pieces.sample(4)
+    # @solution = @pieces.sample(4)
+
+    @solution = ["R".red, "G".green, "B".blue, "T".cyan]
 
 
   end
@@ -151,6 +151,8 @@ end
 
 
 class Mastermind
+
+
   
   def play
     game = Board.new
@@ -171,8 +173,10 @@ class Mastermind
       puts "You no win"
       print "The solution was \t"
       4.times do |i|
-      print (@game.solution[i] + "\s")
+        print (@game.solution[i] + "\s")
+      end
     end
+  end
 
 
  end
