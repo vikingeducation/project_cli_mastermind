@@ -4,10 +4,10 @@
    track the board pieces X
    set answer X
    check victory X
-   check full
+   check full X
 
  Player class
-    place pins 
+    place pins X
 
   human class < player class
       input from human X
@@ -15,7 +15,7 @@
       input from ai
 
   Maker
-    sets the solution pieces randomly
+    sets the solution pieces randomly X
   Mastermind class
      tell the board to render X
      tell the player to place pieces X
@@ -125,9 +125,11 @@ class Board
 
     # @solution = ["R", "G", "B", "T", "O", "M", "K", "E"].sample(4)
 
-    # @solution = @pieces.sample(4)
+    @solution = @pieces.sample(4)
 
-    @solution = ["R", "G", "B", "T"]
+    p @solution
+
+    # @solution = ["R", "G", "B", "T"]
 
   end
 
