@@ -1,8 +1,9 @@
 =begin
- Board class 
+ game = Board.new class 
    render method - to print board  X
    track the board pieces X
-   check victory
+   set answer X
+   check victory X
    check full
 
  Player class
@@ -16,11 +17,11 @@
   Maker
     sets the solution pieces randomly
   Mastermind class
-     tell the board to render
-     tell the player to place pieces
-     tells the board to check victory
-       unless victory && !full next
-         victor message
+     tell the board to render X
+     tell the player to place pieces X
+     tells the board to check victory X
+       unless victory && !full next X
+         victor message X
 
 
 
@@ -42,29 +43,23 @@
 
 =end
 
+require 'colorize'
+
 
 class Board
-  attr_reader :board, :pieces
-
+  attr_reader :board # :pieces
   def initialize
 
     # "X" is a blank space
-    @board = [
-                ["X", "X", "X", "X"],
-                ["X", "X", "X", "X"],
-                ["X", "X", "X", "X"],
-                ["X", "X", "X", "X"],
-                ["X", "X", "X", "X"],
-                ["X", "X", "X", "X"],
-                ["X", "X", "X", "X"],
-                ["X", "X", "X", "X"],
-                ["X", "X", "X", "X"],
-                ["X", "X", "X", "X"],
-                ["X", "X", "X", "X"],
-                ["X", "X", "X", "X"]
-             ]
 
-    @pieces = %w[R G B T A M K E]
+
+    @board = Array.new(12) { Array.new(4) {"X"} }
+
+    @pieces = ["R".red, "G".green, "B".blue, "T".cyan, "O".light_red, "M".magenta, "K".yellow, "E".black]
+
+    set_solution
+
+
 
     
 
@@ -78,10 +73,30 @@ class Board
       p @board[i]
     end
     puts
-    puts "Pieces:"
-    p @pieces
-    puts
+    puts "Pieces:".black
+    8.times do |i|
+      print (@pieces[i] + "\s")
+    end
+    puts "\n\n"
 
+  end
+
+  def set_solution
+
+    # @solution = ["R", "G", "B", "T", "O", "M", "K", "E"].sample(4)
+
+    @solution = @pieces.sample(4)
+
+
+  end
+
+  def victory?
+
+
+    if board[0] == @solution
+      then true
+    else
+      false
 
 
   end
@@ -110,7 +125,6 @@ class Human < Player
 
   def place_pin (board)
      input = get_input
-      puts board
       puts board[0]
       
      board[0] = input
@@ -139,14 +153,34 @@ end
 class Mastermind
   
   def play
-    board = Board.new
-    human = Human.new(board)
+    game = Board.new
+    human = Human.new(game)
    
-    board.render
-    human.place_pin(board)
+    12.times do
+      game.render
+      human.place_pin(game.board)
+      if game.victory?
+        puts "You Won!"
+        break
+      end
+    end
 
-    board.render
+    game.render
+
+    unless victory?
+      puts "You no win"
+      print "The solution was \t"
+      4.times do |i|
+      print (@game.solution[i] + "\s")
+    end
+
+
  end
 
 end
+
+
+m = Mastermind.new
+
+m.play
 
