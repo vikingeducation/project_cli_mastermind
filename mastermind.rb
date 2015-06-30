@@ -38,23 +38,20 @@ class Mastermind
 			# call board rendering method
       @board.render
 			# ask for guess from codebreaker
-      @code_breaker.guess
-			# add guess to codebreakerr guess count
+      guess = @code_breaker.get_guess
+
 
 			# break the loop IF game is over
       break if check_game_over
     end
 
-		# display winner
+	def check_game_over
+		check_victory
+  end
 
-	# check_game_over
-		# check_victory
-
-	# check_victory
-		# IF codebreaker guess == code
-			# display victory message
-		# IF codebreaker guesses > 12
-			# display defeat message
+	def check_victory
+    @code_breaker.guess_count > 12 || @code_breaker.get_guess == @code_maker.code
+  end
 
 end
 
@@ -62,17 +59,27 @@ end
 class Board
   PEG_COLORS = %w( b g o r p y)
 
-	# initialize
-		# create empty board
+	def initialize
+		@board = []
+  end
 
-	# render
-		# display codebreaker's guess and keys and guess count
+	def render
+		@board.each do |guess|
+      puts guess
+    end
+  end
 
-  # add_guess
+  def add_guess(guess)
+    @board << guess
+  end
 
-  # is_valid_guess?
+  def get_code(code)
+    @code = code
+  end
 
-  # check_victory
+  def check_victory?(guess)
+    guess == @code
+  end
 
   # check_correct_guesses
 
@@ -81,13 +88,28 @@ class Board
 end
 
 class CodeBreaker
+  PEG_COLORS = %w( b g o r p y)
 
   # initialize
     @guess_count = 0
 
-  # guess
+  def get_guess
+    p "Enter guess >> "
+    guess = gets.chomp.split("")
+  end
 
-  # is_valid_guess?
+  def is_valid_guess?(guess)
+    guess.each do |p|
+      unless PEG_COLORS.include?(p)
+        p "#{p} is not a valid color."
+        return false
+      end
+      return true
+  end
+
+  def add_guess_count
+    @guess_count += 1
+  end
 
 end
 
