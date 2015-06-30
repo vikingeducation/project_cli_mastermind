@@ -174,8 +174,20 @@ end
 
 class AI < Player
 
+  def initialize
+    @guess_count = 0
+    @memory = []
+  end
+
   def play
     @is_breaker? code_breaker : code_maker
+  end
+
+  def get_educated_choice
+    if @guess_count > 6
+      return @memory.shuffle
+    else
+    end
   end
 
   def code_breaker
@@ -183,7 +195,7 @@ class AI < Player
 
     puts "The computer is selecting a move!"
     4.times do
-      choice << COLORS.sample
+      choice << get_educated_choice
     end
 
     sleep 1
@@ -220,8 +232,7 @@ class Renderer
     puts (" " * 7) + ("Choice") + (" " * 17) + ("Hint")
     @guesses.length.times do |val|
       puts "#{@guesses[val]}  #{@hints[val]}"
-      # print "Hints: "
-      # p @hints[val]
+
     end
   end
 
