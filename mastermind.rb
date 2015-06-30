@@ -10,15 +10,22 @@ class Game
   end
 
   def create_players
-    @codemaker = Computer.new
-    @codebreaker = Human.new
+    puts "Do you want to be a codemaker? (y/n)"
+    if gets.chomp == "n" 
+      @codemaker = Computer.new
+      @codebreaker = Human.new
+    else
+      @codemaker = Human.new
+      @codebreaker = Computer.new
+    end
   end
     
   def play
+
     create_players
 
     @code = @codemaker.generate
-    puts "#{@code} - Code generated"
+    #puts "#{@code} - Code generated"
 
 
     12.times do |x|
@@ -33,8 +40,14 @@ class Game
       puts "#{@play_board.current_board} - your guess"
 
       @play_board.add_to_board(@codemaker.feedback(answer, @code))
-      puts "#{@play_board.current_board} - board"
+      #puts "#{@play_board.current_board} - board"
+      puts "Our board"
+      @play_board.display_board
+
     end
+    puts "You lost. The answer is #{@code}"
+    
+
 
   end
 
@@ -76,7 +89,8 @@ class Human < Player
   end
 
   def generate
-
+    puts "Please enter the code"
+    gets.chomp.split(" ")
   end
 
   def guess
@@ -100,7 +114,14 @@ class Computer < Player
   end
 
 
-  def guess
+  def guess 
+    new_code = []
+
+    4.times do 
+      new_code.push(COLORS.sample) 
+    end
+    new_code
+    
   end
 
 end
@@ -118,13 +139,14 @@ class Board
     @current_board << input
   end
 
-  def display_board
+  def display_board 
 
-    @current_board.each |line|
-      puts line +"\n"
+    for i in (0..@current_board.size)
+      i.odd? ? (print "#{@current_board[i]}\n") : (print "#{@current_board[i]}")
+    end
   end
 
-  end
+  
 
 end
 
