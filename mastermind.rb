@@ -42,8 +42,8 @@ class Mastermind #Game flow
           break
         else
           @board.update(guess, tries)
+          @board.render
           hints(guess)
-          @board.render #colored pegs hints
           tries -=1
         end
       end
@@ -53,25 +53,43 @@ class Mastermind #Game flow
   end
 
   def hints(guess)
-    puts compare_match(guess)
+    # p @code_maker.solution
+    puts compare_exact_match(guess)
   end
 
-  def compare_match(guess)
+  def compare_exact_match(guess)
+    guess_copy = guess.dup
     code = @code_maker.solution.dup
-    result = {:color_match => 0, :exact_match => 0}
+    result = {:exact_match => 0}
+
+    guess_copy.each_with_index do |color, index|
+      if color == code[index]
+        result[:exact_match] +=1
+        code[index] = nil
+        guess_copy[index] = nil
+      end
+    end
+    code.select!{ |item| item != nil}
+    guess_copy.select!{ |item| item != nil}
+    result[:color_match] = compare_color_match(code, guess_copy)
+    result
+  end
+
+  def compare_color_match(code, guess)
+    p code
+    result = {:color_match => 0}
 
     guess.each_with_index do |color, index|
-      if guess[index]==code[index]
-        result[:exact_match] +=1      #code: ggrb guess: bgrb
-        code[index] = nil
-      elsif code.include?(color)
+      if code.include?(color)
         result[:color_match] += 1
-        code[code.index(color)] = nil #code: g, g, r, nil
+        code[code.index(color)] = nil
+        puts color
+        puts index
       end
 
     end
 
-    result
+    result[:color_match]
   end
 
   def guess_correct?(guess)
