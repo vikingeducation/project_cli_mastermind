@@ -52,6 +52,7 @@ class Board
 
     # "X" is a blank space
 
+    @clues = Array.new(12) { Array.new(4) {"-"} }
 
     @board = Array.new(12) { Array.new(4) {"X"} }
 
@@ -68,7 +69,8 @@ class Board
     puts
 
     12.times do |i|
-      p @board[i]
+      print "#{@board[i]} #{@clues[i]}"
+      puts
     end
     puts
     puts "Pieces:".black
@@ -83,9 +85,15 @@ class Board
   
       
      board[0] = input
+
      board.rotate!
 
   end
+
+  def clues
+    
+  end
+
 
 
   def set_solution
@@ -95,7 +103,6 @@ class Board
     # @solution = @pieces.sample(4)
 
     @solution = ["R", "G", "B", "T"]
-
 
   end
 
