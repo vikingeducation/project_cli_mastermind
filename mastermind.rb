@@ -18,17 +18,22 @@ class Game
     create_players
 
     @code = @codemaker.generate
-    print "#{@code} - Code generated"
-    12.times do
+    puts "#{@code} - Code generated"
+
+
+    12.times do |x|
+
+      puts "This is your turn #{x+1}" 
+
       answer = @codebreaker.guess
       
       check_win(answer)
 
       @play_board.add_to_board(answer)
-      p @play_board.board
+      puts "#{@play_board.current_board} - your guess"
 
       @play_board.add_to_board(@codemaker.feedback(answer, @code))
-      p @play_board.board
+      puts "#{@play_board.current_board} - board"
     end
 
   end
@@ -41,17 +46,6 @@ class Game
   end
 
 end
-
-    #render a board
-
-    #player tries to guess
-    #gives a feedback
-    #player want to exit or wins?
-
-    #After loop ends player loses
-    #show the code
-
-
 
 class Player
 
@@ -101,7 +95,6 @@ class Computer < Player
     4.times do 
       new_code.push(COLORS.sample) 
     end
-    puts "#{new_code} New code generated"
     new_code
     
   end
@@ -114,18 +107,22 @@ end
 
 class Board
 
-  attr_reader :board
+  attr_reader :current_board
 
   def initialize
-    @board=[]
+    @current_board=[]
     #[[4 colors, 4 pegs],[]...12]
   end
 
   def add_to_board (input)
-    @board << input
+    @current_board << input
   end
 
   def display_board
+
+    @current_board.each |line|
+      puts line +"\n"
+  end
 
   end
 
