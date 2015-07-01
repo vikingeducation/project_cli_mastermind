@@ -220,7 +220,7 @@ class AI < CodeBreaker
   def initialize(board)
     super(board)
     @guess = [0, 0, 1, 1]
-    @candidates = generate_possible_solutions
+    @candidates = [0, 1, 2, 3, 4, 5].repeated_permutation(4).to_a
   end
 
   def get_guess
@@ -234,13 +234,13 @@ class AI < CodeBreaker
   #
   # loop
   #   feedback = get_feedback(initial_guess, real_code)
-
+  #
   #   codes.each do |code|
   #     if get_feedback(initial_guess, code) == feedback
-  #       remove code from codes
+  #       keep code in the codes
   #     end
   #   end
-
+  #
   #   initial_guess = codes[0]
   # end
 
@@ -252,21 +252,6 @@ class AI < CodeBreaker
     end
 
     @guess = @candidates[0]
-  end
-
-  def generate_possible_solutions
-    candidates = []
-    vals = [0, 1, 2, 3, 4, 5]
-    vals.each do |v1|
-      vals.each do |v2|
-        vals.each do |v3|
-          vals.each do |v4|
-            candidates << [v1, v2, v3, v4]
-          end
-        end
-      end
-    end
-    candidates
   end
 
   def convert_num_to_guess(nums)
