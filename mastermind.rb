@@ -22,9 +22,6 @@
 
 require './deep_dup'
 
-#@board.add_peg_set(Pegset.new)
-#pegs = Pegset.new(solution, guess)
-
 class Mastermind
 	def play
 		guess_count = 0  #could be in Board given historical tracking
@@ -33,10 +30,10 @@ class Mastermind
 		solution = create_solution(player_2)
 		game = Board.new
 		test = Pegset.new
-		while guess_count < 12
+		until guess_count == 12 || player_wins?
 			current_ans = player_1.get_ans(guess_count)
 			result_of_test = test.check_solution(solution, current_ans)
-			break if result_of_test == "You WIN!"
+			break if player_wins?(result_of_test)
 			game.add_turn(current_ans, result_of_test)
 			game.render
 			guess_count += 1
@@ -45,7 +42,7 @@ class Mastermind
 
 	def create_solution(player_2)
 		solution = []
-		if player_2 == 0
+		if player_2 == 0			#get solution from user
 		else
 			color_options = ["r","b","g","w"]
 			(color_options.length).times do
@@ -53,6 +50,14 @@ class Mastermind
 			end
 		end
 		return solution
+	end
+
+	def player_wins?(result = [0])
+		if result[0] == 4
+			true
+		else
+			false
+		end
 	end
 end
 
@@ -85,8 +90,8 @@ class Board
 	end
 
 	def render
-		p @peg_state[0]
-		p @peg_state[1]
+		#p @peg_state[0]
+		#p @peg_state[1]
 		@game_state.each_with_index do |row, index|
 			print "Guess #{index+1}:    #{row.join("  ")}  "
 			puts "Result: " + " \u2713 "*@peg_state[index][0] + " o "*@peg_state[index][1] + " x "*(4-(@peg_state[index][0]+@peg_state[index][1]))
@@ -103,9 +108,8 @@ class Pegset
 
 		if solution == guess
 			puts "You WIN!"
-		else
-			compare(solution, guess)
 		end
+		compare(solution, guess)
 	end
 
 	def compare(solution, guess)
