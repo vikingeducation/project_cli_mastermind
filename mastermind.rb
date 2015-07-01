@@ -19,7 +19,7 @@ class Mastermind #Game flow
   def print_instructions
     puts "******************************"
     puts "Welcome to Mastermind! Are you ready for a challenge?"
-    puts "The color options are [b]lue, [r]ed, [p]urple, [o]range, 
+    puts "The color options are [b]lue, [r]ed, [p]urple, [o]range,
     [y]ellow, and [g]reen. You can also press 'q' to quit"
     puts "******************************"
   end
@@ -37,7 +37,7 @@ class Mastermind #Game flow
   def select_mode
     is_valid = false
     until is_valid
-      print "Do you want to be the (1) code breaker or the 
+      print "Do you want to be the (1) code breaker or the
       (2) code maker? "
       input = gets.chomp.to_i
       is_valid = [1,2].include?(input)
@@ -50,7 +50,7 @@ class Mastermind #Game flow
     @attempts_left = 12
 
     while @attempts_left > 0
-      puts "This is the code breaker's attempt 
+      puts "This is the code breaker's attempt
       No. #{13 - @attempts_left}"
       @guess = @code_breaker.guess
 
