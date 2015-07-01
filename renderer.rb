@@ -1,3 +1,4 @@
+# Renderer draws the board state to the player.
 class Renderer
 
   def initialize(board)

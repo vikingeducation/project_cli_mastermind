@@ -1,3 +1,4 @@
+# The input module is responsible for allowing the player to put in choices.
 module Input
   COLORS = ["B", "G", "R", "O", "Y", "P" ]
 
@@ -7,10 +8,11 @@ module Input
   #   end
   # end
 
+  # Get choice returns a string if they want to save,
+  # Otherwise, it returns an array with their choices.
   def get_choice
-    #puts "Input your choice! (In format 'R B Y G')"
     choice_input = gets.chomp.upcase
-    
+
     if choice_input.downcase == "save"
       return "save"
     end
@@ -28,7 +30,10 @@ module Input
     return choice_input.split
   end
 
+  # Choices must be 4 characters seperated by a space.
+  # Rejects any inputs that have non-color characters.
   def valid_choice?(choice)
+    return false if choice.split.length != 4
     choice.split(" ").all? { |char| COLORS.include?(char) }
   end
 

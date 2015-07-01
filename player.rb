@@ -1,5 +1,6 @@
 require './input.rb'
 
+# Player is the generic base class for Human and AI players.
 class Player
 
   include Input
@@ -32,7 +33,7 @@ class Human < Player
   end
 
   def code_breaker
-    puts "#{@player_num} Guess the code!"
+    puts "#{@player_num} Guess the code! (Or type 'save' to save)"
     new_guess = get_choice
     return new_guess
   end
@@ -94,8 +95,6 @@ class AI < Player
     4.times do
       choice << COLORS.sample
     end
-
-  
 
     choice
   end

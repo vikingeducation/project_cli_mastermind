@@ -1,8 +1,15 @@
 require 'yaml'
 
+# Board represents the game state internally.
 class Board
 
-  attr_reader :guesses, :hints
+  attr_reader :guesses, :hints, :winning_condition
+
+  def init_with(code)
+    @guesses = code['guesses']
+    @hints = code['hints']
+    @winning_condition = code['winning_condition']
+  end
 
   def initialize(condition = [])
     @guesses = []
@@ -34,13 +41,6 @@ class Board
     game_file.write(save_string)
     game_file.close
     puts "saving game"
-  end
-
-  def load_game
-    game_file = File.new("./save.yaml", "r")
-    yaml = game_file.read
-    YAML.load(yaml)
-    game_file.close
   end
 
   private

@@ -1,8 +1,7 @@
 require './board.rb'
 require './player.rb'
 require './renderer.rb'
-require './serializer.rb'
-
+# Game controls gameflow, also responsible for loading game.
 class Game
 
   def initialize
@@ -11,28 +10,61 @@ class Game
     @player1 = Human.new(1)
     @player2 = AI.new("COMPUTER")
     @players = [@player1, @player2]
+    @game_saved = false
   end
 
   def play
 
-    start_play
-    get_win_condition
+    load_or_new_game
     play_round
 
   end
 
   private
 
+    def load_game
+      game_file = File.new("./save.yaml", "r")
+      yaml = game_file.read
+      new_board = YAML.load(yaml)
+      game_file.close
+      return new_board
+    end
+
+    def load_or_new_game
+      if File.exist?('./save.yaml')
+        puts "There is a saved game! Type 'L' to load it!"
+        choice = gets.chomp.upcase
+        if choice == "L"
+          load_saved_game
+        else
+          start_play
+          get_win_condition
+        end
+      else
+        start_play
+        get_win_condition
+      end
+    end
+
+    def load_saved_game
+      @player1.set_role(true)
+      @player2.set_role(false)
+      @board = load_game
+      @renderer = Renderer.new(@board)
+      @renderer.draw
+    end
+
     def check_if_save(input)
       if input.is_a? Array
         @board.accept_guess(input)
       elsif input.is_a? String
         @board.save_game
+        @game_saved = true
       end
     end
 
     def play_round
-      until(game_won || game_lost)
+      until(game_won || game_lost || game_saved?)
         # Get a guess from the breaker player
         new_guess = breaker.play
 
@@ -53,6 +85,7 @@ class Game
     def game_lost
       if @board.num_guesses > 11
         puts "Player #{breaker.player_num} lost!"
+        puts "The solution was: #{@board.winning_condition}"
         return true
       end
     end
@@ -62,6 +95,10 @@ class Game
         puts "Player #{breaker.player_num} won!"
         return true
       end
+    end
+
+    def game_saved?
+      @game_saved
     end
 
     # Handles finding if the player won or not
