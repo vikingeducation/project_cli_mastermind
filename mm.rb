@@ -102,7 +102,7 @@ class Board
                    "B" => "B".blue,
                    "T" => "T".cyan, 
                    "O" => "O".light_red,
-                   "M" => "M".magenta,
+                   "M" => "M".light_magenta,
                    "K" => "K".yellow,
                    "E" => "E".light_black,
                    "X" => "X".black }
@@ -232,6 +232,26 @@ end
 
 class Computer < Player
 
+  def initialize(board)
+    @game = board
+  end
+
+
+  def take_turn
+
+    input = []
+
+
+
+    input = @game.pieces.sample(4)
+
+    
+
+   @game.place_pin(input)
+  end
+
+  
+
 end
 
 
@@ -242,10 +262,12 @@ class Mastermind
   def play
     game = Board.new
     human = Human.new(game)
+    computer = Computer.new(game)
    
     12.times do
       game.render
-      human.take_turn
+      computer.take_turn
+      sleep(0.8)
       if game.victory?
         game.render
         puts "You Won!"
@@ -257,6 +279,7 @@ class Mastermind
 
     unless game.victory?
       puts "You no win"
+      game.render
       print "The solution was: \s"
       4.times do |i|
         print (game.solution[i] + "\s")
