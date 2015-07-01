@@ -43,6 +43,7 @@
 
 =end
 
+#install using 'gem install colorize'
 require 'colorize'
 
 
@@ -73,17 +74,23 @@ class Board
 
     12.times do |i|
       
-      @board[i].each do |x|
-        board[0] = color_scheme[x] 
+      4.times do |j|
+        print "#{color_scheme[@board[i][j]]}" # #{@clues[i][j]}"
+        # print i
+        # puts
+        # print j
+        # puts
       end
-
-      print "#{@board[i]} #{@clues[i]}"
-      puts
+      print "\s\s"
+      4.times do |j|
+        print "#{@clues[i][j]}"
+      end
+      puts      
     end
     puts
     puts "Pieces:".blue
     8.times do |i|
-      print (@pieces[i] + "\s")
+      print (color_scheme[@pieces[i]] + "\s")
     end
     puts "\n\n"
 
@@ -97,7 +104,8 @@ class Board
                    "O" => "O".light_red,
                    "M" => "M".magenta,
                    "K" => "K".yellow,
-                   "E" => "E".light_black }
+                   "E" => "E".light_black,
+                   "X" => "X".black }
 
             
   end
