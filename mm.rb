@@ -155,7 +155,7 @@ class Board
 
     @solution = @pieces.sample(4)
 
-    p @solution
+   
 
     # @solution = ["R", "G", "B", "T"]
 
@@ -196,8 +196,11 @@ class Human < Player
     input = []
 
     until valid_turn?(input)
-      puts "Enter a piece."
+      puts "Enter your choices or 'quit' to quit."
       input = gets.chomp.upcase.chars
+      if input == %w[Q U I T]
+          exit
+       end 
         unless valid_turn?(input)
           puts "Invalid Input"
         end
@@ -261,23 +264,35 @@ class Mastermind
   
   def play
     game = Board.new
-    human = Human.new(game)
-    computer = Computer.new(game)
-   
+    
+    puts "Would you like to play? (y) or watch computer?"
+    
+    if gets.chomp == "y"
+        player = Human.new(game)
+    else
+        player = Computer.new(game)
+    end
+    
+
     12.times do
+      system "clear"
       game.render
-      computer.take_turn
-      sleep(0.8)
+      player.take_turn
+      sleep(0.5)
       if game.victory?
+        system "clear"
         game.render
         puts "You Won!"
         break
+
       end
+
     end
 
     
 
     unless game.victory?
+      system "clear"
       puts "You no win"
       game.render
       print "The solution was: \s"
