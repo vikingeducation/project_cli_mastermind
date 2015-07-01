@@ -1,27 +1,16 @@
-# Set up the game [mastermind]
-  # Create a game board [board]
-  # Create two players: Code-maker and code-breaker [player]
-  # Code maker makes code #(solution) [board]
-# Start the game loop (12 tries) [mastermind]
-  # Render the board [board]
-  # Take code-breaker guess [player]
-  # Validate guess (valid input) [player]
-  # Compare guess to solution [ask board]
-    #If guess is correct -
-      #end game [mastermind]
-    #Else -
-      #show information on guess [board]
-        # Number of correct colored pegs in correct position [board]
-        # Correct colored pegs in wrong position [board]
-#end game [mastermind]
-  #show actual solution [board]
-  #replay [mastermind]
-
-require 'pry-byebug'
-
 class Mastermind #Game flow
 
   def initialize
+    keep_playing = true
+    while keep_playing
+      select_player
+      @board = Board.new
+      play
+      keep_playing = play_again?
+    end
+  end
+
+  def select_player
     if select_mode == 1
       @code_maker = Computer.new
       @code_breaker = Player.new
@@ -29,7 +18,6 @@ class Mastermind #Game flow
       @code_maker = Player.new
       @code_breaker = Computer.new
     end
-    @board = Board.new
   end
 
   def select_mode
@@ -44,32 +32,25 @@ class Mastermind #Game flow
   end
 
   def play
-    tries = 12
-    @board.render
-    keep_playing = true
-    while keep_playing #All the games - until player quits
-      while tries > 0 #Single game
-        puts "This is the code breaker's attempt No. #{13 - tries}"
+    attempts_left = 12
 
-        guess = @code_breaker.guess
+    while attempts_left > 0 #Single game
+      puts "This is the code breaker's attempt No. #{13 - attempts_left}"
+      guess = @code_breaker.guess
 
-        if guess_correct?(guess)
-          win_game
-          break
-        else
-          @board.update(guess, tries)
-          @board.match_history (hints(guess))
-          @board.render
-          tries -=1
-        end
+      if guess_correct?(guess)
+        win_game
+        break
+      else
+        @board.update(guess, attempts_left)
+        @board.add_to_match_history (compare_exact_match(guess))
+        @board.render
+        attempts_left -=1
       end
-      lose_game if tries <= 0
-      keep_playing = play_again? #need to reset board
     end
-  end
 
-  def hints(guess) #peg hash
-    compare_exact_match(guess)
+      lose_game if attempts_left <= 0
+
   end
 
   def compare_exact_match(guess)
@@ -84,8 +65,9 @@ class Mastermind #Game flow
         guess_copy[index] = nil
       end
     end
-    code.select!{ |item| item != nil}
-    guess_copy.select!{ |item| item != nil}
+
+    code -= [nil]
+    guess_copy -= [nil]
     result[:color_match] = compare_color_match(code, guess_copy)
     result
   end
@@ -98,7 +80,6 @@ class Mastermind #Game flow
         result[:color_match] += 1
         code[code.index(color)] = nil
       end
-
     end
 
     result[:color_match]
@@ -109,7 +90,7 @@ class Mastermind #Game flow
   end
 
   def win_game
-    puts "Congratulations! Your code was correct!"
+    puts "Congratulations! The code was correct!"
   end
 
   def lose_game
@@ -142,7 +123,7 @@ class Board #Game logic
     @pegs =[]
   end
 
-  def match_history(hint)
+  def add_to_match_history(hint)
     @pegs << hint
   end
 
@@ -156,12 +137,8 @@ class Board #Game logic
     puts
   end
 
-  def update(guess, tries)
-    @board[12 - tries]= guess
-  end
-
-  def show_hints (guess, solution)
-    #
+  def update(guess, attempts_left)
+    @board[12 - attempts_left]= guess
   end
 
 end
@@ -229,4 +206,4 @@ class Computer #as code maker
 end
 
 a = Mastermind.new
-a.play
+
