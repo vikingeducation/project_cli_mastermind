@@ -17,7 +17,9 @@
 	- create initial state of the board
 	- store the historical state of the board
 	- render method: output history of the game
-#6. Class CodeMaker (not using right now)
+#6. Class CodeMaker
+	-
+
 =end
 
 require './deep_dup'
@@ -31,7 +33,11 @@ class Mastermind
 		game = Board.new
 		test = Pegset.new
 		until guess_count == 12 || player_wins?
-			current_ans = player_1.get_ans(guess_count)
+			if player_2 == 0
+				current_ans = player_1.ai
+			else
+				current_ans = player_1.get_ans(guess_count)
+			end
 			result_of_test = test.check_solution(solution, current_ans)
 			break if player_wins?(result_of_test)
 			game.add_turn(current_ans, result_of_test)
@@ -43,6 +49,8 @@ class Mastermind
 	def create_solution(player_2)
 		solution = []
 		if player_2 == 0			#get solution from user
+			player_1 = CodeMaker.new
+			solution = player_1.make_code
 		else
 			color_options = ["r","b","g","w"]
 			(color_options.length).times do
@@ -76,6 +84,15 @@ class Codebreaker
 		puts "Enter guess (#{guess_no + 1} / 12):"
 		current_guess = gets.chomp.split(",")
 	end
+
+	def ai
+		solution = []
+		color_options = ["r","b","g","w"]
+		(color_options.length).times do
+			solution << color_options.sample
+		end
+		return solution
+	end
 end
 
 class Board
@@ -90,15 +107,12 @@ class Board
 	end
 
 	def render
-		#p @peg_state[0]
-		#p @peg_state[1]
 		@game_state.each_with_index do |row, index|
 			print "Guess #{index+1}:    #{row.join("  ")}  "
 			puts "Result: " + " \u2713 "*@peg_state[index][0] + " o "*@peg_state[index][1] + " x "*(4-(@peg_state[index][0]+@peg_state[index][1]))
 		end
 		puts "Solution:   o  o  o  o"
 	end
-
 end
 
 class Pegset
@@ -113,12 +127,8 @@ class Pegset
 	end
 
 	def compare(solution, guess)
-		#p solution
-		#p guess
 		exactly_correct = exact_matches(solution, guess)
 		color_correct = color_only_matches(solution,guess) - exactly_correct
-		#p exactly_correct
-		#p color_correct
 		return [exactly_correct, color_correct]
 	end
 
@@ -145,5 +155,12 @@ class Pegset
 			i += 1
 		end
 		return match_only_color
+	end
+end
+
+class CodeMaker
+	def make_code
+		puts "Enter Code - r(red), b(blue), g(green), w(white) in the format r,b,g,w"
+		gets.chomp.split(",")
 	end
 end
