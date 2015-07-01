@@ -29,7 +29,8 @@ class Mastermind
 		guess_count = 0  #could be in Board given historical tracking
 		player_1 = Codebreaker.new
 		player_2 = player_1.opponent
-		solution = create_solution(player_2)
+		code = CodeMaker.new
+		solution = code.create_solution(player_2)
 		game = Board.new
 		test = Pegset.new
 		until guess_count == 12 || player_wins?
@@ -44,20 +45,6 @@ class Mastermind
 			game.render
 			guess_count += 1
 		end
-	end
-
-	def create_solution(player_2)
-		solution = []
-		if player_2 == 0			#get solution from user
-			player_1 = CodeMaker.new
-			solution = player_1.make_code
-		else
-			color_options = ["r","b","g","w"]
-			(color_options.length).times do
-				solution << color_options.sample
-			end
-		end
-		return solution
 	end
 
 	def player_wins?(result = [0])
@@ -75,7 +62,7 @@ class Codebreaker
 	end
 
 	def opponent
-		puts "Who do you want to play against: human (0) or AI (1)?"   #when asking binary q's, use boolean!!
+		puts "Who do you want to play as a Codebreaker (1) or Codemaker (0)?"   #when asking binary q's, use boolean!!
 		opponent = gets.chomp.to_i
 	end
 
@@ -162,5 +149,18 @@ class CodeMaker
 	def make_code
 		puts "Enter Code - r(red), b(blue), g(green), w(white) in the format r,b,g,w"
 		gets.chomp.split(",")
+	end
+
+	def create_solution(player)
+		solution = []
+		if player == 0
+			solution = make_code
+		else
+			color_options = ["r","b","g","w"]
+			(color_options.length).times do
+				solution << color_options.sample
+			end
+		end
+		return solution
 	end
 end
