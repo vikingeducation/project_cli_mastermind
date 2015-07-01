@@ -69,19 +69,39 @@ class Board
   def render
 
     puts
+      
 
     12.times do |i|
+      
+      @board[i].each do |x|
+        board[0] = color_scheme[x] 
+      end
+
       print "#{@board[i]} #{@clues[i]}"
       puts
     end
     puts
-    puts "Pieces:".black
+    puts "Pieces:".blue
     8.times do |i|
       print (@pieces[i] + "\s")
     end
     puts "\n\n"
 
   end
+  
+  def color_scheme
+                 {"R" => "R".red,
+                   "G" => "G".green,
+                   "B" => "B".blue,
+                   "T" => "T".cyan, 
+                   "O" => "O".light_red,
+                   "M" => "M".magenta,
+                   "K" => "K".yellow,
+                   "E" => "E".light_black }
+
+            
+  end
+
 
   def place_pin(input)
   
