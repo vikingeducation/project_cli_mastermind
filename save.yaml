@@ -1,0 +1,48 @@
+--- !ruby/object:Board
+guesses:
+- - B
+  - B
+  - R
+  - G
+- - B
+  - R
+  - G
+  - R
+- - R
+  - G
+  - O
+  - P
+- - P
+  - O
+  - R
+  - B
+- - Y
+  - Y
+  - Y
+  - Y
+hints:
+- - B
+  - W
+  - " "
+  - " "
+- - W
+  - " "
+  - " "
+  - " "
+- - " "
+  - " "
+  - " "
+  - " "
+- - B
+  - " "
+  - " "
+  - " "
+- - " "
+  - " "
+  - " "
+  - " "
+winning_condition:
+- O
+- B
+- B
+- B
