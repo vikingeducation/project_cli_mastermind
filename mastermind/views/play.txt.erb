@@ -1,0 +1,9 @@
+
+Close: <%= @board.close %>
+Exact: <%= @board.exact %>
+
+<% @board.each_with_index do |row, index| %>
+<%= "#{index}" %>.
+<%= row %>
+<%= '-' * Row::WIDTH %>
+<% end %>
