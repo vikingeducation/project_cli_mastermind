@@ -1,256 +1,14 @@
-module Paint
-	WIDTH = 4
-
-	def color(number)
-		code = ((number.to_i % 15)).to_s
-		bg = "\e[48;5;#{code}m"
-		width = ' ' * WIDTH
-		close = "\e[0m"
-		"#{bg}#{width}#{close}"
-	end
-end
-
-class Color
-	include Paint
-
-	attr_accessor :position, :number
-
-	def initialize(options={})
-		@number = options[:number]
-		@position = options[:position]
-	end
-
-	def ==(other)
-		@number == other
-	end
-
-	def to_s
-		color(@number)
-	end
-end
-
-class Proximity
-	include Paint
-
-	attr_accessor :type
-
-	def initialize(options={})
-		@type = options[:type]
-	end
-
-	def ==(value)
-		@type == value
-	end
-
-	def to_s
-		@type ? send(@type) : wrong
-	end
-
-	def <=>(other)
-		if @type == other.type
-			return 0
-		elsif @type == :exact
-			return -1
-		elsif @type == :close && other.type == :wrong
-			return -1
-		elsif @type == :close && other.type == :exact
-			return 1
-		elsif @type == :wrong	
-			return 1
-		end
-	end
-
-	private
-		def close
-			color(7)
-		end
-
-		def exact
-			color(8)
-		end
-
-		def wrong
-			color(0)
-		end
-end
-
-class Guess < Color
-	attr_accessor :proximity
-
-	def initialize(options={})
-		super(
-			:position => options[:position],
-			:number => options[:color]
-		)
-	end
-
-	def exact?
-		@proximity == :exact
-	end
-
-	def close?
-		@proximity == :close
-	end
-
-	def wrong?
-		@proximity == :wrong
-	end
-end
-
-module Pattern
-	def ==(other)
-		self.normalize == other.normalize
-	end
-
-	def normalize
-		self.map {|c| "#{c.position}.#{c.number}"}.join("-")
-	end
-end
-
-class Code
-	include Enumerable
-	include Pattern
-
-	attr_accessor :colors
-
-	def initialize(options={})
-		if options[:colors]
-			self.colors = options[:colors] if options[:colors]
-		else
-			@colors = (0..3).to_a.map {|i| Color.new(:position => i)}
-		end
-	end
-
-	def [](index)
-		@colors[index]
-	end
-
-	def []=(index, value)
-		@colors[index] = value
-	end
-
-	def <<(value)
-		color = select {|c| ! c.number}.first
-		color.number = value if color
-	end
-
-	def -(value)
-		@colors - value
-	end
-
-	def dup
-		colors = @colors.map {|c| c.number}
-		self.class.new(:colors => colors)
-	end
-
-	def colors=(value)
-		@colors = value.map.with_index do |c, i|
-			c = Color.new(:position => i, :number => c)
-		end
-	end
-
-	def each(proc=nil)
-		@colors.each do |item|
-			if block_given?
-				yield(item)
-			else
-				proc.call(item)
-			end
-		end
-	end
-
-	def to_s
-		lines = []
-		2.times do
-			line = @colors ? self.map {|c| c.to_s}.join : ''
-			lines << line
-		end
-		lines.join("\n")
-	end
-end
-
-class Row
-	WIDTH = Paint::WIDTH * 7 + 3
-
-	include Enumerable
-	include Pattern
-
-	attr_accessor :guesses
-
-	def initialize(options={})
-		if options[:guesses]
-			self.guesses = options[:guesses] if options[:guesses]
-		else
-			@guesses = (0..3).to_a.map {|i| Guess.new(:position => i)}
-		end
-	end
-
-	def guesses=(value)
-		@guesses = value.map.with_index do |c, i|
-			c = Guess.new(:position => i, :color => c)
-		end
-	end
-
-	def [](index)
-		@guesses[index]
-	end
-
-	def <<(value)
-		guess = select {|g| ! g.number}.first
-		guess.number = value if guess
-	end
-
-	def -(value)
-		@guesses - value
-	end
-
-	def each(proc=nil)
-		@guesses.each do |item|
-			if block_given?
-				yield(item)
-			else
-				proc.call(item)
-			end
-		end
-	end
-
-	def sort
-		@guesses.sort_by do |g|
-		end
-	end
-
-	def dup
-		guesses = @guesses.map {|g| g.number}
-		self.class.new(:guesses => guesses)
-	end
-
-	def to_s
-		lines = []
-		sorted = @guesses.sort_by {|g| g.proximity}
-		2.times do |i|
-			line = map {|c| c.to_s}.join
-			g1 = sorted[0 + (2 * i)]
-			g2 = sorted[1 + (2 * i)]
-			p1 = g1.proximity ? g1.proximity : ' ' * Paint::WIDTH
-			p2 = g2.proximity ? g2.proximity : ' ' * Paint::WIDTH
-			line += " | [#{p1}][#{p2}]"
-			lines << line
-		end
-		lines.join("\n")
-	end
-
-	def resolved?
-		! select {|g| g.proximity}.empty?
-	end
-end
+require_relative 'code.rb'
 
 class Board
 	include Enumerable
 
-	attr_accessor :code
+	attr_accessor :code, :role, :debug
 	attr_reader :rows
 
 	def initialize(options={})
+		@debug = options[:debug]
+		@role = options[:role]
 		@rows = (1..12).to_a.map {Row.new}
 		self.code = options[:code]
 	end
@@ -288,7 +46,7 @@ class Board
 			rows << r.to_s
 			rows << '-' * Row::WIDTH
 		end
-		rows << @code.to_s
+		rows << @code.to_s if show_code?
 		rows.join("\n")
 	end
 
@@ -357,14 +115,38 @@ class Board
 	def proximitize!(row, results)
 		results.each do |key, value|
 			value.each do |guess|
-				row[guess.position].proximity = Proximity.new(:type => key)
+				row[guess.position].proximity = key
 			end
 		end
-		row = row.map {|g| g.proximity = Proximity.new(:type => :wrong) unless g.proximity}
+		row = row.map {|g| g.proximity = wrong unless g.proximity}
+	end
+
+	def code?
+		@code.select {|c| ! c.number}.empty?
 	end
 
 	def win?
 		row = resolved.first
-		@code == row
+		row ? @code == row : false
 	end
+
+	def lose?
+		unresolved.empty? && ! win?
+	end
+
+	def resolve_ready?
+		row = unresolved.first
+		row.select {|g| ! g.number}.empty? && code?
+	end
+
+	private
+		def show_code?
+			return true if @debug
+			if @role == :codebreaker
+				return true if win? || lose?
+			elsif @role == :codemaker
+				return true
+			end
+			return false
+		end
 end

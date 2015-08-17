@@ -12,7 +12,13 @@ class GameController < Controller
 			:board => @model.board
 		)
 		@view.render('form')
-		@router.action = :select_guess
+		if @model.codebreaker?
+			# set board role to codebreaker
+			@router.action = :select_guess
+		else
+			# set board role to codemaker
+			@router.action = :select_code
+		end
 	end
 
 	def over
@@ -31,11 +37,15 @@ class GameController < Controller
 		end
 	end
 
+	def select_code
+
+	end
+
 	def select_guess
 		if @model.auth.valid_guess?(Input.data)
 			@model.guess = Input.data
 		end
-		if @model.win? || @model.over?
+		if @model.win? || @model.lose?
 			@router.action = :over
 		else
 			@router.action = :play

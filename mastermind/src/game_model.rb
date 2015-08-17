@@ -2,34 +2,29 @@ require_relative 'game_auth.rb'
 require_relative 'board.rb'
 
 class GameModel < Model
-	attr_accessor :role, :turns, :board
+	CODEBREAKER = '1'
+	CODEMAKER = '2'
+
+	attr_accessor :board
 
 	def initialize
 		super(:auth => GameAuth.new)
-		
+		clear
 	end
 
 	def clear
-		@role = nil
 		@board = Board.new
 	end
 
 	def role=(value)
-		# set up game
-		@role = value
+		@board.role = value == CODEBREAKER ? :codebreaker : :codemaker
+	end
+
+	def color=(value)
+		@board.code << value.to_i
 	end
 
 	def guess=(value)
-		@guess = value
-	end
-
-	def create
-		self
-	end
-
-	def win?
-	end
-
-	def over?
+		@board << value.to_i
 	end
 end

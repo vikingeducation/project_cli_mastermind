@@ -8,11 +8,11 @@ class GameAuth < Auth
 		end
 	end
 
-	def valid_guess?(guess)
-		if '123456'.split('').include?(guess)
+	def valid_color?(color)
+		if '123456'.split('').include?(color)
 			return true
 		else
-			@error = "Invalid guess: #{guess.to_i.to_s}"
+			@error = "Invalid color: #{color.to_i.to_s}"
 			return false
 		end
 	end
