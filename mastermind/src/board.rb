@@ -1,6 +1,10 @@
 require_relative 'code.rb'
+require_relative 'ai.rb'
 
 class Board
+	ROWS = 12
+	COLORS = 6
+
 	include Enumerable
 
 	attr_accessor :code, :role, :debug
@@ -9,7 +13,7 @@ class Board
 	def initialize(options={})
 		@debug = options[:debug]
 		@role = options[:role]
-		@rows = (1..12).to_a.map {Row.new}
+		@rows = (1..ROWS).to_a.map {Row.new}
 		self.code = options[:code]
 	end
 
@@ -77,10 +81,10 @@ class Board
 	end
 
 	def exactness!(row, code)
-		exacts = row.select do |g|
-			exact = (g == code[g.position])
+		exacts = row.select do |c|
+			exact = (c == code[c.position])
 			if exact
-				code[g.position] = nil
+				code[c.position] = nil
 			end
 			exact
 		end
@@ -89,16 +93,16 @@ class Board
 	end
 
 	def closeness!(row, code)
-		closes = row.select do |g|
-			included = code.include?(g)
+		closes = row.select do |row_color|
+			included = code.include?(row_color)
 			if included
 				removed = false
-				code = code.map do |c|
-					if c == g && ! removed
-						c = nil 
+				code = code.map do |code_color|
+					if code_color == row_color && ! removed
+						code_color = nil 
 						removed = true
 					else
-						c
+						code_color
 					end
 				end
 			end
@@ -107,18 +111,18 @@ class Board
 	end
 
 	def wrongness!(row, code)
-		wrongs = row.select {|g| ! code.include?(g)}
+		wrongs = row.select {|c| ! code.include?(c)}
 		row -= wrongs
 		wrongs
 	end
 
 	def proximitize!(row, results)
 		results.each do |key, value|
-			value.each do |guess|
-				row[guess.position].proximity = key
+			value.each do |color|
+				row[color.position].proximity = key
 			end
 		end
-		row = row.map {|g| g.proximity = wrong unless g.proximity}
+		row = row.map {|c| c.proximity = :wrong unless c.proximity}
 	end
 
 	def code?
@@ -136,7 +140,7 @@ class Board
 
 	def resolve_ready?
 		row = unresolved.first
-		row.select {|g| ! g.number}.empty? && code?
+		row ? row.select {|c| ! c.number}.empty? && code? : false
 	end
 
 	private

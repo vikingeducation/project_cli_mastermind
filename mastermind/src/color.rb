@@ -8,6 +8,7 @@ module Paint
 		close = "\e[0m"
 		"#{bg}#{width}#{close}"
 	end
+	module_function :color
 end
 
 class Proximity

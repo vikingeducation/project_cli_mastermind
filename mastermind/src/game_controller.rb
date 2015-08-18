@@ -9,23 +9,32 @@ class GameController < Controller
 	def play
 		@view.render('game')
 		@view.render('play',
-			:board => @model.board
+			:board => @model
 		)
+		unless @model.code? && @model.codemaker?
+			@view.render('colors')
+		else
+			@view.render('ai')
+		end
 		@view.render('form')
 		if @model.codebreaker?
-			# set board role to codebreaker
+			@model.code = AI.code unless @model.code?
 			@router.action = :select_guess
-		else
-			# set board role to codemaker
+		elsif ! @model.code?
 			@router.action = :select_code
+		else
+			@router.action = :select_guess
 		end
 	end
 
 	def over
 		@view.render('game')
-		@view.render('over')
+		@view.render('play')
+		result = @model.win? ? 'win' : 'lose'
+		@view.render('over', :result => result)
 		@view.render('form')
 		@router.action = :menu
+		@model.clear
 	end
 
 	def select_role
@@ -33,17 +42,35 @@ class GameController < Controller
 			@model.role = Input.data
 			@router.action = :play
 		else
+			@router.notice = @model.auth.error
 			@router.action = :menu
 		end
 	end
 
 	def select_code
-
+		if ['c', 'clear'].include?(Input.data)
+			@model.clear_code
+		else
+			if @model.auth.valid_color?(Input.data)
+				@model.color = Input.data
+			else
+				@router.notice = @model.auth.error
+			end
+		end
+		@router.action = :play
 	end
 
 	def select_guess
-		if @model.auth.valid_guess?(Input.data)
-			@model.guess = Input.data
+		if ['c', 'clear'].include?(Input.data)
+			@model.clear_guesses
+		elsif @model.codebreaker?
+			if @model.auth.valid_color?(Input.data)
+				@model.guess = Input.data
+			else
+				@router.notice = @model.auth.error
+			end
+		else
+			4.times {@model.guess = AI.color}
 		end
 		if @model.win? || @model.lose?
 			@router.action = :over

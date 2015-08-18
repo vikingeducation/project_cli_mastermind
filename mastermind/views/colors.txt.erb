@@ -1,0 +1,10 @@
+
+<%
+colors = []
+(1..6).each do |i| 
+	colors << "#{i}. #{Paint.color(i)} "
+end
+%>
+Select a color: <%= colors.join(' ') %>
+Type 'c' or 'clear' to clear your selections.
+<% if @notice %><%= "\n#{@notice}\n" %><% end %>
