@@ -11,20 +11,10 @@ class GameController < Controller
 		@view.render('play',
 			:board => @model
 		)
-		unless @model.code? && @model.codemaker?
-			@view.render('colors')
-		else
-			@view.render('ai')
-		end
+		@view.render(form_message)
 		@view.render('form')
-		if @model.codebreaker?
-			@model.code = AI.code unless @model.code?
-			@router.action = :select_guess
-		elsif ! @model.code?
-			@router.action = :select_code
-		else
-			@router.action = :select_guess
-		end
+		@router.action = :select_guess
+		@router.action = :select_code unless @model.code?
 	end
 
 	def over
@@ -38,44 +28,60 @@ class GameController < Controller
 	end
 
 	def select_role
-		if @model.auth.valid_role?(Input.data)
-			@model.role = Input.data
+		@model.role = Input.data
+		if @model.role?
 			@router.action = :play
 		else
-			@router.notice = @model.auth.error
+			Input.notice = @model.validation.error
 			@router.action = :menu
 		end
 	end
 
 	def select_code
-		if Input.clear?
-			@model.clear_code
-		else
-			if @model.auth.valid_color?(Input.data)
-				@model.color = Input.data
-			else
-				@router.notice = @model.auth.error
-			end
-		end
+		auto_code if @model.codebreaker?
+		player_code if @model.codemaker?
 		@router.action = :play
 	end
 
 	def select_guess
-		if Input.clear?
-			@model.clear_guesses
-		elsif @model.codebreaker?
-			if @model.auth.valid_color?(Input.data)
-				@model.guess = Input.data
-			else
-				@router.notice = @model.auth.error
-			end
-		else
-			4.times {@model.guess = AI.color}
-		end
-		if @model.win? || @model.lose?
-			@router.action = :over
-		else
-			@router.action = :play
-		end
+		auto_guess if @model.codemaker?
+		player_guess if @model.codebreaker?
+		@router.action = :play
+		@router.action = :over if @model.win? || @model.lose?
 	end
+
+	private
+		def form_message 
+			if @model.codebreaker?
+				return @model.code? ? 'colors' : 'thinking'
+			else
+				return @model.code? ? 'thinking' : 'colors'
+			end
+		end
+
+		def auto_code
+			@model.code = AI.code
+		end
+
+		def player_code
+			@model.code = Input.data
+			if Input.clear?
+				@model.clear_code
+			elsif ! @model.code?
+				Input.notice = @model.validation.error
+			end
+		end
+
+		def auto_guess
+			@model.guess = AI.guess
+		end
+
+		def player_guess
+			@model.guess = Input.data
+			if Input.clear?
+				@model.clear_guesses
+			elsif ! @model.guess?
+				Input.notice = @model.validation.error
+			end
+		end
 end

@@ -73,7 +73,7 @@ class Board
 	end
 
 	def unresolved
-		select {|r| ! r.resolved?}
+		select {|r| r.unresolved?}
 	end
 
 	def resolved
@@ -126,21 +126,21 @@ class Board
 	end
 
 	def code?
-		@code.select {|c| ! c.number}.empty?
+		@code.select {|c| c.number.nil?}.empty?
 	end
 
-	def win?
-		row = resolved.first
+	def code_cracked?
+		row = resolved.last
 		row ? @code == row : false
 	end
 
-	def lose?
-		unresolved.empty? && ! win?
+	def without_guesses?
+		unresolved.empty? && ! code_cracked?
 	end
 
 	def resolve_ready?
 		row = unresolved.first
-		row ? row.select {|c| ! c.number}.empty? && code? : false
+		row ? row.normalize.length == 4 && code? : false
 	end
 
 	private

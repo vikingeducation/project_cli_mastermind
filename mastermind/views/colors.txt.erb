@@ -7,4 +7,4 @@ end
 %>
 Select a color: <%= colors.join(' ') %>
 Type 'c' or 'clear' to clear your selections.
-<% if @notice %><%= "\n#{@notice}\n" %><% end %>
+<% if Input.notice? %><%= "\n#{Input.notice}" %><% Input.clear(:notice) %><% end %>

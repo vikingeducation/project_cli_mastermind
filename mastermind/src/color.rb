@@ -73,6 +73,10 @@ class Color
 	def to_s
 		color(@number)
 	end
+
+	def to_i
+		@number
+	end
 end
 
 class Guess < Color

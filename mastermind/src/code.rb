@@ -22,7 +22,7 @@ class Code
 	end
 
 	def normalize
-		self.map {|c| "#{c.position}.#{c.number}"}.join("-")
+		to_a.join
 	end
 
 	def [](index)
@@ -71,6 +71,10 @@ class Code
 		end
 		lines.join("\n")
 	end
+
+	def to_a
+		map {|c| c.to_i}
+	end
 end
 
 class Row < Code
@@ -116,6 +120,10 @@ class Row < Code
 	end
 
 	def resolved?
-		! select {|g| g.proximity}.empty?
+		select {|g| g.proximity.nil?}.empty?
+	end
+
+	def unresolved?
+		! resolved?
 	end
 end

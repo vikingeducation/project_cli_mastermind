@@ -1,4 +1,4 @@
-require_relative 'game_auth.rb'
+require_relative 'game_validation.rb'
 require_relative 'board.rb'
 
 class GameModel < Model
@@ -6,9 +6,10 @@ class GameModel < Model
 	CODEMAKER = '2'
 
 	attr_accessor :board
+	attr_reader :last_guess
 
 	def initialize
-		super(:auth => GameAuth.new)
+		super(:validation => GameValidation.new)
 		clear
 	end
 
@@ -25,16 +26,20 @@ class GameModel < Model
 	end
 
 	def code=(value)
-		@board.code = value
+		if @validation.valid_code?(value)
+			@board.code = value.split('').map {|c| c.to_i}
+		end
 	end
 
 	def role=(value)
-		if value == CODEBREAKER
-			value = :codebreaker
-		else
-			value = :codemaker
+		if @validation.valid_role?(value)
+			if value == CODEBREAKER
+				value = :codebreaker
+			else
+				value = :codemaker
+			end
+			@board.role = value
 		end
-		@board.role = value
 	end
 
 	def color=(value)
@@ -42,8 +47,13 @@ class GameModel < Model
 	end
 
 	def guess=(value)
-		@board << value.to_i
-		@board.resolve if @board.resolve_ready?
+		@last_guess = value
+		if @validation.valid_code?(value)
+			value.chars.each do |c|
+				@board << c.to_i
+			end
+			@board.resolve
+		end
 		@board
 	end
 
@@ -51,25 +61,32 @@ class GameModel < Model
 		@board.to_s
 	end
 
+	def role?
+		@board.role
+	end
+
 	def code?
 		@board.code?
 	end
 
+	def guess?
+		row = @board.resolved.first
+		row.normalize == @last_guess if row
+	end
+
 	def win?
 		if @board.role == :codebreaker
-			return @board.win?
+			return @board.code_cracked?
 		else
-			return true if @board.lose?
-			return false if @board.win?
+			return @board.without_guesses?
 		end
 	end
 
 	def lose?
 		if @board.role == :codebreaker
-			return @board.lose?
+			return @board.without_guesses?
 		else
-			return false if @board.lose?
-			return true if @board.win?
+			return @board.code_cracked?
 		end
 	end
 
