@@ -1,3 +1,5 @@
+require_relative 'validation.rb'
+
 class AppError < StandardError
 	def initialize(message)
 		super(message)
@@ -5,10 +7,10 @@ class AppError < StandardError
 end
 
 class Model
-	attr_reader :auth
+	attr_reader :validation
 
 	def initialize(options={})
-		@auth = options[:auth] ? options[:auth] : Auth.new
+		@validation = options[:validation] ? options[:validation] : Validation.new
 		clear
 	end
 

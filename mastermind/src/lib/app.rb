@@ -1,21 +1,6 @@
 require_relative 'router.rb'
 require_relative 'input.rb'
 
-=begin
-
-Mouse MVC
-
-  ,,
- {' \  
- _( _)_)
-
-    () ()
-     ('')
- (_ ( `o)
-   )_\||
-
-=end
-
 class App
 	def initialize(options={})
 		@controller = options[:controller]
@@ -41,6 +26,6 @@ class App
 			@router.route
 			reset if Input.reset?
 		end while ! Input.quit?
-		Input.data = nil
+		Input.clear
 	end
 end

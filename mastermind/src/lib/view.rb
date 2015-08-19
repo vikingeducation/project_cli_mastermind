@@ -1,7 +1,7 @@
 require 'erb'
 
 class View
-	attr_accessor :dir, :notice
+	attr_accessor :dir
 
 	def initialize(options={})
 		@dir = options[:dir]

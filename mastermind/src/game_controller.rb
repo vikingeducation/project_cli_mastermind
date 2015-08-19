@@ -48,7 +48,7 @@ class GameController < Controller
 	end
 
 	def select_code
-		if ['c', 'clear'].include?(Input.data)
+		if Input.clear?
 			@model.clear_code
 		else
 			if @model.auth.valid_color?(Input.data)
@@ -61,7 +61,7 @@ class GameController < Controller
 	end
 
 	def select_guess
-		if ['c', 'clear'].include?(Input.data)
+		if Input.clear?
 			@model.clear_guesses
 		elsif @model.codebreaker?
 			if @model.auth.valid_color?(Input.data)

@@ -1,10 +1,9 @@
-require_relative 'auth.rb'
 require_relative 'controller.rb'
 require_relative 'model.rb'
 require_relative 'view.rb'
 
 class Router
-	attr_accessor :controller, :action, :notice
+	attr_accessor :controller, :action
 
 	def initialize(options={})
 		@controller = options[:controller]
@@ -14,8 +13,6 @@ class Router
 	end
 
 	def route
-		@view.notice = @notice
-		@notice = nil
 		controller = Object.const_get(@controller).new(
 			:view => @view,
 			:model => @model,

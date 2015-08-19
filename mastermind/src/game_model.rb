@@ -57,21 +57,19 @@ class GameModel < Model
 
 	def win?
 		if @board.role == :codebreaker
-			return true if @board.win?
-			return false if @board.lose?
+			return @board.win?
 		else
-			return false if @board.win?
 			return true if @board.lose?
+			return false if @board.win?
 		end
 	end
 
 	def lose?
 		if @board.role == :codebreaker
-			return false if @board.win?
-			return true if @board.lose?
+			return @board.lose?
 		else
-			return true if @board.win?
 			return false if @board.lose?
+			return true if @board.win?
 		end
 	end
 
