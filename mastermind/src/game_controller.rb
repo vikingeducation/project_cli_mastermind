@@ -51,7 +51,7 @@ class GameController < Controller
 	end
 
 	private
-		def form_message 
+		def form_message
 			if @model.codebreaker?
 				return @model.code? ? 'colors' : 'thinking'
 			else

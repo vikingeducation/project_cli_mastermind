@@ -1,3 +1,5 @@
+require_relative 'board.rb'
+
 class AI
 	def self.color
 		random_color.to_s

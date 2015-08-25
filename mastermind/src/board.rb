@@ -80,7 +80,36 @@ class Board
 		select {|r| r.resolved?}
 	end
 
-	def exactness!(row, code)
+	def code?
+		@code.select {|c| c.number.nil?}.empty?
+	end
+
+	def code_cracked?
+		row = resolved.last
+		row ? @code == row : false
+	end
+
+	def without_guesses?
+		unresolved.empty? && ! code_cracked?
+	end
+
+	def resolve_ready?
+		row = unresolved.first
+		row ? row.normalize.length == 4 && code? : false
+	end
+
+	private
+		def show_code?
+			return true if @debug
+			if @role == :codebreaker
+				return true if win? || lose?
+			elsif @role == :codemaker
+				return true
+			end
+			return false
+		end
+
+			def exactness!(row, code)
 		exacts = row.select do |c|
 			exact = (c == code[c.position])
 			if exact
@@ -124,33 +153,4 @@ class Board
 		end
 		row = row.map {|c| c.proximity = :wrong unless c.proximity}
 	end
-
-	def code?
-		@code.select {|c| c.number.nil?}.empty?
-	end
-
-	def code_cracked?
-		row = resolved.last
-		row ? @code == row : false
-	end
-
-	def without_guesses?
-		unresolved.empty? && ! code_cracked?
-	end
-
-	def resolve_ready?
-		row = unresolved.first
-		row ? row.normalize.length == 4 && code? : false
-	end
-
-	private
-		def show_code?
-			return true if @debug
-			if @role == :codebreaker
-				return true if win? || lose?
-			elsif @role == :codemaker
-				return true
-			end
-			return false
-		end
 end
