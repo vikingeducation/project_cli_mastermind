@@ -20,7 +20,7 @@ class Board
         feedback_print = ''
         @feedbacks[index].each{|f| feedback_print += " #{f} "} if @feedbacks[index]
 
-        puts "| Guess #{index + 1}: #{guess_print}  |  Feedback: #{feedback_print} |"
+        puts " Guess #{index + 1}: #{guess_print}  |  Feedback: #{feedback_print} "
       end
     else
       puts "No guesses yet!"

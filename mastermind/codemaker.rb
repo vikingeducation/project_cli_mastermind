@@ -11,22 +11,32 @@ class Codemaker
   end
 
   def get_feedback
-    guess = @board.guesses.last
-    feedback = Array.new(4, '')
+    guess = @board.guesses.last.deep_dup
+    code_copy = @code.deep_dup
+    feedback = []
 
     # Check correct color and position
-    guess.each_with_index do |peg, index|
-      if peg == @code[index]
-        feedback[index] = '*'
+    index = 0
+    while index < guess.size
+      if guess[index] == code_copy[index]
+        feedback << '*'
+        guess.delete_at(index)
+        code_copy.delete_at(index)
+      else
+        index += 1
       end
     end
 
     # Check what's left for correct color in wrong position
-    feedback.each_with_index do |peg, index|
-
+    guess.each do |peg|
+      if code_copy.include?(peg)
+        feedback << '+'
+        # Delete that one copy of the matching guess in the code copy - can be simplified until game allows duplicates in the code
+        code_copy.delete_at(code_copy.index(peg))
+      end
     end
 
-    @board.place_feedback(feedback.sort)
+    @board.place_feedback(feedback)
   end
 
   private

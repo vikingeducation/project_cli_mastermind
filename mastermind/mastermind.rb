@@ -3,6 +3,9 @@ require_relative 'board'
 require_relative 'codebreaker'
 require_relative 'codemaker'
 
+# Pull in deep dup module
+require_relative 'deep_dup'
+
 class Mastermind
 
   def initialize(max_guesses = 3, player_name = 'Ruby Tuby', allow_dups = false)
