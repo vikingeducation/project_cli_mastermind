@@ -5,7 +5,7 @@ class Codemaker
   def initialize(allow_dups, board)
     @board = board
 
-    # TODO make code private?
+    # TODO make code more private?
     @code = @@valid_guesses.sample(4)
     puts @code.to_s # TODO: delete this
   end
@@ -31,14 +31,12 @@ class Codemaker
     guess.each do |peg|
       if code_copy.include?(peg)
         feedback << '+'
-        # Delete that one copy of the matching guess in the code copy - can be simplified until game allows duplicates in the code
+        # Delete that one copy of the matching guess in the code copy
         code_copy.delete_at(code_copy.index(peg))
       end
     end
 
     @board.place_feedback(feedback)
   end
-
-  private
 
 end

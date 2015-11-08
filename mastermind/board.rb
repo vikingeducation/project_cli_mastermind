@@ -1,6 +1,5 @@
 class Board
   attr_reader :guesses
-
   @@valid_guesses = ['r', 'b', 'g', 'y', 'p', 'o']
 
   def initialize
@@ -36,14 +35,6 @@ class Board
     end
   end
 
-  def valid_guess? guess
-    if guess.select{|guess| @@valid_guesses.include?(guess)}.size == 4
-      true
-    else
-      puts "Hmm, I don't recognize those colors. Try again..."
-    end
-  end
-
   def place_feedback feedback
     @feedbacks << feedback
   end
@@ -52,4 +43,13 @@ class Board
     @feedbacks.last == Array.new(4, '*')
   end
 
+  private
+
+  def valid_guess? guess
+    if guess.select{|guess| @@valid_guesses.include?(guess)}.size == 4
+      true
+    else
+      puts "Hmm, I don't recognize those colors. Try again..."
+    end
+  end
 end
