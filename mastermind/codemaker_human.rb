@@ -2,12 +2,16 @@ class CodemakerHuman < Codemaker
   include DataIO
 
   def get_feedback
+    @board.render
+    puts "Secret code: #{@code.join(' ')}"
+    feedback = []
     loop do
       feedback = get_input("Enter your feedback for the guess (* for correct position and color, + for correct color wrong position)")
-      # TODO:  can be less than four so fix
-      break if valid_entry_format?(feedback)
+      if feedback.is_a? Array
+        break if @board.place_feedback(feedback)
+      end
     end
-    @board.place_feedback(feedback)
+
   end
 
   private

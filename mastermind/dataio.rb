@@ -16,4 +16,12 @@ module DataIO
     gets.chomp.split(',')
   end
 
+  def valid_entries? entry, valid_options
+    if entry.select{|item| valid_options.include?(item)}.size == entry.size
+      true
+    else
+      puts "Hmm, I don't recognize those options. Try again..."
+    end
+  end
+
 end

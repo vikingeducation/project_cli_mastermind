@@ -1,6 +1,9 @@
 class Board
+  include DataIO
+
   attr_reader :guesses
   @@valid_guesses = ['r', 'b', 'g', 'y', 'p', 'o']
+  @@valid_feedbacks = ['*', '+']
 
   def initialize
     @guesses = []
@@ -12,13 +15,8 @@ class Board
     puts '-' * 50
     if @guesses.size > 0
       @guesses.each_with_index do |guess, index|
-        guess_print = ' '
-        guess.each{|g| guess_print += " #{g} "}
-
-        feedback_print = ''
-        @feedbacks[index].each{|f| feedback_print += " #{f} "} if @feedbacks[index]
-
-        puts " Guess #{index + 1}: #{guess_print}  |  Feedback: #{feedback_print} "
+        output =
+        puts " Guess #{index + 1}: #{guess.join(' ')}  |  Feedback: #{@feedbacks[index].join(' ') if @feedbacks[index]} "
       end
     else
       puts "No guesses yet!"
@@ -27,7 +25,7 @@ class Board
   end
 
   def place_guess guess
-    if valid_guess?(guess)
+    if valid_entries?(guess, @@valid_guesses)
       @guesses << guess
       true
     else
@@ -36,20 +34,16 @@ class Board
   end
 
   def place_feedback feedback
-    @feedbacks << feedback
+    if valid_entries?(feedback, @@valid_feedbacks)
+      @feedbacks << feedback
+      true
+    else
+      false
+    end
   end
 
   def winning_guess?
     @feedbacks.last == Array.new(4, '*')
   end
 
-  private
-
-  def valid_guess? guess
-    if guess.select{|guess| @@valid_guesses.include?(guess)}.size == 4
-      true
-    else
-      puts "Hmm, I don't recognize those colors. Try again..."
-    end
-  end
 end
