@@ -7,6 +7,7 @@ require_relative 'board'
 require_relative 'codebreaker'
 require_relative 'codemaker'
 require_relative 'codemaker_human'
+require_relative 'codebreaker_computer'
 
 class Mastermind
 
@@ -25,18 +26,17 @@ class Mastermind
     puts "***    Welcome to Mastermind!    ***"
     puts "************************************\n\n"
 
-    puts "What is your name?"
-    name = gets.chomp
-
     puts "Enter 1 to play as the codebreaker or 2 to play as the codemaker"
     mode = gets.chomp.to_i
 
     if mode == 1
+      puts "What is your name?"
+      name = gets.chomp
       @codemaker = Codemaker.new(@allow_dups, @board)
       @codebreaker = Codebreaker.new(name, @board)
     elsif mode == 2
       @codemaker = CodemakerHuman.new(@allow_dups, @board)
-      @codebreaker = Codebreaker.new("Computer Guesser", @board)
+      @codebreaker = CodebreakerComputer.new("Computer Guesser", @board)
     end
 
     start
@@ -76,7 +76,7 @@ class Mastermind
 
   def out_of_guesses?
     if @board.guesses.size >= @max_guesses
-      puts "Sorry, you ran out of guesses. Better luck next time!"
+      puts "Sorry, #{@codebreaker.name} ran out of guesses. Better luck next time!"
       true
     else
       false
@@ -85,7 +85,7 @@ class Mastermind
 
   def victory?
     if @board.winning_guess?
-      puts "Congrats!!  You WIN!!"
+      puts "Congrats!!  #{@codebreaker.name.upcase} WINS!!"
       true
     else
       false

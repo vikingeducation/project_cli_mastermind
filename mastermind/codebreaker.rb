@@ -1,5 +1,6 @@
 class Codebreaker
   include DataIO
+  attr_reader :name
 
   def initialize(name, board)
     @name = name
