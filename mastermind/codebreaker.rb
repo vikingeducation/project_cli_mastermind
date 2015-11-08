@@ -17,6 +17,8 @@ class Codebreaker
     end
   end
 
+  private
+
   def ask_guess
     puts "Enter move (options: r, b, g, y, p, o)"
     print " > "
