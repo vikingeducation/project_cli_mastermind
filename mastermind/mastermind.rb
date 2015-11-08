@@ -8,8 +8,10 @@ require_relative 'deep_dup'
 
 class Mastermind
 
+  # TODO:  Convert to options hash
   def initialize(max_guesses = 3, player_name = 'Ruby Tuby', allow_dups = false)
-    @board = Board.new(max_guesses)
+    @max_guesses = max_guesses
+    @board = Board.new
     @codemaker = Codemaker.new(allow_dups, @board)
     @codebreaker = Codebreaker.new(player_name, @board)
 
@@ -48,11 +50,29 @@ class Mastermind
 
   def game_over?
     # TODO: check for win or quit
-    true
+    victory? || out_of_guesses?
   end
 
   # TODO: allow for quitting
   def quit
+  end
+
+  def out_of_guesses?
+    if @board.guesses.size >= @max_guesses
+      puts "Sorry, you ran out of guesses. Better luck next time!"
+      true
+    else
+      false
+    end
+  end
+
+  def victory?
+    if @board.winning_guess?
+      puts "Congrats!!  You WIN!!"
+      true
+    else
+      false
+    end
   end
 
 end

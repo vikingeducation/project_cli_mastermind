@@ -3,8 +3,7 @@ class Board
 
   @@valid_guesses = ['r', 'b', 'g', 'y', 'p', 'o']
 
-  def initialize(max_guesses)
-    @max_guesses = max_guesses
+  def initialize
     @guesses = []
     @feedbacks = []
   end
@@ -47,6 +46,10 @@ class Board
 
   def place_feedback feedback
     @feedbacks << feedback
+  end
+
+  def winning_guess?
+    @feedbacks.last == Array.new(4, '*')
   end
 
 end
