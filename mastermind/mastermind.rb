@@ -1,12 +1,19 @@
+# Pull in board, codebreaker, and codemaker classes
+require_relative 'board'
+
 class Mastermind
 
-  def initialize(guesses = 3, player_name = 'Ruby Tuby', allow_dups = false)
-    # @board = Board.new(guesses)
-    # @codemaker = Codemaker.new(allow_dups)
+  def initialize(max_guesses = 3, player_name = 'Ruby Tuby', allow_dups = false)
+    @board = Board.new(max_guesses)
+    # @codemaker = Codemaker.new(allow_dups, @board)
     # @codebreaker = Codebreaker.new(player_name, @board)
+
+    @current_player = @codebreaker
 
     start
   end
+
+  private
 
   def start
     puts "************************************"
@@ -23,6 +30,15 @@ class Mastermind
   end
 
   def play
+  end
+
+  def game_over?
+  end
+
+  def quit
+  end
+
+  def switch_player
   end
 end
 
