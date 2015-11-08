@@ -6,7 +6,7 @@ class Codemaker
     @board = board
 
     # TODO make code more private?
-    @code = @@valid_guesses.sample(4)
+    @code = get_code
     puts @code.to_s # TODO: delete this
   end
 
@@ -37,6 +37,12 @@ class Codemaker
     end
 
     @board.place_feedback(feedback)
+  end
+
+  private
+
+  def get_code
+    @@valid_guesses.sample(4)
   end
 
 end

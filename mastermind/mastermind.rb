@@ -1,30 +1,50 @@
+# Pull in deep dup and valid entry modules
+require_relative 'deep_dup'
+require_relative 'dataio'
+
 # Pull in board, codebreaker, and codemaker classes
 require_relative 'board'
 require_relative 'codebreaker'
 require_relative 'codemaker'
-
-# Pull in deep dup module
-require_relative 'deep_dup'
+require_relative 'codemaker_human'
 
 class Mastermind
 
-  def initialize(options = {max_guesses: 3, player_name: 'Ruby Tuby', allow_dups: false})
+  def initialize(options = {max_guesses: 3, allow_dups: false})
     @max_guesses = options[:max_guesses]
+    @allow_dups = options[:allow_dups]
     @board = Board.new
-    @codemaker = Codemaker.new(options[:allow_dups], @board)
-    @codebreaker = Codebreaker.new(options[:player_name], @board)
 
-    start
+    get_mode
   end
 
   private
 
-  def start
+  def get_mode
     puts "************************************"
     puts "***    Welcome to Mastermind!    ***"
     puts "************************************\n\n"
+
+    puts "What is your name?"
+    name = gets.chomp
+
+    puts "Enter 1 to play as the codebreaker or 2 to play as the codemaker"
+    mode = gets.chomp.to_i
+
+    if mode == 1
+      @codemaker = Codemaker.new(@allow_dups, @board)
+      @codebreaker = Codebreaker.new(name, @board)
+    elsif mode == 2
+      @codemaker = CodemakerHuman.new(@allow_dups, @board)
+      @codebreaker = Codebreaker.new("Computer Guesser", @board)
+    end
+
+    start
+  end
+
+  def start
     puts "INSTRUCTIONS:"
-    puts "Enter your color guess using letters separated by a comma.\n\n"
+    puts "Enter your guess/feedback using letters/characters separated by a comma.\n\n"
     puts "COLOR CODE:"
     puts "r = red, b = blue, g = green, y = yellow, p = purple, o = orange\n\n"
     puts "FEEDBACK CODE:"
@@ -74,4 +94,4 @@ class Mastermind
 
 end
 
-game = Mastermind.new({max_guesses: 6})
+game = Mastermind.new({max_guesses: 3})
