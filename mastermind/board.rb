@@ -1,9 +1,6 @@
 class Board
   include DataIO
-
   attr_reader :guesses
-  @@valid_guesses = ['r', 'b', 'g', 'y', 'p', 'o']
-  @@valid_feedbacks = ['*', '+']
 
   def initialize
     @guesses = []

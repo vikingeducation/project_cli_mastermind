@@ -1,5 +1,4 @@
 class CodemakerHuman < Codemaker
-  include DataIO
 
   def get_feedback
     @board.render

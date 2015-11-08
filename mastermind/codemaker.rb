@@ -1,6 +1,5 @@
 class Codemaker
-  # TODO: Not DRY since also in codebreaker
-  @@valid_guesses = ['r', 'b', 'g', 'y', 'p', 'o']
+  include DataIO
 
   def initialize(allow_dups, board)
     @board = board

@@ -1,4 +1,6 @@
 module DataIO
+  @@valid_guesses = ['r', 'b', 'g', 'y', 'p', 'o']
+  @@valid_feedbacks = ['*', '+']
 
   private
 
