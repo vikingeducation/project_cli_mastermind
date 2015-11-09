@@ -14,8 +14,9 @@ class CodebreakerComputer < Codebreaker
       @set_possible_guesses.select! do |guess|
         @board.feedbacks.last == feedback_algorithm(@board.guesses.last.deep_dup, guess.deep_dup)
       end
-      puts @set_possible_guesses.size
-      @set_possible_guesses.each{|guess| print "#{guess.join}, "}
+      # Uncomment below to see the AI in action
+      # puts @set_possible_guesses.size
+      # @set_possible_guesses.each{|guess| print "#{guess.join}, "}
       current_guess = @set_possible_guesses.sample
     end
     @set_possible_guesses.delete(current_guess)

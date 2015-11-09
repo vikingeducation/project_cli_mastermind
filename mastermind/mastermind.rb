@@ -24,11 +24,9 @@ class Mastermind
   private
 
   def get_mode
-    puts "************************************"
-    puts "***    Welcome to Mastermind!    ***"
-    puts "************************************\n\n"
+    welcome_message
 
-    puts "Enter 1 to play as the codebreaker or 2 to play as the codemaker"
+    puts "Enter 1 to play as the codebreaker or 2 to play as the codemaker."
     mode = gets.chomp.to_i
 
     initialize_players(mode)
@@ -48,15 +46,7 @@ class Mastermind
   end
 
   def start
-    puts "INSTRUCTIONS:"
-    puts "Enter your guess/feedback using letters/characters separated by a comma.\n\n"
-    puts "COLOR CODE:"
-    puts "r = red, b = blue, g = green, y = yellow, p = purple, o = orange\n\n"
-    puts "FEEDBACK CODE:"
-    puts "* = colored peg, + = white peg\n\n"
-    puts "For example:\n Enter move > r,b,g,y\n\n"
-
-    # kick off the moves
+    give_instructions
     play
   end
 
@@ -95,6 +85,22 @@ class Mastermind
     else
       false
     end
+  end
+
+  def welcome_message
+    puts "************************************"
+    puts "***    Welcome to Mastermind!    ***"
+    puts "************************************\n\n"
+  end
+
+  def give_instructions
+    puts "INSTRUCTIONS:"
+    puts "Enter your guess/feedback using letters/characters separated by a comma.\n\n"
+    puts "COLOR CODE:"
+    puts "r = red, b = blue, g = green, y = yellow, p = purple, o = orange\n\n"
+    puts "FEEDBACK CODE:"
+    puts "* = colored peg, + = white peg\n\n"
+    puts "For example:\n Enter move > r,b,g,y\n\n"
   end
 
 end
