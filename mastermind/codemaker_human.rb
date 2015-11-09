@@ -27,7 +27,7 @@ class CodemakerHuman < Codemaker
   def valid_code? code
     result = true
     code.each do |peg|
-      unless @@valid_guesses.include? peg
+      unless VALID_GUESSES.include? peg
         puts "I don't recognize those colors. Try again."
         result = false
         break

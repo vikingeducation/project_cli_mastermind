@@ -9,6 +9,8 @@ require_relative 'codemaker'
 require_relative 'codemaker_human'
 require_relative 'codebreaker_computer'
 
+require 'pry'
+
 class Mastermind
 
   def initialize(options = {max_guesses: 3, allow_dups: false})
@@ -94,4 +96,4 @@ class Mastermind
 
 end
 
-game = Mastermind.new({max_guesses: 3})
+game = Mastermind.new({max_guesses: 12})

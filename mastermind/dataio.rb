@@ -1,5 +1,5 @@
 module DataIO
-  @@valid_guesses = ['r', 'b', 'g', 'y', 'p', 'o']
+  VALID_GUESSES = ['r', 'b', 'g', 'y', 'p', 'o']
   @@valid_feedbacks = ['*', '+']
 
   private
@@ -24,6 +24,33 @@ module DataIO
     else
       puts "Hmm, I don't recognize those options. Try again..."
     end
+  end
+
+  def feedback_algorithm code, guess
+    feedback = []
+
+    # Check correct color and position
+    index = 0
+    while index < guess.size
+      if guess[index] == code[index]
+        feedback << '*'
+        guess.delete_at(index)
+        code.delete_at(index)
+      else
+        index += 1
+      end
+    end
+
+    # Check what's left for correct color in wrong position
+    guess.each do |peg|
+      if code.include?(peg)
+        feedback << '+'
+        # Delete that one copy of the matching guess in the code copy
+        code.delete_at(code.index(peg))
+      end
+    end
+
+    feedback
   end
 
 end

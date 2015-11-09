@@ -1,6 +1,6 @@
 class Board
   include DataIO
-  attr_reader :guesses
+  attr_reader :guesses, :feedbacks
 
   def initialize
     @guesses = []
@@ -22,7 +22,7 @@ class Board
   end
 
   def place_guess guess
-    if valid_entries?(guess, @@valid_guesses)
+    if valid_entries?(guess, VALID_GUESSES)
       @guesses << guess
       true
     else
