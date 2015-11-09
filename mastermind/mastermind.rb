@@ -31,6 +31,11 @@ class Mastermind
     puts "Enter 1 to play as the codebreaker or 2 to play as the codemaker"
     mode = gets.chomp.to_i
 
+    initialize_players(mode)
+    start
+  end
+
+  def initialize_players mode
     if mode == 1
       puts "What is your name?"
       name = gets.chomp
@@ -40,8 +45,6 @@ class Mastermind
       @codemaker = CodemakerHuman.new(@allow_dups, @board)
       @codebreaker = CodebreakerComputer.new("Computer Guesser", @board)
     end
-
-    start
   end
 
   def start
