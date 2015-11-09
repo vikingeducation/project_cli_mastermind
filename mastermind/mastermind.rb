@@ -13,9 +13,8 @@ require 'pry'
 
 class Mastermind
 
-  def initialize(options = {max_guesses: 3, allow_dups: false})
+  def initialize(options = {max_guesses: 3})
     @max_guesses = options[:max_guesses]
-    @allow_dups = options[:allow_dups]
     @board = Board.new
 
     get_mode
@@ -37,10 +36,10 @@ class Mastermind
     if mode == 1
       puts "What is your name?"
       name = gets.chomp
-      @codemaker = Codemaker.new(@allow_dups, @board)
+      @codemaker = Codemaker.new(@board)
       @codebreaker = Codebreaker.new(name, @board)
     elsif mode == 2
-      @codemaker = CodemakerHuman.new(@allow_dups, @board)
+      @codemaker = CodemakerHuman.new(@board)
       @codebreaker = CodebreakerComputer.new("Computer Guesser", @board)
     end
   end

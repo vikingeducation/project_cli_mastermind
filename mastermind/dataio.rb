@@ -19,6 +19,7 @@ module DataIO
   end
 
   def valid_entries? entry, valid_options
+    # if entry.all?()
     if entry.select{|item| valid_options.include?(item)}.size == entry.size
       true
     else

@@ -32,11 +32,6 @@ class CodemakerHuman < Codemaker
         result = false
         break
       end
-      unless code.count(peg) == 1
-        puts "Duplicates not allowed. Try again."
-        result = false
-        break
-      end
     end
     result
   end
