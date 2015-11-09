@@ -25,15 +25,11 @@ class CodemakerHuman < Codemaker
   end
 
   def valid_code? code
-    result = true
-    code.each do |peg|
-      unless VALID_GUESSES.include? peg
-        puts "I don't recognize those colors. Try again."
-        result = false
-        break
-      end
+    unless code.all? { |peg| VALID_GUESSES.include? peg }
+      puts "I don't recognize those colors. Try again."
+    else
+      true
     end
-    result
   end
 
 end
