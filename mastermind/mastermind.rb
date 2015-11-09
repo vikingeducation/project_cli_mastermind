@@ -16,8 +16,18 @@ class Mastermind
   def initialize(options = {max_guesses: 3})
     @max_guesses = options[:max_guesses]
     @board = Board.new
+    @mode = get_mode
+  end
 
-    get_mode
+  def play
+    give_instructions
+    loop do
+      @codebreaker.get_guess
+      @codemaker.get_feedback
+      @board.render
+
+      break if game_over?
+    end
   end
 
   private
@@ -29,7 +39,6 @@ class Mastermind
     mode = gets.chomp.to_i
 
     initialize_players(mode)
-    start
   end
 
   def initialize_players mode
@@ -41,21 +50,6 @@ class Mastermind
     elsif mode == 2
       @codemaker = CodemakerHuman.new(@board)
       @codebreaker = CodebreakerComputer.new("Computer Guesser", @board)
-    end
-  end
-
-  def start
-    give_instructions
-    play
-  end
-
-  def play
-    loop do
-      @codebreaker.get_guess
-      @codemaker.get_feedback
-      @board.render
-
-      break if game_over?
     end
   end
 
@@ -105,3 +99,4 @@ class Mastermind
 end
 
 game = Mastermind.new({max_guesses: 12})
+game.play
