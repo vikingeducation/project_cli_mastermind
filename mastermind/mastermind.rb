@@ -76,7 +76,7 @@ class Mastermind
 
   def out_of_guesses?
     if @board.guesses.size >= @max_guesses
-      puts "Sorry, #{@codebreaker.name} ran out of guesses. Better luck next time!"
+      puts "Sorry, #{@codebreaker.name} ran out of guesses. The code was #{@codemaker.code.join(', ')}. Better luck next time!"
       true
     else
       false

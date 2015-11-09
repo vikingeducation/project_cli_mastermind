@@ -1,5 +1,6 @@
 class Codemaker
   include DataIO
+  attr_reader :code
 
   def initialize(allow_dups, board)
     @board = board
