@@ -1,3 +1,5 @@
+require_relative 'dataio'
+
 class Board
   include DataIO
   attr_reader :guesses, :feedbacks
