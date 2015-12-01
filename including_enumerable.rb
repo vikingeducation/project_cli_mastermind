@@ -1,21 +1,18 @@
-=begin
-  Warmup 3: Including Enumerable
-=end
-module Enumerable
-  def each
-    i = 0
-    while i < self.size
-      yield(self[i])
-      i += 1
-    end
-    self
-  end
-end
+
 
 class Twitter
   include Enumerable
 
   attr_reader :tweets
+
+  def each
+    i = 0
+    while i < tweets.size
+      yield(tweets[i])
+      i += 1
+    end
+    self
+  end
 
   def initialize
     @tweets = []
@@ -32,8 +29,10 @@ class Twitter
   end
 end
 
+# THESE ARE DIFFERENT FROM THE EXAMPLES, NOT SURE IF IT CAN BE DONE OTHER WAY.
+
 t = Twitter.new
 t.tweet("first message")
 t.tweet("second message")
-t.tweets.each{|msg| puts msg}
-print t.tweets.map{|msg| msg.upcase}
+t.each{|msg| puts msg}
+print t.map{|msg| msg.upcase}
