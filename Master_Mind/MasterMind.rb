@@ -24,6 +24,34 @@ class MasterMind
       @code = @player2.make_a_code
     end
   end
+
+  def start_game
+    puts ""
+    puts ""
+    puts "///// - MASTERMIND - \\\\\\\\\\"
+    puts "--------------------------"
+    puts "By Steven Chang"
+    puts "--------------------------"
+    puts ""
+    puts "Mastermind is a code-breaking game for ONE or TWO players."
+    puts ""
+    puts "The game is played using:"
+    puts ""
+    puts "- A decoding board with twelve rows containing four large holes."
+    puts "- Code pegs of eight different numbers, which will be placed in the large holes on the board."
+    puts ""
+    puts "ONE player mode:"
+    puts "- The computer decides a combination of pegs for the player to guess."
+    puts "- The player gets 12 guesses."
+    puts "- After every guess the player will be told how accurate their guess was, next to their guess. (%) stands for correct number but wrong position. ($) stands for exact number and position. These will not specify which pegs they're indicating."
+    puts "- The game ends when the code is guessed or the player runs out of guesses."
+    puts ""
+    puts "TWO player mode:"
+    puts "- Same as above except player TWO will set the code instead of the computer."
+    puts "--------------------------"
+    puts ""
+    ask_for_mode
+  end
 end
 
 class Player
@@ -89,4 +117,4 @@ class Computer
 
 end
 
-MasterMind.new.ask_for_mode
+MasterMind.new.start_game
