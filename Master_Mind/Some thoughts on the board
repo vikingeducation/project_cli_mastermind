@@ -1,0 +1,40 @@
+The Board
+
+Legend     ****MASTERMIND CLASS
+$ = exact
+% = right but in the wrong position
+
+   -Q-W-E-R-   "   -Q-W-E-R-" - String that never needs to change
+12 -X-X-X-X-   "12 -X-X-X-X-" - String that needs to change
+11 -X-X-X-X-
+10 -X-X-X-X-
+9  -X-X-X-X-
+8  -X-X-X-X-
+7  -X-X-X-X-
+6  -X-X-X-X-
+5  -X-X-X-X-
+4  -X-X-X-X-
+3  -X-X-X-X-
+2  -X-X-X-X-
+1  -X-X-X-X-
+   -Q-W-E-R-   "  -Q-W-E-R-" - Strig that never needs to change
+
+
+-1-2-3-4-5-6-7-8-PEGS  "-#{in_peg_holder_this_round[0]}-#{etc}-#{etc}-#{etc}-#{etc}-#{etc}-#{etc}-#{etc}"
+-A-S-D-F-G-H-J-K-PEG HOLDER - String that never needs to change
+
+Instructions:
+Enter the number of the peg you want to move: r
+Invalid selection! Enter the number of the peg you want to move (1 to 8): 8
+Enter the destination for that peg (if there's a peg there already, the pegs will switch places.): 7
+Invalid selection! Enter the destination slot, either on the board (Q,W,E,R) or on the peg holder (A,S,D,F,G,H,J,K): Q
+
+An Array for PEGS
+At the start of a new round it'll always be [1,2,3,4,5,6,7,8]
+
+So at the start of every round
+
+
+
+
+

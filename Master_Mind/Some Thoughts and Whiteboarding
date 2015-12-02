@@ -1,0 +1,32 @@
+Start by thinking through the problem and whiteboarding your solution. Focus on:
+
+Which parts of the program should actually be separate objects (classes) and methods? You can optionally wrap them all in a module.
+What variables and methods need to be exposed and which should be private?
+
+
+Initialise game (Mastermind)
+  - Say Hello, Introduce the Game
+  - Render board
+  - Available pieces
+  - Part of the board that shows how close they were to the right answer
+
+  - Once player submits their move around they type s to submit.
+  - They can quit at anytime by pressing q. 
+  - Should be able to move the pieces from the players rack to the board by being prompted to ask a piece to move from the your set, to a slot on the board. At anytime they can reset the current round. 
+  - It would be pretty sick if the user could move a piece back from the board to their rack or if they could switch pieces that are currently on the board.
+
+  Every round you'd need to set up a new coloured 8 pieces.
+  Every round you'd need to set up 4 black pieces and 4 white pieces to show once submitted how accurate the player was. 
+
+Sounds like to me you'd need classes wise
+
+Game class
+Player class
+Pieces class
+  with two subclasses
+    black and white pieces
+    colored pieces
+Board class
+  with two subclasses
+    players board
+    clue board
