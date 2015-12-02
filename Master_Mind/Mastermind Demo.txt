@@ -1,6 +1,6 @@
-Demo of how it'll look
+Demo of how it'll look - Now to figure out the classes
 
-///// - MASTERMIND - \\\\\
+///// - MASTERMIND - \\\\\                  ***************** MasterMind
 --------------------------
 By Steven Chang
 --------------------------
@@ -23,7 +23,7 @@ TWO player mode:
 
 Type 'quit' and then enter, at any point, to exit the game.
 
-Press '1' or '2' and then enter, to set the mode: 1
+Press '1' or '2' and then enter, to set the mode: 1   **************MASTERMIND
 
 ---------------------------
 
