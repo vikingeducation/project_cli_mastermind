@@ -4,7 +4,7 @@ class MasterMind
     @player2 = Player.new
     @computer = Computer.new
     @mode = nil
-    @code = nil
+    @master_code = nil
   end
 
   def ask_for_mode
@@ -17,11 +17,11 @@ class MasterMind
 
   def ask_for_master_code
     if @mode == '1'
-      @code = @computer.make_a_code
+      @master_code = @computer.make_a_code
     else
       puts "Code Maker, set a code of four numbers from '1' to '8'."
       print "Each number must be different (e.g. 1234): "
-      @code = @player2.make_a_code
+      @master_code = @player2.make_a_code
     end
   end
 
@@ -51,6 +51,7 @@ class MasterMind
     puts "--------------------------"
     puts ""
     ask_for_mode
+    ask_for_master_code
   end
 end
 
@@ -114,7 +115,12 @@ class Player
 end
 
 class Computer
-
+  def make_a_code
+    numbers = [1,2,3,4,5,6,7,8]
+    master_code = []
+    4.times {master_code << numbers.shuffle!.pop}
+    master_code.join('')
+  end
 end
 
 MasterMind.new.start_game
