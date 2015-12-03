@@ -63,7 +63,7 @@ class MasterMind
   def play_game
     @round = 1
     until @code_breaker.response == @master_code || round == 13
-      @board.pegs = %w[1 2 3 4 5 6 7 8]
+      @board.pegs = %w[! @ # $ % ^ & *]
       @code_breaker.play_round
       @code_breaker.response = @master_code
       @round += 1
@@ -79,20 +79,55 @@ class Board
     @mastermind = game
     @code_breaker = player
     @board = []
-    12.times { @board << %w[X X X X] }
-    @pegs = %w[1 2 3 4 5 6 7 8]
-    @peg_holder = %w[a s d f g h j k]
-    @board_position = %w[q w e r]
+    12.times { @board << %w[= = = =] }
+    @pegs = %w[! @ # $ % ^ & *]
+    @peg_holder = %w[q w e r a s d f]
+    @board_position = %w[1 2 3 4]
+  end
+
+  def find_destination_key_index(destination_key)
+    if @peg_holder.include? destination_key.downcase
+      destination_key_index = @peg_holder.index(destination_key.downcase)
+    else
+      destination_key_index = @board_position.index(destination_key)
+    end
+    destination_key_index
+  end
+
+  def find_chosen_key_index(chosen_key)
+    if @peg_holder.include? chosen_key.downcase
+      chosen_key_index = @peg_holder.index(chosen_key.downcase)
+    else
+      chosen_key_index = @board_position.index(chosen_key)
+    end
+    chosen_key_index
+  end
+
+  def switch_pegs(chosen_key, destination_key)
+    round_array = @mastermind.round - 1
+    chosen_key_index = find_chosen_key_index(chosen_key)
+    destination_key_index = find_destination_key_index(destination_key)
+    if @peg_holder.include? chosen_key.downcase
+      if @peg_holder.include? destination_key.downcase
+        @pegs[chosen_key_index], @pegs[destination_key_index] = @pegs[destination_key_index], @pegs[chosen_key_index]
+      else
+        @pegs[chosen_key_index], @board[round_array][destination_key_index] = @board[round_array][destination_key_index], @pegs[chosen_key_index]
+      end
+    elsif @peg_holder.include? destination_key.downcase
+      @board[round_array][chosen_key_index], @pegs[destination_key_index] = @pegs[destination_key_index], @board[round_array][chosen_key_index]
+    else
+      @board[round_array][chosen_key_index], @board[round_array][destination_key_index] = @board[round_array][destination_key_index], @board[round_array][chosen_key_index]
+    end
   end
 
   def render
     puts "--------------------------"
     puts ""
     puts "Legend"
-    puts "$ = exact"
-    puts "% = right but in the wrong position"
+    puts "E = exact"
+    puts "R = right but in the wrong position"
     puts ""
-    puts "   -Q-W-E-R-"
+    puts "   -1-2-3-4- KEYPAD"
     puts "12 -#{@board[11][0]}-#{@board[11][1]}-#{@board[11][2]}-#{@board[11][3]}-"
     puts "11 -#{@board[10][0]}-#{@board[10][1]}-#{@board[10][2]}-#{@board[10][3]}-"
     puts "10 -#{@board[9][0]}-#{@board[9][1]}-#{@board[9][2]}-#{@board[9][3]}-"
@@ -105,12 +140,16 @@ class Board
     puts "3  -#{@board[2][0]}-#{@board[2][1]}-#{@board[2][2]}-#{@board[2][3]}-"
     puts "2  -#{@board[1][0]}-#{@board[1][1]}-#{@board[1][2]}-#{@board[1][3]}-"
     puts "1  -#{@board[0][0]}-#{@board[0][1]}-#{@board[0][2]}-#{@board[0][3]}-"
-    puts "   -Q-W-E-R-"
+    puts "   -1-2-3-4- KEYPAD"
     puts ""
-    puts "#{@pegs[0]}-#{@pegs[1]}-#{@pegs[2]}-#{@pegs[3]}-#{@pegs[4]}-#{@pegs[5]}-#{@pegs[6]}-#{@pegs[7]}-PEGS"
-    puts "A-S-D-F-G-H-J-K-PEG HOLDER"
+    puts "   -#{@pegs[0]}-#{@pegs[1]}-#{@pegs[2]}-#{@pegs[3]}-"
+    puts "   -Q-W-E-R- KEYPAD"
+    puts ""
+    puts "   -#{@pegs[4]}-#{@pegs[5]}-#{@pegs[6]}-#{@pegs[7]}-"
+    puts "   -A-S-D-F- KEYPAD"
     puts ""
   end
+
 end
 
 class Computer
@@ -132,19 +171,10 @@ class Player
     @board = board
   end
 
-  def choose_destination
+  def choose_key
     respond
-    until destination_is_valid?
-      print "Invalid selection! Enter a position on the board (Q, W, E or R) or a position on the peg holder (A, S, D, F, G, H, J, K): "
-      respond
-    end
-    @response
-  end
-
-  def choose_peg
-    respond
-    until peg_is_valid?
-      print "Invalid selection! Enter the number of the peg you want to move (1 to 8): "
+    until key_is_valid?
+      print "Invalid selection! Enter a KEYPAD position (1, 2, 3, 4, Q, W, E, R, A, S, D, F): "
       respond
     end
     @response
@@ -164,13 +194,13 @@ class Player
     true
   end
 
-  def destination_is_valid?
-    return true if ['q','w','e','r','a','s','d','f','g','h','j','k','l'].include? @response.downcase
+  def key_is_valid?
+    return true if ['1','2','3','4','q','w','e','r','a','s','d','f'].include? @response.downcase
     false
   end
 
   def submit_guess?(board_for_the_round)
-    if !((board_for_the_round).include? 'X')
+    if !((board_for_the_round).include? '=')
       print "Type 's' then enter to submit your answer: "
       respond
       if @response.downcase == 's'
@@ -198,28 +228,15 @@ class Player
     false
   end
 
-  def peg_is_valid?
-    return true if (1..8).include? @response.to_i
-    false
-  end
-
   def play_round
     @board.render
     until submit_guess?(@board.board[@mastermind.round-1])
-      print "Which peg do you want to move (1 to 8): "
-      chosen_peg = choose_peg
-      print "Where do you want the peg to go (Q,W,E,R,A,S etc): "
-      peg_destination = choose_destination
-      if (@board.pegs.include? chosen_peg) && (@board.peg_holder.include? peg_destination.downcase)
-        @board.pegs[@board.pegs.index(chosen_peg)], @board.pegs[@board.peg_holder.index(peg_destination.downcase)] = @board.pegs[@board.peg_holder.index(peg_destination.downcase)], @board.pegs[@board.pegs.index(chosen_peg)]
-      elsif (@board.pegs.include? chosen_peg) && (@board.board_position.include? peg_destination.downcase)
-        @board.pegs[@board.pegs.index(chosen_peg)], @board.board[@mastermind.round-1][@board.board_position.index(peg_destination.downcase)] = @board.board[@mastermind.round-1][@board.board_position.index(peg_destination.downcase)], @board.pegs[@board.pegs.index(chosen_peg)]
-      elsif (@board.board[@mastermind.round-1].include? chosen_peg) && (@board.peg_holder.include? peg_destination.downcase)
-        @board.board[@mastermind.round-1][@board.board[@mastermind.round-1].index(chosen_peg)], @board.pegs[@board.peg_holder.index(peg_destination.downcase)] = @board.pegs[@board.peg_holder.index(peg_destination.downcase)], @board.board[@mastermind.round-1][@board.board[@mastermind.round-1].index(chosen_peg)]
-      else
-        @board.board[@mastermind.round-1][@board.board[@mastermind.round-1].index(chosen_peg)], @board.board[@mastermind.round-1][@board.board_position.index(peg_destination.downcase)] = @board.board[@mastermind.round-1][@board.board_position.index(peg_destination.downcase)], @board.board[@mastermind.round-1][@board.board[@mastermind.round-1].index(chosen_peg)]
-      end
-    @board.render
+      print "Which peg do you want to move (select a KEYPAD position): "
+      chosen_peg = choose_key
+      print "Where do you want the peg to go (select a KEYPAD position): "
+      peg_destination = choose_key
+      @board.switch_pegs(chosen_peg, peg_destination)
+      @board.render
     end
   end
 

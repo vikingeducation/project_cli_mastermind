@@ -1,0 +1,11 @@
+who's going to render the board? The game or the board class?
+
+I feel like it's most convenient if the game
+asks for a move from the player
+  validity would be checked in the form of
+    - valid peg chosen?
+    - valid destination chosen?
+    - if there's a ped there already, make a switch.
+
+Some valid points, for each round there's always going to be 4 Xs somewhere.
+Each round however there's going to be a new set of pegs.
