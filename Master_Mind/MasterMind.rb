@@ -1,6 +1,6 @@
 class MasterMind
 
-  attr_reader :round
+  attr_accessor :round
 
   def initialize
     @board = Board.new(self, @code_breaker)
@@ -65,7 +65,6 @@ class MasterMind
     until @code_breaker.response == @master_code || round == 13
       @board.pegs = %w[! @ # $ % ^ & *]
       @code_breaker.play_round
-      @code_breaker.response = @master_code
       @round += 1
     end
   end
@@ -85,28 +84,19 @@ class Board
     @board_position = %w[1 2 3 4]
   end
 
-  def find_destination_key_index(destination_key)
-    if @peg_holder.include? destination_key.downcase
-      destination_key_index = @peg_holder.index(destination_key.downcase)
+  def find_key_index(key)
+    if @peg_holder.include? key.downcase
+      key_index = @peg_holder.index(key.downcase)
     else
-      destination_key_index = @board_position.index(destination_key)
+      key_index = @board_position.index(key)
     end
-    destination_key_index
-  end
-
-  def find_chosen_key_index(chosen_key)
-    if @peg_holder.include? chosen_key.downcase
-      chosen_key_index = @peg_holder.index(chosen_key.downcase)
-    else
-      chosen_key_index = @board_position.index(chosen_key)
-    end
-    chosen_key_index
+    key_index
   end
 
   def switch_pegs(chosen_key, destination_key)
     round_array = @mastermind.round - 1
-    chosen_key_index = find_chosen_key_index(chosen_key)
-    destination_key_index = find_destination_key_index(destination_key)
+    chosen_key_index = find_key_index(chosen_key)
+    destination_key_index = find_key_index(destination_key)
     if @peg_holder.include? chosen_key.downcase
       if @peg_holder.include? destination_key.downcase
         @pegs[chosen_key_index], @pegs[destination_key_index] = @pegs[destination_key_index], @pegs[chosen_key_index]
@@ -174,10 +164,18 @@ class Player
   def choose_key
     respond
     until key_is_valid?
-      print "Invalid selection! Enter a KEYPAD position (1, 2, 3, 4, Q, W, E, R, A, S, D, F): "
+      print "Invalid selection! Type 'z' to submit your code or enter a KEYPAD position (1, 2, 3, 4, Q, W, E, R, A, S, D, F): "
       respond
     end
+    submit if @response.downcase == 'z'
     @response
+  end
+
+  def submit
+    until !(@board.board[@mastermind.round-1].include? '=')
+      puts "Code must have 4 pegs in it!"
+      play_round
+    end
   end
 
   def code_is_valid?
@@ -195,18 +193,10 @@ class Player
   end
 
   def key_is_valid?
-    return true if ['1','2','3','4','q','w','e','r','a','s','d','f'].include? @response.downcase
-    false
-  end
-
-  def submit_guess?(board_for_the_round)
-    if !((board_for_the_round).include? '=')
-      print "Type 's' then enter to submit your answer: "
-      respond
-      if @response.downcase == 's'
-        return true
-      end
-    end
+    # if @response == 'z' then all of this should until loop with the submit? method as the conditional. we want to see if there's a full code up there we can submit
+    # if not we need to prompt them for a new respond, that's gotta keep looping until valid.
+    # once that loop ends, it can still goto this return true or false thing.
+    return true if ['1','2','3','4','q','w','e','r','a','s','d','f','z'].include? @response.downcase
     false
   end
 
@@ -230,11 +220,13 @@ class Player
 
   def play_round
     @board.render
-    until submit_guess?(@board.board[@mastermind.round-1])
-      print "Which peg do you want to move (select a KEYPAD position): "
+    until false
+      print "Select peg to move (via its KEYPAD position) or 'z' and enter to submit code: "
       chosen_peg = choose_key
-      print "Where do you want the peg to go (select a KEYPAD position): "
+      break if chosen_peg.downcase == 'z'
+      print "Select peg destination (via its KEYPAD position) or 'z' and enter to submit code: "
       peg_destination = choose_key
+      break if peg_destination.downcase == 'z'
       @board.switch_pegs(chosen_peg, peg_destination)
       @board.render
     end
