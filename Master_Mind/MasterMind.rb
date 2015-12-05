@@ -1,10 +1,11 @@
 class MasterMind
 
   attr_accessor :round
+  attr_accessor :master_code
 
   def initialize
     @board = Board.new(self, @code_breaker)
-    @computer = Computer.new
+    @computer = Computer.new(self)
     @mode = nil
     @master_code = nil
     @code_breaker = Player.new(self, @board)
@@ -24,8 +25,8 @@ class MasterMind
     if @mode == '1'
       @master_code = @computer.make_a_code
     else
-      puts "Code Maker, set a code of four numbers from '1' to '8'."
-      print "Each number must be different (e.g. 1234): "
+      puts "Code Maker, set a code of four pegs from these pegs (!, @, #, $, %, ^, & , *)."
+      print "Each peg must be different (e.g. !@#$): "
       @master_code = @code_maker.make_a_code
     end
   end
@@ -62,10 +63,23 @@ class MasterMind
 
   def play_game
     @round = 1
-    until @code_breaker.response == @master_code || round == 13
+    until @board.clue_board[@round - 2] == ['E','E','E','E'] || @round == 13
       @board.pegs = %w[! @ # $ % ^ & *]
+      @board.render
       @code_breaker.play_round
       @round += 1
+    end
+    display_outcome
+  end
+
+  def display_outcome
+    if @board.clue_board[@round - 2] == ['E','E','E','E']
+      puts "YOU WIN!!"
+    else
+      puts ""
+      puts "MASSIVE FAIL!! THE ANSWER IS -#{@master_code.join('-')}-"
+      puts ""
+      puts "I suggest a diet rich in blueberries and salmon."
     end
   end
 end
@@ -73,15 +87,34 @@ end
 class Board
 
   attr_accessor :board, :pegs, :peg_holder, :board_position
+  attr_reader :clue_board
 
   def initialize(game, player)
     @mastermind = game
+    @clue_board = []
+    12.times { @clue_board << [] }
     @code_breaker = player
     @board = []
     12.times { @board << %w[= = = =] }
     @pegs = %w[! @ # $ % ^ & *]
     @peg_holder = %w[q w e r a s d f]
     @board_position = %w[1 2 3 4]
+  end
+
+  def assess_guess
+    @clue_board[@mastermind.round-1] = []
+    @board[@mastermind.round-1].each_with_index do |peg, index|
+      if peg == @mastermind.master_code[index]
+        @clue_board[@mastermind.round-1] << 'E'
+      elsif @mastermind.master_code.include? peg
+        @clue_board[@mastermind.round-1] << "R"
+      end
+    end
+    if @clue_board[@mastermind.round-1].empty?
+      @clue_board[@mastermind.round-1] == "Complete Fail!"
+    else
+      @clue_board[@mastermind.round-1].sort!
+    end
   end
 
   def find_key_index(key)
@@ -118,18 +151,18 @@ class Board
     puts "R = right but in the wrong position"
     puts ""
     puts "   -1-2-3-4- KEYPAD"
-    puts "12 -#{@board[11][0]}-#{@board[11][1]}-#{@board[11][2]}-#{@board[11][3]}-"
-    puts "11 -#{@board[10][0]}-#{@board[10][1]}-#{@board[10][2]}-#{@board[10][3]}-"
-    puts "10 -#{@board[9][0]}-#{@board[9][1]}-#{@board[9][2]}-#{@board[9][3]}-"
-    puts "9  -#{@board[8][0]}-#{@board[8][1]}-#{@board[8][2]}-#{@board[8][3]}-"
-    puts "8  -#{@board[7][0]}-#{@board[7][1]}-#{@board[7][2]}-#{@board[7][3]}-"
-    puts "7  -#{@board[6][0]}-#{@board[6][1]}-#{@board[6][2]}-#{@board[6][3]}-"
-    puts "6  -#{@board[5][0]}-#{@board[5][1]}-#{@board[5][2]}-#{@board[5][3]}-"
-    puts "5  -#{@board[4][0]}-#{@board[4][1]}-#{@board[4][2]}-#{@board[4][3]}-"
-    puts "4  -#{@board[3][0]}-#{@board[3][1]}-#{@board[3][2]}-#{@board[3][3]}-"
-    puts "3  -#{@board[2][0]}-#{@board[2][1]}-#{@board[2][2]}-#{@board[2][3]}-"
-    puts "2  -#{@board[1][0]}-#{@board[1][1]}-#{@board[1][2]}-#{@board[1][3]}-"
-    puts "1  -#{@board[0][0]}-#{@board[0][1]}-#{@board[0][2]}-#{@board[0][3]}-"
+    puts "12 -#{@board[11][0]}-#{@board[11][1]}-#{@board[11][2]}-#{@board[11][3]}- #{@clue_board[11].join('')}"
+    puts "11 -#{@board[10][0]}-#{@board[10][1]}-#{@board[10][2]}-#{@board[10][3]}- #{@clue_board[10].join('')}"
+    puts "10 -#{@board[9][0]}-#{@board[9][1]}-#{@board[9][2]}-#{@board[9][3]}- #{@clue_board[9].join('')}"
+    puts "9  -#{@board[8][0]}-#{@board[8][1]}-#{@board[8][2]}-#{@board[8][3]}- #{@clue_board[8].join('')}"
+    puts "8  -#{@board[7][0]}-#{@board[7][1]}-#{@board[7][2]}-#{@board[7][3]}- #{@clue_board[7].join('')}"
+    puts "7  -#{@board[6][0]}-#{@board[6][1]}-#{@board[6][2]}-#{@board[6][3]}- #{@clue_board[6].join('')}"
+    puts "6  -#{@board[5][0]}-#{@board[5][1]}-#{@board[5][2]}-#{@board[5][3]}- #{@clue_board[5].join('')}"
+    puts "5  -#{@board[4][0]}-#{@board[4][1]}-#{@board[4][2]}-#{@board[4][3]}- #{@clue_board[4].join('')}"
+    puts "4  -#{@board[3][0]}-#{@board[3][1]}-#{@board[3][2]}-#{@board[3][3]}- #{@clue_board[3].join('')}"
+    puts "3  -#{@board[2][0]}-#{@board[2][1]}-#{@board[2][2]}-#{@board[2][3]}- #{@clue_board[2].join('')}"
+    puts "2  -#{@board[1][0]}-#{@board[1][1]}-#{@board[1][2]}-#{@board[1][3]}- #{@clue_board[1].join('')}"
+    puts "1  -#{@board[0][0]}-#{@board[0][1]}-#{@board[0][2]}-#{@board[0][3]}- #{@clue_board[0].join('')}"
     puts "   -1-2-3-4- KEYPAD"
     puts ""
     puts "   -#{@pegs[0]}-#{@pegs[1]}-#{@pegs[2]}-#{@pegs[3]}-"
@@ -143,11 +176,16 @@ class Board
 end
 
 class Computer
+
+  def initialize(game)
+    @mastermind = game
+  end
+
   def make_a_code
-    numbers = [1,2,3,4,5,6,7,8]
+    pegs = %w[! @ # $ % ^ & *]
     master_code = []
-    4.times {master_code << numbers.shuffle!.pop}
-    master_code.join('')
+    4.times {master_code << pegs.shuffle!.pop}
+    master_code
   end
 end
 
@@ -179,10 +217,10 @@ class Player
   end
 
   def code_is_valid?
-    code_numbers = @response.split('')
-    if code_numbers.size == 4 && code_numbers.size == code_numbers.uniq.size
-      code_numbers.each do |number|
-        if !((1..8).include? number.to_i)
+    code = @response.split('')
+    if code.size == 4 && code.size == code.uniq.size
+      code.each do |peg|
+        if !((%w(! @ # $ % ^ & *)).include? peg)
           return false
         end
       end
@@ -193,9 +231,6 @@ class Player
   end
 
   def key_is_valid?
-    # if @response == 'z' then all of this should until loop with the submit? method as the conditional. we want to see if there's a full code up there we can submit
-    # if not we need to prompt them for a new respond, that's gotta keep looping until valid.
-    # once that loop ends, it can still goto this return true or false thing.
     return true if ['1','2','3','4','q','w','e','r','a','s','d','f','z'].include? @response.downcase
     false
   end
@@ -204,8 +239,8 @@ class Player
     respond
     until code_is_valid?
       puts "The code you have entered is invalid!"
-      puts "Code Maker, set a code of four numbers from 1 to 8."
-      print "Each number must be different (e.g. 1234): "
+      puts "Code Maker, set a code of four pegs from these pegs (!, @, #, $, %, ^, & , *)."
+      print "Each peg must be different (e.g. !@#$): "
       respond
     end
     @response
@@ -219,17 +254,18 @@ class Player
   end
 
   def play_round
-    @board.render
-    until false
-      print "Select peg to move (via its KEYPAD position) or 'z' and enter to submit code: "
+    loop do
+      print "Move from (KEYPAD position) or 'z' to submit code: "
       chosen_peg = choose_key
       break if chosen_peg.downcase == 'z'
-      print "Select peg destination (via its KEYPAD position) or 'z' and enter to submit code: "
+      print "Move to (KEYPAD position) or 'z' to submit code: "
       peg_destination = choose_key
       break if peg_destination.downcase == 'z'
       @board.switch_pegs(chosen_peg, peg_destination)
       @board.render
     end
+    @board.assess_guess
+    @board.render
   end
 
   def quit?
