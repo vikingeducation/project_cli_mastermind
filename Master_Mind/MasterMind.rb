@@ -1,22 +1,20 @@
 class MasterMind
 
-  attr_accessor :round
-  attr_accessor :master_code
+  attr_accessor :round, :master_code
 
   def initialize
     @board = Board.new(self, @code_breaker)
-    @computer = Computer.new(self)
+    @computer = Computer.new(self, @board)
     @mode = nil
     @master_code = nil
     @code_breaker = Player.new(self, @board)
-    @code_maker = Player.new(self, @board)
     @round = 1
   end
 
   def ask_for_mode
     puts "Type 'quit' and then enter, at any point, to exit the game."
     puts ""
-    print "Press '1' or '2' and then enter, to set the mode: "
+    print "Press '1' (to play as the Code Breaker) or '2' (as the Code Maker) and then enter, to set the mode: "
     @mode = @code_breaker.set_mode
     puts ""
   end
@@ -27,7 +25,7 @@ class MasterMind
     else
       puts "Code Maker, set a code of four pegs from these pegs (!, @, #, $, %, ^, & , *)."
       print "Each peg must be different (e.g. !@#$): "
-      @master_code = @code_maker.make_a_code
+      @master_code = @code_breaker.make_a_code
     end
   end
 
@@ -46,14 +44,14 @@ class MasterMind
     puts "- A decoding board with twelve rows containing four large holes."
     puts "- Code pegs of eight different numbers, which will be placed in the large holes on the board."
     puts ""
-    puts "ONE player mode:"
+    puts "'Code Breaker' mode:"
     puts "- The computer decides a combination of pegs for the player to guess."
     puts "- The player gets 12 guesses."
     puts "- After every guess the player will be told how accurate their guess was, next to their guess. (%) stands for correct number but wrong position. ($) stands for exact number and position. These will not specify which pegs they're indicating."
     puts "- The game ends when the code is guessed or the player runs out of guesses."
     puts ""
-    puts "TWO player mode:"
-    puts "- Same as above except player TWO will set the code instead of the computer."
+    puts "'Code Maker' mode:"
+    puts "- Same as above except the player will set the code and the computer will try to break it."
     puts "--------------------------"
     puts ""
     ask_for_mode
@@ -63,18 +61,29 @@ class MasterMind
 
   def play_game
     @round = 1
+    @board.render
     until @board.clue_board[@round - 2] == ['E','E','E','E'] || @round == 13
       @board.pegs = %w[! @ # $ % ^ & *]
+      if @mode == '1'
+        @code_breaker.play_round
+      else
+        @computer.play_round(@round)
+      end
       @board.render
-      @code_breaker.play_round
       @round += 1
     end
     display_outcome
+    print @computer.definite
+    print @computer.definitely_not
+    print @computer.exact_positions
+    print @computer.maybe
   end
 
   def display_outcome
     if @board.clue_board[@round - 2] == ['E','E','E','E']
+      puts ""
       puts "YOU WIN!!"
+      puts ""
     else
       puts ""
       puts "MASSIVE FAIL!! THE ANSWER IS -#{@master_code.join('-')}-"
@@ -111,7 +120,7 @@ class Board
       end
     end
     if @clue_board[@mastermind.round-1].empty?
-      @clue_board[@mastermind.round-1] == "Complete Fail!"
+      @clue_board[@mastermind.round-1] = %w[F A I L !]
     else
       @clue_board[@mastermind.round-1].sort!
     end
@@ -177,8 +186,58 @@ end
 
 class Computer
 
-  def initialize(game)
+  attr_accessor :definite, :definitely_not
+  attr_reader :exact_positions, :maybe
+
+  def initialize(game, board)
     @mastermind = game
+    @board = board
+    @definite = []
+    @definitely_not = []
+    @maybe = []
+    @exact_positions = {}
+  end
+
+  def assess_results(round)
+    e_count_current = 0
+    e_count_previous = 0
+    @board.clue_board[round-1].each { |e| e_count_current += 1 if e == "E"}
+    @board.clue_board[round-2].each { |e| e_count_previous += 1 if e == "E"}
+    if round >= 2 && round <= 5
+      if @board.clue_board[round-1].size > @board.clue_board[round-2].size
+        @definite << @board.board[round-1][round-2]
+        @definitely_not << @board.pegs[round-2]
+        check_for_exacts(round, e_count_previous, e_count_current)
+      elsif @board.clue_board[round-1].size < @board.clue_board[round-2].size
+        @definite << @board.pegs[round-2]
+        @definitely_not << @board.board[round-1][round-2]
+        check_for_exacts(round, e_count_previous, e_count_current)
+      elsif @board.clue_board[round-1] == @board.clue_board[round-2]
+        # This is going to take some work 
+        @maybe << @board.board[round-1][round-2]
+        @maybe << @board.pegs[round-2]
+      else
+        @definite << @board.board[round-1][round-2]
+        @definite << @board.pegs[round-2]
+        check_for_exacts(round, e_count_previous, e_count_current)
+      end
+    end
+    if round > 5 && @maybe.size == 2
+
+    end
+  end
+
+  # Dealing with maybes
+  # First I guess you'd put all your definites in place.
+  # Then you'd put your definites in.
+  # Then you'd start subbing in one of the maybes at a time to figure out if it's supposed to be there. 
+
+  def check_for_exacts(round, e_count_previous, e_count_current)
+    if e_count_current - e_count_previous == 1
+      @exact_positions[@board.board[round-1][round-2]] = round-2
+    elsif e_count_previous - e_count_current == 1
+      @exact_positions[@board.board[round-2][round-2]] = round-2
+    end
   end
 
   def make_a_code
@@ -187,6 +246,20 @@ class Computer
     4.times {master_code << pegs.shuffle!.pop}
     master_code
   end
+
+  def play_round(round)
+    pegs = %w[! @ # $ % ^ & *]
+    if round == 1
+      @board.board[round-1] = %w[! @ # $]
+    elsif round < 6
+      new_array = @board.board[round-2]
+      @board.board[round-1] = new_array.dup
+      @board.board[round-1][round - 2] = @board.pegs[round + 2]
+    end
+    @board.assess_guess
+    assess_results(round)
+  end
+
 end
 
 class Player
@@ -243,7 +316,7 @@ class Player
       print "Each peg must be different (e.g. !@#$): "
       respond
     end
-    @response
+    @response.split('')
   end
 
   def mode_is_valid?
