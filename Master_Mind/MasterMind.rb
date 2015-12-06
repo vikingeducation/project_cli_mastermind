@@ -3,11 +3,11 @@ class MasterMind
   attr_accessor :round, :master_code
 
   def initialize
-    @board = Board.new(self, @code_breaker)
+    @board = Board.new(self, @human)
     @computer = Computer.new(self, @board)
     @mode = nil
     @master_code = nil
-    @code_breaker = Player.new(self, @board)
+    @human = Human.new(self, @board)
     @round = 1
   end
 
@@ -15,7 +15,7 @@ class MasterMind
     puts "Type 'quit' and then enter, at any point, to exit the game."
     puts ""
     print "Press '1' (to play as the Code Breaker) or '2' (as the Code Maker) and then enter, to set the mode: "
-    @mode = @code_breaker.set_mode
+    @mode = @human.set_mode
     puts ""
   end
 
@@ -25,7 +25,7 @@ class MasterMind
     else
       puts "Code Maker, set a code of four pegs from these pegs (!, @, #, $, %, ^, & , *)."
       print "Each peg must be different (e.g. !@#$): "
-      @master_code = @code_breaker.make_a_code
+      @master_code = @human.make_a_code
     end
   end
 
@@ -63,12 +63,12 @@ class MasterMind
     @round = 1
     @board.render
     until @board.clue_board[@round - 2] == ['E','E','E','E'] || @round == 13
-      @board.pegs = %w[! @ # $ % ^ & *]
       if @mode == '1'
-        @code_breaker.play_round
+        @human.play_round
       else
         @computer.play_round(@round)
       end
+      @board.pegs = %w[! @ # $ % ^ & *]
       @board.render
       @round += 1
     end
@@ -102,7 +102,7 @@ class Board
     @mastermind = game
     @clue_board = []
     12.times { @clue_board << [] }
-    @code_breaker = player
+    @human = player
     @board = []
     12.times { @board << %w[= = = =] }
     @pegs = %w[! @ # $ % ^ & *]
@@ -184,14 +184,22 @@ class Board
 
 end
 
-class Computer
+class Player
+
+  def initialize(game, board)
+    @mastermind = game
+    @board = board
+  end
+
+end
+
+class Computer < Player
 
   attr_accessor :definite, :definitely_not
   attr_reader :exact_positions, :maybe
 
   def initialize(game, board)
-    @mastermind = game
-    @board = board
+    super(game, board)
     @definite = []
     @definitely_not = []
     @maybe = []
@@ -259,17 +267,15 @@ class Computer
     @board.assess_guess
     assess_results(round)
   end
-
 end
 
-class Player
+class Human < Player
 
   attr_accessor :response
 
   def initialize(game, board)
-    @mastermind = game
+    super(game, board)
     @response = nil
-    @board = board
   end
 
   def choose_key
@@ -338,7 +344,6 @@ class Player
       @board.render
     end
     @board.assess_guess
-    @board.render
   end
 
   def quit?
@@ -359,7 +364,6 @@ class Player
     end
     @response
   end
-
 end
 
 MasterMind.new.start_game
