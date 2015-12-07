@@ -1,0 +1,254 @@
+Demo of how it'll look - Now to figure out the classes
+
+///// - MASTERMIND - \\\\\                  ***************** MasterMind
+--------------------------
+By Steven Chang
+--------------------------
+Mastermind is a code-breaking game for ONE or TWO players.
+
+The game is played using:
+
+- A decoding board with twelve rows containing four large holes.
+- Code pegs of eight different numbers, which will be placed in the large holes on the board.
+
+ONE player mode:
+- The computer decides a combination of pegs for the player to guess.
+- The player gets 12 guesses.
+- After every guess the player will be told how accurate there guess was, next to their guess. (C) stands for close, correct number but wrong position. (E) stands for exact, correct number and correct position. These will not specify which pegs they're indicating.
+- The game ends when the code is guessed or the player runs out of guesses.
+
+TWO player mode:
+- Same as above except player TWO will set the code instead of the computer.
+---------------------------
+
+Type 'quit' and then enter, at any point, to exit the game.
+
+Press '1' or '2' and then enter, to set the mode: 1   **************MASTERMIND
+
+---------------------------
+
+############### INITIAL BOARD - ALSO SHOWING MESSAGE FOR INVALID ENTRY
+
+Legend
+$ = exact
+% = right but in the wrong position
+
+   -Q-W-E-R-
+12 -X-X-X-X-
+11 -X-X-X-X-
+10 -X-X-X-X-
+9  -X-X-X-X-
+8  -X-X-X-X-
+7  -X-X-X-X-
+6  -X-X-X-X-
+5  -X-X-X-X-
+4  -X-X-X-X-
+3  -X-X-X-X-
+2  -X-X-X-X-
+1  -X-X-X-X-
+   -Q-W-E-R-
+
+1-2-3-4-5-6-7-8-PEGS
+A-S-D-F-G-H-J-K-PEG HOLDER
+
+Enter the number of the peg you want to move: r
+Invalid selection! Enter the number of the peg you want to move (1 to 8): 8
+Enter the destination for that peg (if there's a peg there already, the pegs will switch places.): 7
+Invalid selection! Enter the destination slot, either on the board (Q,W,E,R) or on the peg holder (A,S,D,F,G,H,J,K): Q
+
+############################## MOVEMENT OF PEG TO BOARD
+
+Legend
+$ = exact
+% = right but in the wrong position
+
+   -Q-W-E-R-
+12 -X-X-X-X-
+11 -X-X-X-X-
+10 -X-X-X-X-
+9  -X-X-X-X-
+8  -X-X-X-X-
+7  -X-X-X-X-
+6  -X-X-X-X-
+5  -X-X-X-X-
+4  -X-X-X-X-
+3  -X-X-X-X-
+2  -X-X-X-X-
+1  -8-X-X-X-
+   -Q-W-E-R-
+
+1-2-3-4-5-6-7-X-PEGS
+A-S-D-F-G-H-J-K-PEG HOLDER
+
+Instructions:
+Enter the number of the peg you want to move: 7
+Enter the destination for that peg (if there's a peg there already, the pegs will switch places.): A
+
+########################### SWITCHING PEGS
+
+Legend
+$ = exact
+% = right but in the wrong position
+
+   -Q-W-E-R-
+12 -X-X-X-X-
+11 -X-X-X-X-
+10 -X-X-X-X-
+9  -X-X-X-X-
+8  -X-X-X-X-
+7  -X-X-X-X-
+6  -X-X-X-X-
+5  -X-X-X-X-
+4  -X-X-X-X-
+3  -X-X-X-X-
+2  -X-X-X-X-
+1  -8-X-X-X-
+   -Q-W-E-R-
+
+7-2-3-4-5-6-1-X-PEGS
+A-S-D-F-G-H-J-K-PEG HOLDER
+
+Instructions:
+Enter the number of the peg you want to move:
+Enter the destination for that peg (if there's a peg there already, the pegs will switch places.):
+
+########################### SUBMIT OPTION WHEN READY TO SUBMIT
+
+Legend
+$ = exact
+% = right but in the wrong position
+
+   -Q-W-E-R-
+12 -X-X-X-X-
+11 -X-X-X-X-
+10 -X-X-X-X-
+9  -X-X-X-X-
+8  -X-X-X-X-
+7  -X-X-X-X-
+6  -X-X-X-X-
+5  -X-X-X-X-
+4  -X-X-X-X-
+3  -X-X-X-X-
+2  -X-X-X-X-
+1  -8-7-2-3-
+   -Q-W-E-R-
+
+X-X-X-4-5-6-1-X-PEGS
+A-S-D-F-G-H-J-K-PEG HOLDER
+
+Instructions:
+Type 's' to submit your guess or the number of the peg you want to move: s
+
+########################### SUBMIT OPTION WHEN READY TO SUBMIT
+
+Legend
+$ = exact
+% = right but in the wrong position
+
+   -Q-W-E-R-
+12 -X-X-X-X-
+11 -X-X-X-X-
+10 -X-X-X-X-
+9  -X-X-X-X-
+8  -X-X-X-X-
+7  -X-X-X-X-
+6  -X-X-X-X-
+5  -X-X-X-X-
+4  -X-X-X-X-
+3  -X-X-X-X-
+2  -X-X-X-X-
+1  -8-7-2-3-
+   -Q-W-E-R-
+
+X-X-X-4-5-6-1-X-PEGS
+A-S-D-F-G-H-J-K-PEG HOLDER
+
+Instructions:
+Type 's' to submit your guess or the number of the peg you want to move: s
+
+########################### SUBMIT OPTION WHEN READY TO SUBMIT
+
+Legend
+$ = exact
+% = right but in the wrong position
+
+   -Q-W-E-R-
+12 -X-X-X-X-
+11 -X-X-X-X-
+10 -X-X-X-X-
+9  -X-X-X-X-
+8  -X-X-X-X-
+7  -X-X-X-X-
+6  -X-X-X-X-
+5  -X-X-X-X-
+4  -X-X-X-X-
+3  -X-X-X-X-
+2  -X-X-X-X-
+1  -8-7-2-3- $ % %
+   -Q-W-E-R-
+
+X-X-X-4-5-6-1-X-PEGS
+A-S-D-F-G-H-J-K-PEG HOLDER
+
+Instructions:
+Enter the number of the peg you want to move:
+Enter the destination for that peg (if there's a peg there already, the pegs will switch places.):
+
+########################### When submitted answer is correct
+
+Legend
+$ = exact
+% = right but in the wrong position
+
+   -Q-W-E-R-
+12 -X-X-X-X-
+11 -X-X-X-X-
+10 -X-X-X-X-
+9  -X-X-X-X-
+8  -X-X-X-X-
+7  -X-X-X-X-
+6  -X-X-X-X-
+5  -X-X-X-X-
+4  -X-X-X-X-
+3  -X-X-X-X-
+2  -X-X-X-X-
+1  -8-7-2-3- $ $ $ $ - YOU GOT IT!
+   -Q-W-E-R-
+
+X-X-X-4-5-6-1-X-PEGS
+A-S-D-F-G-H-J-K-PEG HOLDER
+
+Instructions:
+Enter the number of the peg you want to move:
+Enter the destination for that peg (if there's a peg there already, the pegs will switch places.):
+
+########################### When player has run out of guesses
+
+Legend
+$ = exact
+% = right but in the wrong position
+
+   -Q-W-E-R-
+12 -8-2-3-7- $ % % % - GAME OVER - ANS: -8-3-7-2
+11 -8-2-3-7- $ % % %
+10 -8-2-3-7- $ % % %
+9  -8-2-3-7- $ % % %
+8  -8-2-3-7- $ % % %
+7  -8-2-3-7- $ % % %
+6  -8-2-3-7- $ % % %
+5  -8-2-3-7- $ % % %
+4  -8-2-3-7- $ % % %
+3  -8-2-3-7- $ % % %
+2  -8-2-3-7- $ % % %
+1  -8-2-3-7- $ % % %
+   -Q-W-E-R-
+
+X-X-X-4-5-6-1-X-PEGS
+A-S-D-F-G-H-J-K-PEG HOLDER
+
+Instructions:
+Press '1' or '2' and enter to start a new game in the selected mode.
+Otherwise type 'quit' and enter to exit:
+
+
+
