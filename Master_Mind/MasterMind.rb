@@ -1,7 +1,6 @@
 class MasterMind
 
-  attr_accessor :round, :master_code, :mode, :computer
-  attr_reader :human
+  attr_reader :human, :computer, :mode, :round, :master_code
 
   def initialize
     @board = Board.new(self, human)
@@ -72,9 +71,9 @@ class MasterMind
 
   def play_game
     @board.render
-    until @board.clue_board[@round - 2] == ['E','E','E','E'] || @round == 13
+    until @board.correct_answer? || @round == 13
       delegate_player
-      @board.pegs = %w[! @ # $ % ^ & *]
+      @board.refresh_pegs
       @board.render
       @round += 1
     end
@@ -82,7 +81,7 @@ class MasterMind
   end
 
   def display_outcome
-    if @board.clue_board[@round - 2] == ['E','E','E','E']
+    if @board.correct_answer?
       puts ""
       puts "YOU WIN!!"
       puts ""
@@ -91,6 +90,7 @@ class MasterMind
       puts "MASSIVE FAIL!! THE ANSWER IS -#{@master_code.join('-')}-"
       puts ""
       puts "I suggest a diet rich in blueberries and salmon."
+      puts ""
     end
   end
 end
@@ -116,6 +116,33 @@ class Board
     @clue_board[round] = []
     return_clues
     organise_clues
+  end
+
+  def correct_answer?
+    true if clue_board[round - 1] == ['E','E','E','E']
+  end
+
+  def place_definites(wrong_hash)
+    wrong_hash.each do |key, index|
+      # if there's only one in the wrong_hash, just pop it into the empty slot, this should never happen though because the assess guess would just fix this and make it into a exact.
+      # if there's two in the wrong_hash, put them in spots they haven't been before and try again.
+      # if there's 3 or more, shuffle two around and keep all the other definites in a previously known wrong spot.
+    end
+  end
+
+  def place_exacts(exact_hash)
+    exact_hash.each do |key, value|
+      @board[round][value] = key
+      @pegs.each do |peg|
+        if peg == key
+          peg = "="
+        end
+      end
+    end
+  end
+
+  def refresh_pegs
+    @pegs = %w[! @ # $ % ^ & *]
   end
 
   def render
@@ -245,6 +272,15 @@ class Computer < Player
     pegs = %w[! @ # $ % ^ & *]
     if current_round == 0
       @board.board[current_round] = %w[! @ # $]
+    elsif @board.clue_board[previous_round].size == 4
+      assess_results
+      @definite = @board.board[previous_round]
+      @board.place_exacts(@exact_positions)
+      @board.place_definites(@wrong_positions)
+    elsif @definite.size == 4
+      assess_results
+      @board.place_exacts(@exact_positions)
+      @board.place_definites(@wrong_positions)
     elsif current_round < 5
       new_array = @board.board[previous_round]
       @board.board[current_round] = new_array.dup
@@ -252,6 +288,11 @@ class Computer < Player
     end
     @board.assess_guess
     assess_results
+    print @definite
+    print @definitely_not
+    print @maybe = []
+    print @exact_positions
+    print @wrong_positions
   end
 
   private
@@ -264,9 +305,38 @@ class Computer < Player
     @mastermind.round - 2
   end
 
+  def add_pegs_to_wrong_positions
+    @definite.each do |peg|
+      if !(@exact_positions.keys.include? peg)
+        @wrong_positions[peg] = []
+      end
+    end
+  end
+
+  def add_exact_position_value_to_wrong_positions
+    @exact_positions.values.each do |index|
+      @wrong_positions.each do |key, value|
+        @wrong_positions[key] = (value << index)
+      end
+    end
+  end
+
+  def three_wrongs_make_a_right
+    @wrong_positions.each do |key, value|
+      if @wrong_positions[key].size == 3
+        @exact_positions[key] = [[0,1,2,3] - value][0][0]
+        @wrong_positions.delete(key)
+      end
+    end
+  end
+
   def assess_results
     count_exacts
-    if current_round >= 1 && current_round <= 4
+    if @definite.size == 4
+      add_pegs_to_wrong_positions
+      add_exact_position_value_to_wrong_positions
+      three_wrongs_make_a_right
+    elsif current_round >= 1 && current_round <= 4
       delegate_definites_maybes
       check_for_exacts
     end
