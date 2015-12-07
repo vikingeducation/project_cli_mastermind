@@ -81,16 +81,24 @@ class MasterMind
   end
 
   def display_outcome
-    if @board.correct_answer?
-      puts ""
-      puts "YOU WIN!!"
-      puts ""
+    if @mode == "1"
+      if @board.correct_answer?
+        puts ""
+        puts "YOU WIN!!"
+        puts ""
+      else
+        puts ""
+        puts "MASSIVE FAIL!! THE ANSWER IS -#{@master_code.join('-')}-"
+        puts ""
+        puts "I suggest a diet rich in blueberries and salmon."
+        puts ""
+      end
     else
-      puts ""
-      puts "MASSIVE FAIL!! THE ANSWER IS -#{@master_code.join('-')}-"
-      puts ""
-      puts "I suggest a diet rich in blueberries and salmon."
-      puts ""
+      if @board.correct_answer?
+        puts ""
+        puts "COMPUTER WINS!!"
+        puts ""
+      end
     end
   end
 end
@@ -152,8 +160,12 @@ class Board
     puts "E = exact"
     puts "R = right but in the wrong position"
     puts ""
-    puts "   -1-2-3-4- KEYPAD"
+    render_board
+    render_keypad
+  end
 
+  def render_board
+    puts "   -1-2-3-4- KEYPAD"
     i = 11
     while i >= 0
       if i + 1 >= 10
@@ -163,8 +175,10 @@ class Board
       end
       i -= 1
     end
-
     puts "   -1-2-3-4- KEYPAD"
+  end
+
+  def render_keypad
     puts ""
     puts "   -#{@pegs[0]}-#{@pegs[1]}-#{@pegs[2]}-#{@pegs[3]}-"
     puts "   -Q-W-E-R- KEYPAD"
