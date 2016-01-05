@@ -10,14 +10,6 @@ class Board
     @solution_row.populate_row ( solution )
   end
 
-  def create_autogenerate_solution 
-    solution = []
-    4.times do
-      solution << Peg::COLORS.sample
-    end
-    create_solution( solution )
-  end
-
   def add_guess_row( guess )
     guess_row = Row.new
     guess_row.populate_row(guess)
@@ -31,7 +23,7 @@ class Board
   def to_s
     str = ""
     (0...guesses.length).each do |guess_num|
-      str << "Guess number #{guess_num}: #{@guesses[guess_num].to_s} #{@responses[guess_num].join}\n"
+      str << "\nGuess number #{guess_num+1}: #{@guesses[guess_num].to_s}\nFull matches: #{@responses[guess_num][:full_match]}\nColor matches: #{@responses[guess_num][:color_match]}\n\n"
     end
     str
   end

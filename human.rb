@@ -13,6 +13,6 @@ class Human < Player
     		return false
     	end
     end
-    guess
+    return guess
   end
 end

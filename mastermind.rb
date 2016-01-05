@@ -24,23 +24,23 @@ class Mastermind
   def play
     instructions
 
-    @board.create_autogenerate_solution
+    puts @board.create_solution(@codemaker.pick_solution)
 
     loop do
       if guess = @codebreaker.make_a_guess
 
-          @board.add_guess_row(guess)
+        @board.add_guess_row(guess)
 
-          if check_win?
-            puts "You won!"
-            break
-          else
-            @board.add_response(respond_to_guess)
-          end
+        if check_win?
+          puts "You won!"
+          break
+        else
+          @board.add_response(respond_to_guess)
+        end
 
-          render
+        render
       else
-        puts "Please put a valid color"
+        puts "Please enter a valid input"
       end
     end
   end
@@ -52,13 +52,13 @@ class Mastermind
   def respond_to_guess
     guess = @board.guesses.last.slots
     solution = @board.solution_row.slots
-    response = []
+    response = { full_match: 0, color_match: 0 }
     guess_colors = {}
     solution_colors = {}
 
     (0..3).each do |index|
       if guess[index] == solution[index]
-        response << "full match"
+        response[:full_match] += 1
       else
         guess_color = guess[index].color
         solution_color = solution[index].color
@@ -81,7 +81,7 @@ class Mastermind
       if solution_colors.keys.include?(color)
         color_matches = [solution_colors[color], guess_colors[color]].min
         color_matches.times do
-          response << "color match"
+          response[:color_match] += 1
         end
       end
     end

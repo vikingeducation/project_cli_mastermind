@@ -8,4 +8,12 @@ class Computer < Player
     end
     guess
   end
+
+  def pick_solution 
+    solution = []
+    4.times do
+      solution << Peg::COLORS.sample
+    end
+    solution
+  end
 end
