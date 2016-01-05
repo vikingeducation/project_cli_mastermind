@@ -19,10 +19,15 @@ class Row
     end
   end
 
+  def to_s
+    colors = @slots.map { |slot| slot.color }
+    colors.join(", ")
+  end
+
 end
 
 class Board
-  attr_accessor :solution_row
+  attr_accessor :solution_row, :guesses
   def initialize
     @solution_row = Row.new
     @guesses = []
@@ -105,17 +110,44 @@ class Mastermind
 
     (0..3).each do |index|
       if guess[index] == solution[index]
-        response << "correct"
+        response << "full match"
       else
-        
+        guess_color = guess[index].color
+        solution_color = solution[index].color
+
+        if remainder_guess.keys.include?(guess_color)
+          remainder_guess[guess_color] += 1
+        else
+          remainder_guess[guess_color] = 1
+        end
+
+        if remainder_solution.keys.include?(solution_color)
+          remainder_solution[solution_color] += 1
+        else
+          remainder_solution[solution_color] = 1
+        end
       end
     end
+
+    remainder_guess.each do |color, number|
+      if remainder_solution.keys.include?(color)
+        color_matches = [remainder_solution[color], remainder_guess[color]].min
+        color_matches.times do
+          response << "color match"
+        end
+      end
+    end
+
+    response
   end
 end
 
+test_game = Mastermind.new
 test_board = Board.new
 test_board.create_autogenerate_solution()
-puts test_board.solution_row.slots.each {  |peg| puts peg.color }
+puts test_board.solution_row.to_s
+test_board.add_guess_row(Row.new.populate_row(["yellow", "blue", "orange", "green"]))
+puts test_board.guesses.last.to_s
 
 # the_mind = Mastermind.new
 # the_mind.play
