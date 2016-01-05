@@ -34,7 +34,7 @@ class Mastermind
 end
 
 # Manages player functionality
-class Player
+class Player(name)
   # initialize
 
   # get_input
