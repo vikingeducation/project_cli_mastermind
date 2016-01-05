@@ -84,8 +84,6 @@ class Board
     # compare_input
     # print possible feedbacks
 
-  # compare_input
-    
 
   # print_feedback
     # red_feedback?
@@ -93,10 +91,21 @@ class Board
 
   # red_feedback?
     # for each peg does it match the winning peg?
+    # delete red matches from the placeholder arrays
+
+    solution = ["R"]
+    guess = ["G", "Y", "G"]
 
   # white_feedback?
+    # receive arrays from red_feedback
     # unless peg is red_feedback?
       # for each peg is the color included in winning combination
+
+  # generate_solution
+    @solutions
+    4.times do
+      @solutions << @@possible_colors.sample
+    end
 
 
 
@@ -111,12 +120,18 @@ class Board
 x = 2
 
   (0..3).each do |idx|
-    if hash[x][idx] == hash[13][idx]
+    if guess[idx] == solution[idx]
+      red_counter += 1
   end
 
+  solution = hash[13] # solution = ["R", "G", "G", "Y"]
+  guess = hash[x] # guess = ["G", "G", "Y", "G"]
 
-  hash[x].each do |ele|
-    if hash[13].include?(ele)
+  guess.each do |color|
+    if solution.include?(color)
       white_counter +=1
+      solution.delete_at(solution.index(color) || solution.length)
     end
+  end
+
 
