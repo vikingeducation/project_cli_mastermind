@@ -1,3 +1,3 @@
 class KeyPeg < Peg
-  @@colors = [:black, :white]
+  COLORS = [:black, :white]
 end
