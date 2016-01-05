@@ -1,0 +1,3 @@
+class CodePeg < Peg
+
+end

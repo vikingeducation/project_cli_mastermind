@@ -1,0 +1,3 @@
+class KeyPeg < Peg
+
+end
