@@ -12,8 +12,9 @@ class Mastermind
   end
 
   def instructions
-    puts "make a guess"
-    puts "if incorrect, make another"
+    puts "These are the colors: yellow, green, blue, purple, orange, brown."
+    puts "Guess four colors in the format 'yellow, red, blue, purple' "
+    puts "Try to guess all possible colors in the correct order"
   end
 
   def render
@@ -26,16 +27,21 @@ class Mastermind
     @board.create_autogenerate_solution
 
     loop do
-      @board.add_guess_row(@codebreaker.make_a_guess)
+      if guess = @codebreaker.make_a_guess
 
-      if check_win?
-        puts "You won!"
-        break
+          @board.add_guess_row(guess)
+
+          if check_win?
+            puts "You won!"
+            break
+          else
+            @board.add_response(respond_to_guess)
+          end
+
+          render
       else
-        @board.add_response(respond_to_guess)
+        puts "Please put a valid color"
       end
-
-      render
     end
   end
 

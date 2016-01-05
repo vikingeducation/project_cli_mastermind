@@ -5,6 +5,14 @@ class Human < Player
     puts "What is your guess?"
     guess = gets.chomp.split(",")
     guess.each{ |color| color.strip! }
+    if guess.length != 4
+    	return false
+    end
+    guess.each do |color|
+    	if !Peg::COLORS.include?(color)
+    		return false
+    	end
+    end
     guess
   end
 end
