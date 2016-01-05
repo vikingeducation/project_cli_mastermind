@@ -6,12 +6,13 @@ class Board
   
   def initialize
     @pegs = 4
+    @current_board = []
   end
 
 
 
-  def render(guess_array)
-    guess_array.each do |row|
+  def render
+    @current_board.each do |row|
       print row
     end
   end
