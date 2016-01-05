@@ -18,10 +18,17 @@ class MasterMind
     puts
   end
 
+
+  
+
   def play
     print_intro
     @board.render
+
     # ask for game settings (human vs ai, roles)
+    @player_1.get_and_set_role
+    puts @player1.role
+ 
     # ask codemaker to create answer_key (if it's computer it'll be automatic, if player handle input)
 
     # start game loop here

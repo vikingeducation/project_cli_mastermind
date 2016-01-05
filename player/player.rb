@@ -1,5 +1,7 @@
 #all human interaction needs to be validated here
 class Player
+  attr_accessor :role
+
   def initialize(role)
     @role = role
   end
