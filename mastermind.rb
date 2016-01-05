@@ -93,21 +93,21 @@ class Mastermind
   end
 
   def check_win?
-    guess = @board.guesses.last
-    solution = @board.solution_row
-    guess == solution
+    @board.guesses.last == @board.solution_row
   end
 
   def respond_to_guess
     guess = @board.guesses.last
     solution = @board.solution_row
     response = []
-    remainder_guess = []
-    remainder_solution = []
+    remainder_guess = {}
+    remainder_solution = {}
 
     (0..3).each do |index|
       if guess[index] == solution[index]
         response << "correct"
+      else
+        
       end
     end
   end
