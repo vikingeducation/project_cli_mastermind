@@ -51,16 +51,20 @@ class Game
 
   def play
     print_instructions
+
     # prompt user for codemaker or codebreaker
     determine_codemaker
+
     # make winning board
     @winning_board = @codemaker.create_board 
+
     puts "==================="
     print "(winning board)", @winning_board, "\n"
     puts "==================="
-    # ask for guesses, constantly display current board with previous guesses
+
     previous_guesses = []
 
+    # ask for guesses, constantly display current board with previous guesses
     until user_has_won? || (@codebreaker.turn == 0)
       @codebreaker.guess = @codebreaker.create_board
       @codebreaker.turn -= 1
