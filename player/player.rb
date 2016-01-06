@@ -1,8 +1,7 @@
 #all human interaction needs to be validated here
 class Player
   attr_accessor :role
-
- COLORS = ["red", "navy", "green", "blue", "yellow", "violet", "pink", "brown"]
+  
   def initialize(role=nil)
     @role = role
   end
@@ -27,15 +26,15 @@ class Player
   end
 
   def get_color_pegs
-    code_peg_colors = COLORS
+    code_peg_colors = ["red", "navy", "green", "blue", "yellow", "violet", "pink", "brown"]
     print "Enter your 4 colors from #{code_peg_colors} : "
     user_input = gets.chomp.split(" ")
-    
+
     until user_input.length == 4 &&\
-          user_input.all? { |item| code_peg_colors.include?(item) } 
+          user_input.all? { |item| code_peg_colors.include?(item) }
       print "Enter your 4 colors from #{code_peg_colors} : "
       user_input = gets.chomp.split(" ")
-    end  
+    end
     user_input
 
   end
