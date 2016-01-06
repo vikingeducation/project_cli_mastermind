@@ -4,12 +4,13 @@ require_relative 'player'
 class Mastermind
   # initialize
   def initialize
-    # set up player
-    @player = Player.new(name, @board)
 
     # set up the board
     @board = Board.new
 
+    # set up player
+    @player = Player.new @board
+    @turn = 1
   end
 
   # play
@@ -18,17 +19,21 @@ class Mastermind
     # get name
     get_name
 
+
     # loop twelve times
-    12.times
+    # 12.times do
+    while @turn <= 12
 
       # render board
       @board.render
 
       # ask for user input
-      @player.get_input
+      @player.get_input(@turn)
 
       # check_victory
-      break if check_victory
+      break if victory?
+
+      @turn += 1
     end
 
     # run loser_message
@@ -45,12 +50,16 @@ class Mastermind
   end
 
   # check_victory
-  def check_victory
+  def victory?
 
     # a winning_combination?
     if @board.winning_combination?
       # display a victory message
       puts "Congratulations, #{@player.name}!"
+      true
+    else
+      false
+    end
   end
 
   # get player's name
@@ -58,4 +67,10 @@ class Mastermind
     puts "Please enter your name: "
     @player.name = gets.chomp
   end
+
+  #instructions
 end
+
+game = Mastermind.new
+
+game.play
