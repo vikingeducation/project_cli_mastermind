@@ -2,26 +2,34 @@ require_relative 'player.rb'
 require_relative 'human.rb'
 require_relative 'computer.rb'
 require_relative 'board.rb'
-require_relative 'logic.rb'
+# require_relative 'logic.rb'
 
 class Game
 
   def initialize
     @winning_board = []
+    @board = Board.new
     @codemaker = nil
     @codebreaker = nil
-    @logic = Logic.new
+    # @logic = Logic.new
   end
 
 
   def print_instructions
-    puts "Welcome to Mastermind! The point of the game is to guess a hidden combination of four pegs. \n You get 12 guesses. \nEach peg has a different color and position. \nThe valid colors to guess are: red, orange, yellow, green, blue and purple."
+    puts "==========================================="
+    puts "Welcome to Mastermind!"
+    puts "The point of the game is to guess a hidden combination of four pegs."
+    puts "You get 12 guesses."
+    puts "Each peg has a different color and position."
+    puts "The valid colors to guess are:"
+    puts "red, orange, yellow, green, blue and purple"
+    puts "==========================================="
   end
 
 
   def determine_codemaker
     until @codemaker
-      puts "Would you like to do be codebreaker or codemaker? Enter 'make' or 'break'"
+      puts "Would you like to do be codebreaker or codemaker? \nEnter 'make' or 'break'"
         choice = gets.chomp.downcase
         if ["make", "break"].include? choice
           if choice == "make"
@@ -47,13 +55,18 @@ class Game
     determine_codemaker
     # make winning board
     @winning_board = @codemaker.create_board 
-    print @winning_board
+    print "(winning board)", @winning_board, "\n"
     # ask for guesses, constantly display current board with previous guesses
+    previous_guesses = []
 
     until user_has_won? || (@codebreaker.turn == 0)
       @codebreaker.guess = @codebreaker.create_board
       @codebreaker.turn -= 1
-      puts @logic.evaluate_color(@winning_board, @codebreaker.guess)
+
+      previous_guesses << @codebreaker.guess
+
+      @board.render(previous_guesses, @winning_board, @codebreaker.guess)
+
     end
     # check if guess was winning guess
 

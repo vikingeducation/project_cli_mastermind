@@ -1,3 +1,5 @@
+require_relative 'logic.rb'
+
 class Board
 
   COLORS = ["RED", "ORANGE", "YELLOW", "GREEN", "BLUE", "PURPLE"]  
@@ -6,14 +8,21 @@ class Board
   
   def initialize
     @pegs = 4
-    @current_board = []
+    @logic = Logic.new
   end
 
 
+  def render_logic(winning_board, guess_board)
+    colors = @logic.evaluate_color(winning_board, guess_board)
+    position = @logic.evaluate_position(winning_board, guess_board)
+    "correct colors: #{colors}, correct positions: #{position}"
+  end
 
-  def render
-    @current_board.each do |row|
-      print row
+
+  def render(previous_guesses, winning_board, guess_board)
+    previous_guesses.each do |row|
+      print "You have not won yet. Here are your guesses:"
+      print "\n#{row}  #{render_logic(winning_board, guess_board)}\n"
     end
   end
 

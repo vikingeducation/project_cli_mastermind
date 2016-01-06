@@ -2,6 +2,12 @@
 
 class Logic
 
+  def initialize
+    @winning_board = nil
+    @guess_board = nil
+  end
+
+
   def evaluate_color(winning_board, guess_board)
     #returns how many correct colors
     color_count = 0
