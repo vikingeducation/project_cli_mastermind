@@ -10,7 +10,6 @@ class Mastermind
 
     # set up player
     @player = Player.new @board
-    @turn = 1
   end
 
   # play
@@ -22,18 +21,17 @@ class Mastermind
 
     # loop twelve times
     # 12.times do
-    while @turn <= 12
+    while @board.turn <= 12
 
       # render board
       @board.render
 
       # ask for user input
-      @player.get_input(@turn)
+      @player.get_input(@board.turn)
 
       # check_victory
       break if victory?
 
-      @turn += 1
     end
 
     # run loser_message

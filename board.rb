@@ -1,4 +1,5 @@
 class Board
+  attr_accessor :turn
   # initialize board
   def initialize
     # set up blank data structure
@@ -32,25 +33,43 @@ class Board
     end 
   end
 
-  # add_pegs(usr_input, turn)
+  # add_pegs(usr_input)
+  def add_pegs(usr_input)
     # If input_valid?
+    if input_valid?(usr_input)
       # place pegs
-    # else
-      # display error message
+      board[turn] = usr_input
+      @turn += 1
+    else
+      puts "Invalid input."
+    end
+  end
 
   # input_valid?
-    # input_color_valid?
-    # input_length_valid?
-
+  def input_valid?(usr_input)
+    input_color_valid?(usr_input) && input_length_valid?(usr_input)
+  end
+    
   # input_color_valid?
+  def input_color_valid?(usr_input)
     # If are the inputs included in all possible colors?
+    usr_input.all? { |chr| POSSIBLE_COLORS.include?(chr) }
+  end
 
   # input_length_valid?
+  def input_length_valid?(usr_input)
     # input length correct
+    usr_input.length == 4
+  end
 
   # generate_feedback
+  def generate_feedback(usr_input)
+    solution = @winning_solution
+    guess = usr_input
+    accuracy = []
     # compare_input
     # print possible feedbacks
+  end
 
 
   # print_feedback
@@ -61,8 +80,18 @@ class Board
     # for each peg does it match the winning peg?
     # delete red matches from the placeholder arrays
 
-    solution = ["R"]
-    guess = ["G", "Y", "G"]
+solution = ["G", "R", "B", "Y"]
+guess = ["G", "G", "R", "P"]
+
+def feedback(usr_input)
+  usr_input.each_with_index do |val, index|
+    if val == @winning_combination[index] && accuracy[index] != "r" && usr_input_index != index
+      accuracy << "y"
+    end
+  end
+end
+
+accuracy = ["r", "y"]
 
   # white_feedback?
     # receive arrays from red_feedback

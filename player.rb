@@ -8,19 +8,15 @@ class Player
   end
 
   # get_input
-  def get_input(turn)
+  def get_input
     # loop infinitely
     loop do
       # ask_for_input
       usr_input = ask_for_input
+      @board.add_peg(usr_input)
 
-      # IF validate_input is true
-      if @board.input_valid?(usr_input)
-        # break loop
-        @board.add_peg(usr_input, turn)
-          break
-      end
     end
+  end
 
   # ask_for_input
   def ask_for_input
