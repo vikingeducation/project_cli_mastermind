@@ -3,6 +3,10 @@ class Peg
     @display = display
   end
 
+  def ==(other_peg)
+    display == other_peg.display
+  end
+
   def display
     @display
   end

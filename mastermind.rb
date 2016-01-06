@@ -1,7 +1,8 @@
 require 'rainbow'
+require_relative 'correctitudable'
 require_relative 'peg'
 require_relative 'code'
-require_relative 'correctitudable'
+require_relative 'computer'
 
 class Game
   include Correctitudable
@@ -14,33 +15,63 @@ class Game
   end
 
   def play
-
     puts Rainbow("WELCOME TO MASTERMIND").red
     if @cheat_mode
       puts "Here's the solution, you cheating bastard:"
       puts @solution.display
     end
 
-    until game_over?
-      puts
-      ask_player_input
-      puts
-      puts display_guesses
-    end
-
-    if guess_correct?
-      puts "You guessed correctly! The solution was indeed:"
-      puts @solution.display
-    elsif out_of_turns?
-      puts "Sorry! You're out of turns. The code was:"
-      puts @solution.display
+    puts "CODEBREAKER or CODEMAKER?"
+    if gets.chomp.downcase == "codebreaker"
+      codebreaker_game
+    else
+      codemaker_game
     end
   end
 
-  private
+  def codemaker_game
+    computer = Computer.new
+    puts
+    ask_codemaker_input
+      until game_over?
+        puts
 
-  # First we check for the position and color. Popping those values from
-  # both arrays.
+        guess = computer.next_guess
+        @guesses << guess
+
+        results = determine_correctitude(guess, @solution)
+        puts display_guesses
+        computer.purge_space(results)
+        puts
+      end
+
+      if guess_correct?
+        puts "What? The computer won??? And in only #{@guesses.count} guesses!"
+        puts @solution.display
+      elsif out_of_turns?
+        puts "Mankind prevails! The computer is stupid and lost."
+        puts @solution.display
+      end
+  end
+
+  def codebreaker_game
+      until game_over?
+        puts
+        ask_codebreaker_input
+        puts
+        puts display_guesses
+      end
+
+      if guess_correct?
+        puts "You guessed correctly! The solution was indeed:"
+        puts @solution.display
+      elsif out_of_turns?
+        puts "Sorry! You're out of turns. The code was:"
+        puts @solution.display
+      end
+  end
+
+  private
 
   def display_dots(correct_position, correct_color)
     output = []
@@ -58,11 +89,22 @@ class Game
     @guesses.each do |guess|
       line = []
       line << guess.display
-      line << determine_correctitude(guess)
+      results = determine_correctitude(guess, @solution)
+      line << display_dots(*results)
       output << line.join("  ")
     end
     output.join("\n")
   end
+
+  def ask_codemaker_input
+    puts "Time to stump a random number generator."
+    @solution = ask_player_input
+  end
+
+  def ask_codebreaker_input
+    @guesses << ask_player_input
+  end
+
 
   def ask_player_input
     loop do
@@ -71,9 +113,9 @@ class Game
       array = extract_numbers_from_string(input)
       unless valid_array?(array)
         puts Rainbow("Invalid guess! Enter 4 numbers between 1-6.").red
+        next
       end
-      @guesses << Code.from_array(array)
-      break
+      return Code.from_array(array)
     end
   end
 
@@ -106,6 +148,4 @@ class Game
   end
 end
 
-
-Game.new(true).play
-
+Game.new(false).play

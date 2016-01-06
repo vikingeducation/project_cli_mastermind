@@ -5,15 +5,23 @@
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
 !_TAG_PROGRAM_VERSION	5.8	//
 ==	/Users/kitlangton/Viking/Unit3/project_cli_mastermind/code.rb	/^  def ==(other_code)$/;"	f	class:Code
+==	/Users/kitlangton/Viking/Unit3/project_cli_mastermind/peg.rb	/^  def ==(other_peg)$/;"	f	class:Peg
 Board	/Users/kitlangton/Viking/Unit3/project_cli_mastermind/board.rb	/^class Board$/;"	c
 Code	/Users/kitlangton/Viking/Unit3/project_cli_mastermind/code.rb	/^class Code$/;"	c
+Computer	/Users/kitlangton/Viking/Unit3/project_cli_mastermind/computer.rb	/^class Computer$/;"	c
 Correctitudable	/Users/kitlangton/Viking/Unit3/project_cli_mastermind/correctitudable.rb	/^module Correctitudable$/;"	m
 Game	/Users/kitlangton/Viking/Unit3/project_cli_mastermind/mastermind.rb	/^class Game$/;"	c
 Peg	/Users/kitlangton/Viking/Unit3/project_cli_mastermind/peg.rb	/^class Peg$/;"	c
 add_peg	/Users/kitlangton/Viking/Unit3/project_cli_mastermind/code.rb	/^  def add_peg(peg)$/;"	f	class:Code
+all_guesses	/Users/kitlangton/Viking/Unit3/project_cli_mastermind/computer.rb	/^  def all_guesses$/;"	f	class:Computer
+answer_combinations	/Users/kitlangton/Viking/Unit3/project_cli_mastermind/computer.rb	/^  def answer_combinations$/;"	f	class:Computer.all_guesses.minimax
+ask_codebreaker_input	/Users/kitlangton/Viking/Unit3/project_cli_mastermind/mastermind.rb	/^  def ask_codebreaker_input$/;"	f
+ask_codemaker_input	/Users/kitlangton/Viking/Unit3/project_cli_mastermind/mastermind.rb	/^  def ask_codemaker_input$/;"	f
 ask_player_input	/Users/kitlangton/Viking/Unit3/project_cli_mastermind/mastermind.rb	/^  def ask_player_input$/;"	f
 blue	/Users/kitlangton/Viking/Unit3/project_cli_mastermind/peg.rb	/^  def self.blue$/;"	F	class:Peg
-determine_correctitude	/Users/kitlangton/Viking/Unit3/project_cli_mastermind/correctitudable.rb	/^  def determine_correctitude(guess)$/;"	f	class:Correctitudable
+codebreaker_game	/Users/kitlangton/Viking/Unit3/project_cli_mastermind/mastermind.rb	/^  def codebreaker_game$/;"	f
+codemaker_game	/Users/kitlangton/Viking/Unit3/project_cli_mastermind/mastermind.rb	/^  def codemaker_game$/;"	f	class:Game
+determine_correctitude	/Users/kitlangton/Viking/Unit3/project_cli_mastermind/correctitudable.rb	/^  def determine_correctitude(guess, solution)$/;"	f	class:Correctitudable
 display	/Users/kitlangton/Viking/Unit3/project_cli_mastermind/code.rb	/^  def display$/;"	f	class:Code
 display	/Users/kitlangton/Viking/Unit3/project_cli_mastermind/peg.rb	/^  def display$/;"	f	class:Peg
 display_dots	/Users/kitlangton/Viking/Unit3/project_cli_mastermind/mastermind.rb	/^  def display_dots(correct_position, correct_color)$/;"	f
@@ -26,15 +34,20 @@ green	/Users/kitlangton/Viking/Unit3/project_cli_mastermind/peg.rb	/^  def self.
 guess_correct?	/Users/kitlangton/Viking/Unit3/project_cli_mastermind/mastermind.rb	/^  def guess_correct?$/;"	f
 initialize	/Users/kitlangton/Viking/Unit3/project_cli_mastermind/board.rb	/^  def initialize$/;"	f	class:Board
 initialize	/Users/kitlangton/Viking/Unit3/project_cli_mastermind/code.rb	/^  def initialize$/;"	f	class:Code
+initialize	/Users/kitlangton/Viking/Unit3/project_cli_mastermind/computer.rb	/^  def initialize$/;"	f	class:Computer
 initialize	/Users/kitlangton/Viking/Unit3/project_cli_mastermind/mastermind.rb	/^  def initialize(cheat)$/;"	f	class:Game
 initialize	/Users/kitlangton/Viking/Unit3/project_cli_mastermind/peg.rb	/^  def initialize(display)$/;"	f	class:Peg
+minimax	/Users/kitlangton/Viking/Unit3/project_cli_mastermind/computer.rb	/^  def minimax$/;"	f	class:Computer.all_guesses
+next_guess	/Users/kitlangton/Viking/Unit3/project_cli_mastermind/computer.rb	/^  def next_guess$/;"	f	class:Computer.all_guesses.minimax
 orange	/Users/kitlangton/Viking/Unit3/project_cli_mastermind/peg.rb	/^  def self.orange$/;"	F	class:Peg
 out_of_turns?	/Users/kitlangton/Viking/Unit3/project_cli_mastermind/mastermind.rb	/^  def out_of_turns?$/;"	f
 play	/Users/kitlangton/Viking/Unit3/project_cli_mastermind/mastermind.rb	/^  def play$/;"	f	class:Game
+purge_space	/Users/kitlangton/Viking/Unit3/project_cli_mastermind/computer.rb	/^  def purge_space(results)$/;"	f	class:Computer.all_guesses
 purple	/Users/kitlangton/Viking/Unit3/project_cli_mastermind/peg.rb	/^  def self.purple$/;"	F	class:Peg
 random	/Users/kitlangton/Viking/Unit3/project_cli_mastermind/code.rb	/^  def self.random$/;"	F	class:Code
 red	/Users/kitlangton/Viking/Unit3/project_cli_mastermind/peg.rb	/^  def self.red$/;"	F	class:Peg
 valid_array?	/Users/kitlangton/Viking/Unit3/project_cli_mastermind/mastermind.rb	/^  def valid_array?(array)$/;"	f
 valid_length?	/Users/kitlangton/Viking/Unit3/project_cli_mastermind/mastermind.rb	/^  def valid_length?(array)$/;"	f
+valid_range?	/Users/kitlangton/Viking/Unit3/project_cli_mastermind/computer.rb	/^  def valid_range?(array)$/;"	f	class:Computer.all_guesses
 valid_range?	/Users/kitlangton/Viking/Unit3/project_cli_mastermind/mastermind.rb	/^  def valid_range?(array)$/;"	f
 yellow	/Users/kitlangton/Viking/Unit3/project_cli_mastermind/peg.rb	/^  def self.yellow$/;"	F	class:Peg
