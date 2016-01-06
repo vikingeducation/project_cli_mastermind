@@ -3,9 +3,7 @@ require_relative './resources.rb'
 class MasterMind
 
   def initialize
-    #players
-    @player_1 = Human.build_codemaker #maker
-    @player_2 = Human.build_codebreaker #breaker
+
     #game_board
     @board = GameBoard.new
   end
@@ -23,21 +21,39 @@ class MasterMind
     @board.render
 
     #ask user for roles and sets them appropriately
-    @player_1.get_and_set_role
-    @player_2.set_role(@player_1.role)
+    player_1 = Human.new 
+    player_2 = Human.new
 
     codebreaker, codemaker = nil, nil
-    if @player_1.role == "codebreaker"
-      codebreaker = @player_1
-      codemaker = @player_2
-    else
-      codebreaker = @player_2
-      codemaker = @player_1
+    if player_1.get_and_set_role == "codebreaker"
+       player_2.set_role(player_1.role)
+      codebreaker = player_1
+      codemaker = player_2
+     else   
+      player_2.set_role(player_1.role)
+      codebreaker = player_2
+      codemaker = player_1
     end
+
+    puts "Player #{player_1.role}, Player2 #{player_2.role}"
 
     # ask codemaker to create answer_key (if it's computer it'll be automatic, if player handle input)
     #codemaker.make_answer_key
+    #if player is computer 
+    #  generate the answer_key
+    # else 
+    #  get the answer_key
+    #
 
+     @board.set_answer_key(code_maker.get_color_pegs)
+     puts @board.answer_key.inspect 
+
+     while !win
+      @board.render
+
+      get_color_pegs
+
+     end     
     # start game loop here
       #print the board
       #ask codebreaker to make move (if it's computer it'll print)

@@ -1,6 +1,8 @@
 require_relative './player.rb'
 
 class Computer < Player
-  def initialize
-  end
+
+  def generate_answer_key
+     
+  end	
 end
