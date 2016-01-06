@@ -10,11 +10,12 @@ class Game
     @winning_board = []
     @codemaker = nil
     @codebreaker = nil
+    @logic = Logic.new
   end
 
 
   def print_instructions
-    puts "Welcome to Mastermind! The point of the game is to guess a hidden combination of four pegs. You get 12 guesses. Each peg has a different color and position. The valid colors to guess are: red, orange, yellow, green, blue and purple."
+    puts "Welcome to Mastermind! The point of the game is to guess a hidden combination of four pegs. \n You get 12 guesses. \nEach peg has a different color and position. \nThe valid colors to guess are: red, orange, yellow, green, blue and purple."
   end
 
 
@@ -48,14 +49,11 @@ class Game
     @winning_board = @codemaker.create_board 
     print @winning_board
     # ask for guesses, constantly display current board with previous guesses
-    puts "user has won?", user_has_won?
-    puts "turns: ", @codebreaker.turn == 0
+
     until user_has_won? || (@codebreaker.turn == 0)
-      puts "i'm in here!"
       @codebreaker.guess = @codebreaker.create_board
       @codebreaker.turn -= 1
-
-
+      puts @logic.evaluate_color(@winning_board, @codebreaker.guess)
     end
     # check if guess was winning guess
 
