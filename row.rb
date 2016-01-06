@@ -15,4 +15,7 @@ class Row
     colors.join(", ")
   end
 
+  def ==(other_row)
+    self.slots == other_row.slots
+  end
 end
