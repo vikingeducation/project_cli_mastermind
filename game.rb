@@ -55,7 +55,9 @@ class Game
     determine_codemaker
     # make winning board
     @winning_board = @codemaker.create_board 
+    puts "==================="
     print "(winning board)", @winning_board, "\n"
+    puts "==================="
     # ask for guesses, constantly display current board with previous guesses
     previous_guesses = []
 
@@ -68,8 +70,8 @@ class Game
       @board.render(previous_guesses, @winning_board, @codebreaker.guess)
 
     end
-    # check if guess was winning guess
-
+    # print congrats or you lose
+    user_has_won? ? (puts "Congratulations! You win!") : (puts "Sorry, you lose!")
 
   end
 

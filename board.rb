@@ -21,7 +21,7 @@ class Board
 
   def render(previous_guesses, winning_board, guess_board)
     previous_guesses.each do |row|
-      print "You have not won yet. Here are your guesses:"
+      print "Previous guesses:"
       print "\n#{row}  #{render_logic(winning_board, guess_board)}\n"
     end
   end

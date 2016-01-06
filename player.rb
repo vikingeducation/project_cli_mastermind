@@ -5,7 +5,7 @@ class Player
   attr_accessor :guess, :turn, :board
 
   def initialize
-    @turn = 12
+    @turn = 2
     @board = Board.new
     @guess = nil
   end
