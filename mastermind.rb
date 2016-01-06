@@ -7,17 +7,24 @@ class Game
   include Correctitudable
 
   GUESS_LIMIT = 12
-  def initialize
+  def initialize(cheat)
     @solution = Code.random
     @guesses = []
+    @cheat_mode = cheat
   end
 
   def play
-    puts @solution.display
-    puts
+
+    puts Rainbow("WELCOME TO MASTERMIND").red
+    if @cheat_mode
+      puts "Here's the solution, you cheating bastard:"
+      puts @solution.display
+    end
 
     until game_over?
+      puts
       ask_player_input
+      puts
       puts display_guesses
     end
 
@@ -61,18 +68,29 @@ class Game
     loop do
       puts "Enter your code. (e.g. 1 2 3 4)"
       input = gets.chomp
-      array = input.scan(/\d/).map(&:to_i)
-      unless array.length == 4
-        puts "Invalid guess. Must enter 4 numbers."
-        next
-      end
-      unless array.all?{ |i| (1..6) === i }
-        puts "Invalid guess. Numbers must be between 1-6."
-        next
+      array = extract_numbers_from_string(input)
+      unless valid_array?(array)
+        puts Rainbow("Invalid guess! Enter 4 numbers between 1-6.").red
       end
       @guesses << Code.from_array(array)
       break
     end
+  end
+
+  def valid_array?(array)
+    valid_range?(array) && valid_length?(array)
+  end
+
+  def valid_range?(array)
+    array.all?{ |i| (1..6) === i }
+  end
+
+  def valid_length?(array)
+    array.length == 4
+  end
+
+  def extract_numbers_from_string(string)
+    string.scan(/\d/).map(&:to_i)
   end
 
   def game_over?
@@ -89,5 +107,5 @@ class Game
 end
 
 
-Game.new.play
+Game.new(true).play
 
