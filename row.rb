@@ -3,7 +3,7 @@ class Row
   def initialize
     @slots = []
   end
-
+  
   def populate_row ( colors )
     colors.each do | color |
       @slots << Peg.new( color )
