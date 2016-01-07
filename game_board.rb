@@ -61,11 +61,26 @@ class GameBoard
   end
 
   def codemaker_response(row, guess)
+    
+    black_pegs,white_pegs = 0,0
+    my_guess = guess.dup
+
     guess.each_with_index do |peg, index|
       if peg == @answer_key[index]
-        @board[row][index + 4] = "black"
-      end
+         black_pegs += 1
+         my_guess[index] = nil
+      end 
     end
+
+    my_guess.each do |peg|
+      if answer_key.include?(peg)
+          white_pegs += 1
+      end 
+    end
+ 
+    while black_pegs > 0
+      
+    end  
   end
 
 end
