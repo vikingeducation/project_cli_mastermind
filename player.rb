@@ -14,7 +14,7 @@ class Player
 
 
 	def get_input
-		puts "input pls"
+		puts "Enter move: "
 		arr = gets.chomp.split('')
 		if input_valid?(arr)
 			@move = arr

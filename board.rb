@@ -4,71 +4,69 @@ class Board
 	attr_reader :win_code
 	def initialize
 		@board = []
-		@feedback = []
 		setup
-		@win_code = create_code
+		create_code
 	end
 
 	def setup
 		12.times do |row|
-			@board[row] = %w(_)*4
+			@board[row] = %w(_)*4, []
 		end
 	end
 
 	def create_code
-		%w(r b g y)
+		@win_code = %w(r b g y)
 	end
 
 	def render
-		12.times do |row|
-			print @board[-row]
-			print @feedback
+		puts "~"*40
+		(1..12).each do |row|
+			puts "#{@board[-row][0]}#{@board[-row][1]}"
 			puts ""
 		end
+		puts "~"*40
 	end
 
 	def full?(turn)
-		turn > 12
+		turn > 11
 	end
 
 	def winning_combination?(turn)
 		row = turn - 1
-		@board[row] == @win_code
+		@board[row][0] == @win_code
 	end
 
-	def add_move(arr, row)
-		@board[row] = arr
-		puts "get here"
-		feedbacks(row)
+	def add_move(move, row)
+		check_feedbacks(move)
+		@board[row] = move, @feedback
 	end
 
-	def red_feedback(code, input)
+	def red_feedbacks(move)
 		4.times do |idx|
-			if code[idx] == input[idx]
-				code.delete_at(idx)
-				input.delete_at(idx)
-				@feedback << "R"
+			if move[idx] == @win_code[idx]
+				@hash[idx] = "R"
 			end
 		end
 	end
 
 
-	def white_feedbacks(code, input)
-		input.each do |color|
-			code.length.times do |idx|
-				if code[idx] == color
-					code.shift!
-					@feedback << "W"
+	def white_feedbacks(move)
+		move.each do |color|
+			4.times do |idx|
+				if color == @win_code[idx]
+					@hash[idx] = "W" unless @hash.has_key?(idx)
 				end
 			end
 		end
 	end
 
-	def feedbacks(row)
-		code = @win_code
-		input = @board[row]
+	def check_feedbacks(move)
 		@feedback = []
-		red_feedback(code, input)
-		white_feedbacks(code, input)
+		@hash = {}
+		red_feedbacks(move)
+		white_feedbacks(move)
+		@hash.each do |key, val|
+			@feedback << val
+		end
 	end
 end
