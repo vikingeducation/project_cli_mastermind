@@ -1,8 +1,9 @@
 class Board
-  attr_accessor :combination
+  attr_accessor :combination, :correct_or_not
   def initialize
     @board_game = {}
     @combination = {}
+    @correct_or_not = {}
     random_combination
     create_board
   end
@@ -13,33 +14,28 @@ class Board
 
 
   def render_board
-    4.downto(1) do |row|
-      @board_game.each do |k, v|
-        if k >= 10
-          print v[row].to_s + "   "
-        else
-          print v[row].to_s + "  "
-        end
+    puts "*  *  *  *"
+    12.downto(1).each do |row|
+      @board_game[row].values.each do |value|
+        print value.to_s + "  "
       end
-      print "  *\n"
+      unless correct_or_not[row].nil?
+        print " near: #{correct_or_not[row]["near"]}, correct: #{correct_or_not[row]["exact"]}"
+      end
+      print "\n"
     end
-    @board_game.keys.each { |key| print key.to_s + "  "}
-    print "  C\n"
   end
 
 
-  def compare input
+  def compare( input, turn )
     check_win input
-
+    correct_or_not[turn] = {"near" => 0, "exact" => 0}
     combination.each do |key, value|
 
       if input[key] == value
-        puts "It's right"
+        correct_or_not[turn]["exact"] += 1
       elsif input.values.include?(value)
-        puts "Nearly right"
-      else
-
-        puts "didnt do it"
+        correct_or_not[turn]["near"] += 1
       end
     end
   end
@@ -54,10 +50,8 @@ class Board
 
 
   def save_in_board( input, turn )
-    i = 4
-    input.values.each do |value|
-      @board_game[turn][i] = value
-      i -= 1
+    input.each do |key, value|
+      @board_game[turn][key] = value
     end
   end
 

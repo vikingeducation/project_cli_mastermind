@@ -46,7 +46,7 @@ class Mastermind
 
   def check_save_input input
     @board.save_in_board( input, @turn )
-    @board.compare input
+    @board.compare( input, @turn )
   end
 
 
