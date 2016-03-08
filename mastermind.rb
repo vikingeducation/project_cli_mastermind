@@ -15,70 +15,51 @@ loose, show combination                       Board
 
 =end
 
+require_relative "player"
+require_relative "board"
+
 class Mastermind
+  attr_accessor :turn, :board
+
   def initialize
     @board = Board.new
     @player = Player.new
+    @turn = 1
     play
   end
 
   def play
-    @board.random_combination
-    @board.create_board
     instruction
-    @board.render
+    @board.random_combination
+    @board.render_board
+
+    while @turn < 13
+      input = @player.get_combination
+      check_save_input input
+
+      @board.render_board
+      @turn += 1
+
+    end
+    puts "you loose!"
   end
+
+  def check_save_input input
+    @board.save_in_board( input, @turn )
+    @board.compare input
+  end
+
 
   def instruction
     puts "hello"
     puts "guess the combination\n"
+    puts "Enter Your Combination, compose of 4 numbers\n"
+    puts "In between 1 and 6, like so :   2 4 1 6\n"
   end
 end
 
 
-class Board
-  def initialize
-    @combination = {}
-    @board = {}
-  end
-
-  def random_combination
-    combination = {}
-    (1..4).each do |i|
-      combination[i] = rand(1..6)
-    end
-    combination
-  end
-
-  def create_board
-    (1..12).each { |row| @board[row] = {1 => 0, 2 => 0, 3 => 0, 4 => 0} }
-  end
-
-  def render_board
-    4.downto(1) do |row|
-      @board.each do |k, v|
-        if k >= 10
-          print v[row].to_s + "   "
-        else
-          print v[row].to_s + "  "
-        end
-      end
-      print "  *\n"
-    end
-    @board.keys.each { |key| print key.to_s + "  "}
-    print "  C\n"
-  end
-end
-
-
-class Player
-  def enter_input
-  end
-    
-end
-
-a = Mastermind.new
-
+game = Mastermind.new
 
 
 
