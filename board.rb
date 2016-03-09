@@ -5,7 +5,6 @@ class Board
     @board_game = {}
     @code = {}
     @close_or_exact = {}
-    create_code
     create_board
   end
 
@@ -54,11 +53,26 @@ class Board
   end
 
 
-  def save_in( input, turn )
+  def save_guess( input, turn )
     input.each do |key, value|
       @board_game[turn][key] = value
     end
   end
+
+  def save_code input
+    input.each do |k, v|
+      code[k] = v
+    end
+  end
+
+  def make_guess
+    computer_guess = {}
+    (1..4).each do |i|
+      computer_guess[i] = rand(1..6)
+    end
+    computer_guess
+  end
+    
 
 
   def create_code
