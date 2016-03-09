@@ -1,52 +1,37 @@
-=begin
-initialize the game         Mastermind
-initialize the board        Board
-initialize the player       Player
-make a random combination   Board
-
-loop 12 times               Mastermind
-  ask player for guess      Player
-  compare to the solution   Board
-    near_clue if one color match the solution Board
-    right_clue if one color is well place     Board
-  check victory state                         Board
-end
-loose, show combination                       Board
-
-=end
 
 require_relative "player"
 require_relative "board"
 
 class Mastermind
-  attr_accessor :turn, :board
 
   def initialize
     @board = Board.new
     @player = Player.new
     @turn = 1
-    play
+  end
+
+  def turn
+    @turn
   end
 
   def play
     instruction
-    @board.random_combination
     @board.render_board
 
-    while @turn < 13
+    while turn < 13
       input = @player.get_combination
-      check_save_input input
+
+      analyse input
 
       @board.render_board
       @turn += 1
 
     end
-    puts "you loose!"
   end
 
-  def check_save_input input
-    @board.save_in_board( input, @turn )
-    @board.compare( input, @turn )
+  def analyse input
+    @board.save_in( input, turn )
+    @board.compare( input, turn )
   end
 
 
@@ -60,6 +45,7 @@ end
 
 
 game = Mastermind.new
+game.play
 
 
 

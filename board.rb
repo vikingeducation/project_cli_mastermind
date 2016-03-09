@@ -1,10 +1,11 @@
 class Board
-  attr_accessor :combination, :correct_or_not
+  attr_accessor :code, :close_or_exact
+
   def initialize
     @board_game = {}
-    @combination = {}
-    @correct_or_not = {}
-    random_combination
+    @code = {}
+    @close_or_exact = {}
+    create_code
     create_board
   end
 
@@ -19,8 +20,8 @@ class Board
       @board_game[row].values.each do |value|
         print value.to_s + "  "
       end
-      unless correct_or_not[row].nil?
-        print " near: #{correct_or_not[row]["near"]}, correct: #{correct_or_not[row]["exact"]}"
+      unless close_or_exact[row].nil?
+        print " near: #{close_or_exact[row]["near"]}, correct: #{close_or_exact[row]["exact"]}"
       end
       print "\n"
     end
@@ -28,39 +29,43 @@ class Board
 
 
   def compare( input, turn )
-    check_win input
-    correct_or_not[turn] = {"near" => 0, "exact" => 0}
-    combination.each do |key, value|
+    check_win( input, turn )
+    close_or_exact[turn] = {"near" => 0, "exact" => 0}
+    code.each do |key, value|
 
       if input[key] == value
-        correct_or_not[turn]["exact"] += 1
+        close_or_exact[turn]["exact"] += 1
       elsif input.values.include?(value)
-        correct_or_not[turn]["near"] += 1
+        close_or_exact[turn]["near"] += 1
       end
     end
   end
 
-  def check_win input
-    if combination == input
-      puts "\n You find the combination ! You Win !\n"
-      puts " The combination was #{combination} !\n"
+  def check_win( input, turn )
+
+    if code == input
+      puts "\n You find the code ! You Win !\n"
+      puts " The code was #{code} !\n"
       exit
+    elsif turn == 12
+      puts "\nThe code was #{code} !"
+      puts "\n Well Tried !\n"
     end
   end
 
 
-  def save_in_board( input, turn )
+  def save_in( input, turn )
     input.each do |key, value|
       @board_game[turn][key] = value
     end
   end
 
 
-  def random_combination
+  def create_code
     (1..4).each do |i|
-      combination[i] = rand(1..6)
+      code[i] = rand(1..6)
     end
-    puts combination
+    puts code
   end
 
 end
