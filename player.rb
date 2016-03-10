@@ -4,6 +4,7 @@ class Player
     gets.chomp.split(" ").map!(&:to_i)
   end
 
+
   def good_format? input
     if input.is_a?(Array) && input.size == 4
       return true
@@ -11,6 +12,7 @@ class Player
       puts "Your combination guess should be in the form  2 3 4 1\n"
     end
   end
+
 
   def in_range? input
     if input.all? { |guess| guess.between?(1,6) }
@@ -31,6 +33,7 @@ class Player
       end
     end
   end
+
 
   def transform_in_hash input
     input_hash = {}

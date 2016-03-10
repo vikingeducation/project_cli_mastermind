@@ -1,4 +1,7 @@
+require_relative "logic"
+
 class Board
+  include Logic
   attr_accessor :code, :close_or_exact
 
   def initialize
@@ -7,6 +10,7 @@ class Board
     @close_or_exact = {}
     create_board
   end
+
 
   def create_board
     (1..12).each { |row| @board_game[row] = {1 => 0, 2 => 0, 3 => 0, 4 => 0} }
@@ -24,62 +28,20 @@ class Board
       end
       print "\n"
     end
+    puts "\n"
   end
 
 
-  def compare( input, turn )
-    check_win( input, turn )
-    close_or_exact[turn] = {"near" => 0, "exact" => 0}
-    code.each do |key, value|
-
-      if input[key] == value
-        close_or_exact[turn]["exact"] += 1
-      elsif input.values.include?(value)
-        close_or_exact[turn]["near"] += 1
+  def save( input, turn = nil )
+    if turn.nil?
+      input.each do |k, v|
+        code[k] = v
+      end
+    else
+      input.each do |key, value|
+        @board_game[turn][key] = value
       end
     end
-  end
-
-  def check_win( input, turn )
-
-    if code == input
-      puts "\n You find the code ! You Win !\n"
-      puts " The code was #{code} !\n"
-      exit
-    elsif turn == 12
-      puts "\nThe code was #{code} !"
-      puts "\n Well Tried !\n"
-    end
-  end
-
-
-  def save_guess( input, turn )
-    input.each do |key, value|
-      @board_game[turn][key] = value
-    end
-  end
-
-  def save_code input
-    input.each do |k, v|
-      code[k] = v
-    end
-  end
-
-  def make_guess
-    computer_guess = {}
-    (1..4).each do |i|
-      computer_guess[i] = rand(1..6)
-    end
-    computer_guess
-  end
-    
-
-
-  def create_code
-    (1..4).each do |i|
-      code[i] = rand(1..6)
-    end
-    puts code
   end
 
 end
