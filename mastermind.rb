@@ -28,6 +28,8 @@ class Game
       else
         puts "#{pending[:exact].length} Exact Matches"
         puts "#{pending[:near].length} Near Matches"
+        puts "#" * 10
+        puts
       end
     end
 
