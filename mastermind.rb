@@ -33,7 +33,7 @@ class Game
       end
     end
 
-    puts "You LOSE!"
+    puts "LOSER!"
     puts "The winning combination was actually #{@@code_sequence.join(",")}"
     return
   end
@@ -98,6 +98,10 @@ class Computer
       @code_sequence << @colors.pop
     end
     return @code_sequence
+  end
+
+  def guess_code
+    self.generate_code
   end
 
 end
