@@ -120,17 +120,5 @@ class Display
   end
 end
 
-
-
-
-
-
-
-
-
-
-
-
-
 mastermind = Mastermind.new("Bill", 5)
 mastermind.start
