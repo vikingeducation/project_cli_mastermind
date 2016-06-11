@@ -7,9 +7,8 @@
 #
 # 1. Player > CodeMaker, CodeBreaker
 # 2. Board       - Array of Rows
-# 3. Rows        - :pegs[4], :close , :exact
-# 3. Peg         - @color
-
+# 3. Rows        - pegs[4], :close , :exact
+# 3. Peg         - color
 #Verbs :
 # 1. place pegs on board - guess
 # 2. Compare code with secret
@@ -38,6 +37,16 @@ class Peg
     @color.hash
   end
 
+  def color
+    case @color
+      when :r then "Red"
+      when :g then "Green"
+      when :b then "Blue"
+      when :y then "Yellow"
+      when :o then "Orange"
+      when :p then "Purple"
+    end
+  end
 end
 
 class Row
@@ -62,10 +71,29 @@ class CodeBreaker < Player
 
   def place_pegs(board, index)
     row = board.slots[index]
-    row.pegs[0] = Peg.new(:r)
-    row.pegs[1] = Peg.new(:y)
-    row.pegs[2] = Peg.new(:g)
-    row.pegs[3] = Peg.new(:b)
+    get_input_from_code_breaker.each_with_index do |str, index|
+      row.pegs[index] = Peg.new(str.to_sym)
+    end
+  end
+
+  def get_input_from_code_breaker
+    input = []
+    loop do
+      puts "Enter Peg order>"
+      raw_input = gets.chomp
+      if raw_input == 'q'
+        exit
+      else
+        input = raw_input.split("")
+        if input & ['r', 'g', 'b', 'p', 'y', 'o'] == input &&
+           input.size == 4
+          break
+        end
+        puts "Please enter a valid input - 4 unique pegs"
+        puts "Available pegs : Red(r) Green(g) Blue(b) Yellow(y) Orange(o) Purple(p)"
+      end
+    end
+    input
   end
 end
 
@@ -100,11 +128,12 @@ class Board
     num_rows.times { @slots << Row.new(num_cols) }
   end
 
-  def render
-    system "clear"
+  def render(opts = {clear: true})
+    system "clear" if opts[:clear]
     @slots.each_with_index do |row, index|
-      puts "#{row.pegs} \t#{row.response}"
-      # print "#{row.pegs[0]} #{row.pegs[1]} #{row.pegs[2]} #{row.pegs[3]} \t#{row.response}"
+      print index.to_s.ljust(3) + "|\t"
+      row.pegs.each {|peg| print peg ? peg.color+"\t\t" : "-"+"\t\t" }
+      puts "| [close: #{row.response[:close]} exact: #{row.response[:exact]}]"
     end
   end
 end
@@ -124,14 +153,16 @@ class Mastermind
   def play
     welcome_msg
     @secret = @code_maker.generate_secret
-    @board.render
+    @board.render(clear: false)
+    winner = nil
     puts
     (0..@max_guess-1).each do |index|
       @code_breaker.place_pegs(@board, index)
       @code_maker.generate_response(@board, index)
       @board.render
-      break
+      break if (winner = check_winner(@board, index))
     end
+    gameover_msg(winner)
   end
 
   private
@@ -147,28 +178,25 @@ class Mastermind
     puts greet_string
   end
 
-  def get_input_from_player
-    input = []
-    loop do
-      puts "Enter Peg order>"
-      raw_input = gets.chomp
-      if raw_input == 'q'
-        exit
-      else
-        input = raw_input.split("")
-        if input & ['r', 'g', 'b', 'g', 'y', 'o'] == input &&
-           input.size == 4
-          break
-        end
-        puts "Please enter a valid input - 4 unique pegs"
-      end
+  def gameover_msg(winner)
+    if winner
+      puts "Congratulations! You win"
+    else
+      puts "Sorry! You ran out of guesses"
     end
-    input
   end
+
+  def check_winner(board, index)
+    row = board.slots[index]
+    response = row.response
+    response[:exact] == NUM_SECRET_PEGS
+  end
+
+
 end
 
 
 
 
-game = Mastermind.new(2)
+game = Mastermind.new(12)
 game.play
