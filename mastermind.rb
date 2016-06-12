@@ -62,21 +62,16 @@ class Player
   def initialize(name)
     @name = name
   end
-end
 
-class CodeBreaker < Player
-  def initialize
-    super "code_breaker"
-  end
-
-  def place_pegs(board, index)
-    row = board.slots[index]
-    get_input_from_code_breaker.each_with_index do |str, index|
-      row.pegs[index] = Peg.new(str.to_sym)
+  def validate_input(user_arr, available_arr)
+    return false if user_arr.size != 4
+    user_arr.each do |item|
+      return false if !available_arr.include?(item)
     end
+    true
   end
 
-  def get_input_from_code_breaker
+  def get_input_from_player
     input = []
     loop do
       puts "Enter Peg order>"
@@ -85,29 +80,12 @@ class CodeBreaker < Player
         exit
       else
         input = raw_input.split("")
-        if input & ['r', 'g', 'b', 'p', 'y', 'o'] == input &&
-           input.size == 4
-          break
-        end
-        puts "Please enter a valid input - 4 unique pegs"
+        break if validate_input(input, ['r', 'g', 'b', 'p', 'y', 'o'])
+        puts "Please enter a valid input - 4 pegs"
         puts "Available pegs : Red(r) Green(g) Blue(b) Yellow(y) Orange(o) Purple(p)"
       end
     end
     input
-  end
-end
-
-class CodeMaker < Player
-  def initialize
-    super "code_maker"
-    @secret = []
-  end
-
-  def generate_secret
-    @secret << Peg.new(:r)
-    @secret << Peg.new(:g)
-    @secret << Peg.new(:y)
-    @secret << Peg.new(:o)
   end
 
   def generate_response(board, index)
@@ -115,13 +93,55 @@ class CodeMaker < Player
     response = row.response
     pegs = row.pegs
     response[:exact]  = @secret.each_index.select { |i| @secret[i] == pegs[i] }.count
-    response[:close] = (pegs & @secret).count - response[:exact]
+    response[:close] =  @secret.each_index.select { |i| pegs.include?(@secret[i]) }.count - response[:exact]
+  end
+end
+
+class Human < Player
+  def initialize
+    super "code_breaker"
+    @secret = []
+  end
+
+  def place_pegs(board, index,num_secret)
+    row = board.slots[index]
+    get_input_from_player.each_with_index do |str, index|
+      row.pegs[index] = Peg.new(str.to_sym)
+    end
+  end
+
+  def generate_secret(num_secret)
+    get_input_from_player.each_with_index do |str, index|
+      @secret << Peg.new(str.to_sym)
+    end
+    @secret
+  end
+end
+
+class Computer < Player
+  def initialize
+    super "code_maker"
+    @secret = []
+  end
+
+  def generate_secret(num_secret)
+    @secret = []
+    arr = ['r', 'g', 'b', 'p', 'y', 'o'].shuffle[0..num_secret-1].each do |str|
+      @secret << Peg.new(str.to_sym)
+    end
+    @secret
+  end
+
+  def place_pegs(board, index, num_secret)
+    row = board.slots[index]
+    (0..num_secret-1).each do |index|
+      row.pegs[index] = Peg.new(['r', 'g', 'b', 'p', 'y', 'o'].sample.to_sym)
+    end
   end
 end
 
 class Board
   COLORS = %w(Red Green Blue Yellow Orange Purple)
-  WINNING_PEGS = %w(r g y o)
   attr_accessor :slots
   def initialize(num_rows, num_cols)
     @slots = []
@@ -143,8 +163,8 @@ class Mastermind
   TOTAL_PEGS      = 6
   attr_reader :max_guess
   def initialize(max_guess)
-    @code_maker = CodeMaker.new
-    @code_breaker = CodeBreaker.new
+    @code_maker = nil
+    @code_breaker = nil
     @secret = []
     @max_guess = max_guess
     @board = Board.new(max_guess, NUM_SECRET_PEGS)
@@ -152,12 +172,13 @@ class Mastermind
 
   def play
     welcome_msg
-    @secret = @code_maker.generate_secret
+    select_role
+    @secret = @code_maker.generate_secret(NUM_SECRET_PEGS)
     @board.render(clear: false)
     winner = nil
     puts
     (0..@max_guess-1).each do |index|
-      @code_breaker.place_pegs(@board, index)
+      @code_breaker.place_pegs(@board, index, NUM_SECRET_PEGS)
       @code_maker.generate_response(@board, index)
       @board.render
       break if (winner = check_winner(@board, index))
@@ -178,11 +199,35 @@ class Mastermind
     puts greet_string
   end
 
+  def select_role
+    puts "Do you want to be a code breaker (cb) or code maker (cm), please enter the corresponding string >"
+    loop do
+      input = gets.chomp
+      if "cb" == input
+        @code_breaker = Human.new
+        @code_maker = Computer.new
+        break
+      elsif "cm" == input
+        @code_maker = Human.new
+        @code_breaker = Computer.new
+        break
+      else
+        puts "Please enter a valid string 'cm' or 'cb' >"
+      end
+    end
+  end
+
   def gameover_msg(winner)
     if winner
-      puts "Congratulations! You win"
+      puts "Congratulations! You win" if @code_breaker.kind_of?(Human)
+      puts "Computer Wins! Your code is broken" if @code_breaker.kind_of?(Computer)
     else
-      puts "Sorry! You ran out of guesses"
+      puts "Sorry! You ran out of guesses" if @code_breaker.kind_of?(Human)
+      puts "You win! Computer failed to break you awesome code" if @code_breaker.kind_of?(Computer)
+      print "Secret Code is [\t"
+      @secret.each {|peg| print peg ? peg.color+"\t\t" : "-"+"\t\t" }
+      print " ]"
+      puts
     end
   end
 
@@ -191,8 +236,6 @@ class Mastermind
     response = row.response
     response[:exact] == NUM_SECRET_PEGS
   end
-
-
 end
 
 
