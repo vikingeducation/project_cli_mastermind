@@ -31,11 +31,8 @@ class Mastermind
 
 
 
-	def check_victory? #BOARD
-		# if code matches player
-			# true
-			# end game (display win message)
-		# else false
+	def check_victory?( guess ) #BOARD
+		@code_maker == guess
 	end
 
 
@@ -72,8 +69,13 @@ class Mastermind
 			# cpu.index(color) == player.index(color) ?
 	end
 
-	def check_guess #BOARD
+	def check_guess( guess ) #BOARD
 
+
+	end
+
+	def max_turn
+		@turn == 12
 	end
 
 	def valid_move?( guess )
