@@ -45,7 +45,6 @@ class Mastermind
 		code_dup = @code_maker.dup
 		guess_dup = guess.dup
 		# first check if the color is there
-
 			guess.each_with_index do | e, i |
 
 				if e == code_dup[i]
@@ -64,7 +63,8 @@ class Mastermind
 				# end
 		end
 
-		guess.each do |x|
+
+		guess_dup.each do |x|
 
 			hint << :w if code_dup.include?(x) unless x == ""
 		end

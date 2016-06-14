@@ -40,7 +40,6 @@ class Board
 			print hint[ count ]
 			count += 1
 		end
-binding.pry
 		puts ""
 	end
 
