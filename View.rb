@@ -35,12 +35,12 @@ class Board
 	def self.render_hint ( hint ) #PLAYER
 		# array  [R,R,R,R]
 		count = 0
-		Board.message(%q(Hint:))
+		print "Hint:"
 		until hint.length == count
 			print hint[ count ]
 			count += 1
 		end
-
+binding.pry
 		puts ""
 	end
 

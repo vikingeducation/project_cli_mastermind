@@ -8,7 +8,7 @@ class Mastermind
 
 	NUM_ROWS = 12
 	NUM_COLS = 4
-	CODE = [:B, :O, :Y, :G, :P, :R]
+	CODE = [:B, :O]
 
 	def initialize( game_state = nil )
 		@code_maker = []
@@ -35,6 +35,7 @@ class Mastermind
 
 	def game_reset
 		@mastermind = Mastermind.new
+		system 'clear'
 	end
 
 
