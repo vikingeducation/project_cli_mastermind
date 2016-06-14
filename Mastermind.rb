@@ -4,7 +4,7 @@
 
 class Mastermind
 
-	attr_accessor :board, :turn
+	attr_accessor :board
 
 	NUM_ROWS = 12
 	NUM_COLS = 4
@@ -32,7 +32,15 @@ class Mastermind
 
 
 	def check_victory?( guess ) #BOARD
-		@code_maker == guess
+		if @code_maker == guess
+			Board.message(%q(You Win!))
+			game_reset
+		end
+	end
+
+
+	def game_reset
+		@mastermind = Mastermind.new
 	end
 
 
@@ -73,6 +81,17 @@ class Mastermind
 
 
 	end
+
+
+
+	def place_guess_on_board ( guess )
+
+		@board[@turn-1] = guess
+
+	end
+
+
+
 
 	def max_turn
 		@turn == 12

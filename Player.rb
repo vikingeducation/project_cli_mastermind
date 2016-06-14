@@ -44,12 +44,15 @@ QUIT = ["q", "quit", "exit"]
 
 		guess = input.upcase.strip.split(",").map { |x| x.to_sym }
 		if @mastermind.valid_move?(guess)
-			if @mastermind.check_victory?( guess )
-				Board.message(%q(You Win!))
-				@mastermind = Mastermind.new
-			end
+
+			@mastermind.check_victory?( guess )
+
+			@mastermind.place_guess_on_board( guess )
+
 		else
+
 			Board.message(%q(Enter a valid guess))
+
 		end
 
 	end
