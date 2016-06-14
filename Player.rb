@@ -30,6 +30,7 @@ QUIT = ["q", "quit", "exit"]
 
 			process(input)
 			Board.render_board( @mastermind )
+
 		end until quit?(input) || @mastermind.max_turn
 	end
 
@@ -45,10 +46,9 @@ QUIT = ["q", "quit", "exit"]
 		guess = input.upcase.strip.split(",").map { |x| x.to_sym }
 		if @mastermind.valid_move?(guess)
 
-			@mastermind.check_victory?( guess )
-
 			@mastermind.place_guess_on_board( guess )
-
+			hint = @mastermind.determine_hints( guess )
+			Board.render_hint( hint )
 		else
 
 			Board.message(%q(Enter a valid guess))

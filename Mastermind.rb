@@ -15,7 +15,6 @@ class Mastermind
 		generate_code
 		@board = game_state || default_state
 		@turn = 0
-
 	end
 
 	def default_state
@@ -23,11 +22,6 @@ class Mastermind
 		Hash.new(0)
 
 	end
-
-	# New Player is generated (PLAYER)
-	# code is generated
-	  # R Y G O P B - possible colors
-
 
 
 
@@ -44,26 +38,56 @@ class Mastermind
 	end
 
 
-	# else CPU displays matching pegs
-	def color_match? #BOARD
+	def determine_hints( guess ) #BOARD
+
+		hint = []
+		code_dup = @code_maker.dup
+		guess_dup = guess.dup
+		# first check if the color is there
+
+			guess.each_with_index do | e, i |
+
+				if e == code_dup[i]
+					hint << :b
+					code_dup[i] = ''
+					guess_dup[i] = ''
+				end
+
+				# if we create a dup of the code_maker
+				# we can delete match to remove the chance of there being
+				# an include? misallocation
+
+					# if it is, put black peg
+				# else
+					# put a white peg
+				# end
+		end
+
+		guess.each do |x|
+
+			hint << :w if code_dup.include?(x) unless x == ""
+		end
+			# end
+
+#		guess.each_with_index do | e, i |
+
+#			if e == @code_maker[i]
+#				hint << :b
+#			end
+#			binding.pry
+#		end
 		# for each player color
 			# does their color === cpu?
 				# => true
 			# else => false
+	return hint
+
 	end
 
-	# until turn 13 - loop through game
-	# player is prompted for 1st guess
-	def game_loop
-		# prompt player for guess
-		# check guess against CPU
-			# if victory - win
-			# else
-				# check color against position
+	def check_exact_match( guess )
 
-
-	 	# display loss upon 13+ turn
 	end
+
 
 	def lose
 		#you lose
@@ -77,20 +101,12 @@ class Mastermind
 			# cpu.index(color) == player.index(color) ?
 	end
 
-	def check_guess( guess ) #BOARD
-
-
-	end
-
-
 
 	def place_guess_on_board ( guess )
 
 		@board[@turn-1] = guess
 
 	end
-
-
 
 
 	def max_turn
@@ -105,6 +121,7 @@ class Mastermind
 		end
 
 		if count == 4
+			check_victory?( guess )
 			@turn += 1
 			return true
 		else
