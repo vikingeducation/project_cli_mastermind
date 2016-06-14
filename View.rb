@@ -9,17 +9,17 @@ class Board
 	def self.render_board( m_mind ) #BOARD
 		# hash or array for rows { 1 => [ _, _, _,  _] ...}
 
-		string = create_grid( m_mind )
+		string = create_string( m_mind )
 
 			string.each do |x|
 
 			print x.split('')[0..3].join
 
-			print "Hint: #{x.split('')[4..(string.length)].join}"
+			print "  Hint: #{x.split('')[4..(x.length-1)].join}"
 
 			puts ""
 
-			binding.pry
+
 		end
 
 
@@ -27,7 +27,7 @@ class Board
 
 
 
-	def self.create_grid( m_mind )
+	def self.create_string( m_mind )
 
 		arr = []
 		m_mind.board.each { | k, v | arr << v.join }
