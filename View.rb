@@ -11,23 +11,28 @@ class Board
 
 		string = create_grid( m_mind )
 
-		count = 0
+			string.each do |x|
 
-		until string.length == count
-			print string[ count ]
-			count += 1
-			puts "" if count % 4 == 0
+			print x.split('')[0..3].join
+
+			print "Hint: #{x.split('')[4..(string.length)].join}"
+
+			puts ""
+
+			binding.pry
 		end
 
 
 	end
 
 
+
 	def self.create_grid( m_mind )
 
 		arr = []
 		m_mind.board.each { | k, v | arr << v.join }
-		return arr.join
+
+		return arr
 
 	end
 

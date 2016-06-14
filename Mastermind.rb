@@ -8,7 +8,7 @@ class Mastermind
 
 	NUM_ROWS = 12
 	NUM_COLS = 4
-	CODE = [:B, :O]
+	CODE = [:R, :G, :B]
 
 	def initialize( game_state = nil )
 		@code_maker = []
@@ -27,15 +27,15 @@ class Mastermind
 
 	def check_victory?( guess ) #BOARD
 		if @code_maker == guess
-			Board.message(%q(You Win!))
+			system 'clear'
+			Board.message(%q(You Win! Let's play again))
 			game_reset
 		end
 	end
 
 
 	def game_reset
-		@mastermind = Mastermind.new
-		system 'clear'
+		Player.new
 	end
 
 
@@ -44,8 +44,8 @@ class Mastermind
 		hint = []
 		code_dup = @code_maker.dup
 		guess_dup = guess.dup
-		# first check if the color is there
-			guess.each_with_index do | e, i |
+
+		guess_dup.each_with_index do | e, i |
 
 				if e == code_dup[i]
 					hint << :b
@@ -53,41 +53,12 @@ class Mastermind
 					guess_dup[i] = ''
 				end
 
-				# if we create a dup of the code_maker
-				# we can delete match to remove the chance of there being
-				# an include? misallocation
-
-					# if it is, put black peg
-				# else
-					# put a white peg
-				# end
 		end
 
-
-		guess_dup.each do |x|
-
-			hint << :w if code_dup.include?(x) unless x == ""
-		end
-			# end
-
-#		guess.each_with_index do | e, i |
-
-#			if e == @code_maker[i]
-#				hint << :b
-#			end
-#			binding.pry
-#		end
-		# for each player color
-			# does their color === cpu?
-				# => true
-			# else => false
-	return hint
+	return position_match( guess_dup, code_dup, hint )
 
 	end
 
-	def check_exact_match( guess )
-
-	end
 
 
 	def lose
@@ -97,22 +68,31 @@ class Mastermind
 
 
 
-	def position_match?( code_breaker, code_maker) #BOARD
-		# check the index of the matched colors
-			# cpu.index(color) == player.index(color) ?
+	def position_match( guess, code, hint ) #BOARD
+
+		guess.each do |x|
+
+			hint << :w if code.include?(x) unless x == ""
+
+		end
+
+		return hint
+
 	end
 
 
 	def place_guess_on_board ( guess )
 
-		@board[@turn-1] = guess
+		@board[ @turn - 1 ] = guess
 
 	end
 
+	def place_hint( hint )
 
-	def max_turn
-		@turn == 12
+		@board[ @turn - 1 ] << hint
+
 	end
+
 
 	def valid_move?( guess )
 		count = 0
@@ -131,12 +111,20 @@ class Mastermind
 
 	end
 
+
+	def max_turn
+		@turn == 12
+	end
+
 private
+
 	def generate_code
-		4.times do
-			@code_maker << CODE.sample
-		end
+
+		4.times {	@code_maker << CODE.sample }
+
 	end
 	# else next turn
+
+
 
 end
