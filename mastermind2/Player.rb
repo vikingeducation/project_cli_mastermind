@@ -11,9 +11,9 @@ QUIT = ["q", "quit", "exit"]
 
 	end
 
-	def select_player
+	def self.select_player
 
-		input = ''gets.strip.upcase''
+		input = ""
 
 		unless input == 'MAKER' || input == 'BREAKER'
 			puts %q(Please enter 'maker' or 'breaker':)
@@ -38,6 +38,8 @@ QUIT = ["q", "quit", "exit"]
 			Board.render_board( @mastermind )
 
 		end until quit?(input) || @mastermind.max_turn
+
+		@mastermind.result
 
 	end
 

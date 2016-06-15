@@ -12,11 +12,11 @@ class Mastermind
 
 	def initialize( game_state = nil )
 
-		if Player.select_player == 'MAKER'
-			@code_maker = []
+		@code_maker = []
+
+		if Player.select_player == 'BREAKER'
 			generate_code
-		else
-			@code_breaker
+		end
 
 		@board = game_state || default_state
 		@turn = 0
@@ -66,8 +66,8 @@ class Mastermind
 
 
 
-	def lose
-		#you lose
+	def result
+		puts "The Code was : #{@code_maker.join}"
 	end
 
 
