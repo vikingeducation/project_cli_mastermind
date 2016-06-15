@@ -9,9 +9,10 @@ class Board
 
 			string.each do |x|
 
+
 			print x.split('')[0..3].join
 
-			print "  Hint: #{x.split('')[4..(x.length-1)].join}" unless x == ""
+			print "  Hint: #{x.split('')[4..(x.length-1)].join}" unless x[4] == nil
 
 			puts ""
 

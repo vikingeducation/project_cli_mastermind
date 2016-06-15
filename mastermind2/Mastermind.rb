@@ -83,10 +83,13 @@ class Mastermind
 
 
 	def place_guess_on_board ( guess )
-		binding.pry
+
 		@board[ @turn - 1 ] = guess
 
 	end
+
+
+
 
 	def place_hint( hint )
 
@@ -104,7 +107,7 @@ class Mastermind
 
 		if count == 4
 			check_victory?( guess )
-			@turn += 1
+			increment_turn
 			return true
 		else
 			return false
@@ -112,6 +115,9 @@ class Mastermind
 
 	end
 
+	def increment_turn
+		@turn += 1
+	end
 
 	def max_turn
 		@turn == 12
@@ -120,10 +126,12 @@ class Mastermind
 
 	def generate_guess
 
+		@cpu_guess = []
+
 		until @cpu_guess.count == 4
 			@cpu_guess << CODE.sample
 		end
-
+		increment_turn
 		return @cpu_guess
 
 	end
