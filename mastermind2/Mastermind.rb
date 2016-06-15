@@ -4,33 +4,29 @@
 
 class Mastermind
 
-	attr_accessor :board
+	attr_accessor :board, :code_maker
 
 	NUM_ROWS = 12
 	NUM_COLS = 4
-	CODE = [:R, :G, :B]
+	CODE = ["R", "G", "B"]
 
 	def initialize( game_state = nil )
 
 		@code_maker = []
+		@cpu_guess = []
 
 		if Player.select_player == 'BREAKER'
 			generate_code
 		end
 
-		@board = game_state || default_state
+		@board = Hash.new(0)
 		@turn = 0
 	end
 
-	def default_state
-
-		Hash.new(0)
-
-	end
 
 
 
-	def check_victory?( guess ) #BOARD
+	def check_victory?( guess )
 		if @code_maker == guess
 			system 'clear'
 			Board.message(%q(You Win! Let's play again))
@@ -44,7 +40,7 @@ class Mastermind
 	end
 
 
-	def determine_hints( guess ) #BOARD
+	def determine_hints( guess )
 
 		hint = []
 		code_dup = @code_maker.dup
@@ -87,7 +83,7 @@ class Mastermind
 
 
 	def place_guess_on_board ( guess )
-
+		binding.pry
 		@board[ @turn - 1 ] = guess
 
 	end
@@ -119,6 +115,17 @@ class Mastermind
 
 	def max_turn
 		@turn == 12
+	end
+
+
+	def generate_guess
+
+		until @cpu_guess.count == 4
+			@cpu_guess << CODE.sample
+		end
+
+		return @cpu_guess
+
 	end
 
 private

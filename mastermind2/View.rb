@@ -2,7 +2,8 @@ require 'pry'
 
 class Board
 
-	def self.render_board( m_mind ) #BOARD
+	def self.render( m_mind ) #BOARD
+
 
 		string = create_string( m_mind )
 
@@ -10,7 +11,7 @@ class Board
 
 			print x.split('')[0..3].join
 
-			print "  Hint: #{x.split('')[4..(x.length-1)].join}"
+			print "  Hint: #{x.split('')[4..(x.length-1)].join}" unless x == ""
 
 			puts ""
 

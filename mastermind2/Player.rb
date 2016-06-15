@@ -7,7 +7,16 @@ QUIT = ["q", "quit", "exit"]
 	def initialize
 
 		@mastermind = Mastermind.new
-		run
+
+		if @mastermind.code_maker == []
+
+		 run_player_as_maker
+
+		else
+
+			run_player_as_breaker
+
+		end
 
 	end
 
@@ -15,7 +24,7 @@ QUIT = ["q", "quit", "exit"]
 
 		input = ""
 
-		unless input == 'MAKER' || input == 'BREAKER'
+		until input == 'MAKER' || input == 'BREAKER'
 			puts %q(Please enter 'maker' or 'breaker':)
 			input = gets.strip.upcase
 		end
@@ -25,11 +34,11 @@ QUIT = ["q", "quit", "exit"]
 	end
 
 
-	def run
+	def run_player_as_breaker
 
 		begin
 			# this is where the 'process' is called (m.mind)
-			Board.message("Choosing from R, G or B, enter a guess in form O,O,O,O")
+			Board.message("Choosing from R, G or B, enter a guess in form OOOO")
 
 			input = gets.strip
 
@@ -45,12 +54,36 @@ QUIT = ["q", "quit", "exit"]
 
 
 
+	def run_player_as_maker
+
+		begin
+
+			input = [""]
+
+			until @mastermind.valid_move?( input )
+
+				Board.message ("Enter the code for CPU to guess")
+
+			  input = gets.upcase.strip.split("")
+			end
 
 
+			@mastermind.code_maker = input
+
+			@mastermind.place_guess_on_board( @mastermind.generate_guess )
+
+			Board.render( @mastermind )
+
+
+		end until quit?(input) || @mastermind.max_turn
+
+
+	end
 
 	def process( input )
 
-		guess = input.upcase.strip.split(",").map { |x| x.to_sym }
+		guess = input.upcase.strip.split("")
+
 
 		if @mastermind.valid_move?(guess)
 
