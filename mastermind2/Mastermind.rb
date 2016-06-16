@@ -71,7 +71,9 @@ class Mastermind
 
 
 	def result
+
 		puts "The Code was : #{@code_maker.join}"
+
 	end
 
 
@@ -90,6 +92,8 @@ class Mastermind
 	end
 
 
+
+
 	def place_guess_on_board ( guess )
 
 		@board[ @turn - 1 ] = guess
@@ -104,6 +108,7 @@ class Mastermind
 		@board[ @turn - 1 ] << hint
 
 	end
+
 
 
 	def valid_move?( guess )
@@ -125,9 +130,11 @@ class Mastermind
 
 	end
 
+
 	def increment_turn
 		@turn += 1
 	end
+
 
 	def max_turn
 		@turn == 12
@@ -138,13 +145,18 @@ class Mastermind
 
 		@cpu_guess = []
 
-		until @cpu_guess.count == 4
-			@cpu_guess << CODE.sample
-		end
+		@cpu_guess << CODE.sample until @cpu_guess.count == 4
+
 		increment_turn
+
 		return @cpu_guess
 
 	end
+
+
+
+
+
 
 private
 
@@ -153,7 +165,6 @@ private
 		4.times {	@code_maker << CODE.sample }
 
 	end
-	# else next turn
 
 
 
