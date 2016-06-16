@@ -9,7 +9,7 @@ class Mastermind
 
 	NUM_ROWS = 12
 	NUM_COLS = 4
-	CODE = ["R", "G"]
+	CODE = [ "R", "G", "B" ]
 
 
 	def initialize( game_state = nil )
@@ -79,7 +79,7 @@ class Mastermind
 
 
 
-	def position_match( guess, code, hint ) #BOARD
+	def position_match( guess, code, hint )
 
 		guess.each do |x|
 
