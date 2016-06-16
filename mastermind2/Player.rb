@@ -28,14 +28,6 @@ private
 
 
 
-	def quit?( input )
-
- 	  QUIT.include?( input )
-
-	end
-
-
-
 	def self.select_player
 
 		input = ""
@@ -55,18 +47,25 @@ private
 
 
 
+	def quit?( input )
+
+ 	  QUIT.include?( input )
+
+	end
+
+
+
 	def run_player_as_breaker
 
 			input = ""
 
 			begin
 
-
 				Board.message("Choosing from R, G or B, enter a guess in form OOOO")
 
-				input = gets.strip
+				input = process_input
 
-				process(input)
+				process( input )
 
 				Board.render( @mastermind )
 
@@ -74,24 +73,8 @@ private
 
 			@mastermind.result
 
-	end
+			@mastermind.game_reset
 
-
-
-
-	def get_player_code
-
-			input = [""]
-
-			begin
-
-				Board.message ("Enter the code for CPU to guess")
-
-			  input = gets.upcase.strip.split("")
-
-			end until @mastermind.valid_move?( input ) || quit?( input )
-
-			@mastermind.code_maker = input
 
 	end
 
@@ -118,24 +101,45 @@ private
 
 		end until quit?(input) || @mastermind.max_turn
 
+		@mastermind.game_reset
+
+	end
+
+
+	def get_player_code
+
+			input = [""]
+
+			begin
+
+				Board.message ("Enter the code for CPU to guess from R,G,B")
+
+			  input = process_input
+
+			end until @mastermind.valid_move?( input ) || quit?( input )
+
+			@mastermind.code_maker = input
+
+	end
+
+
+	def process_input
+
+		return gets.upcase.strip.split("")
+
 	end
 
 
 
 
-	def process( input )
-
-		guess = input.upcase.strip.split("")
+	def process( guess )
 
 
 		if @mastermind.valid_move?(guess)
 
 			@mastermind.place_guess_on_board( guess )
 
-			hint = @mastermind.determine_hints( guess )
-
-			@mastermind.place_hint( hint )
-
+			@mastermind.determine_hints( guess )
 
 		else
 

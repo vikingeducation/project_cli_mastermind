@@ -32,7 +32,11 @@ class Mastermind
 	def check_victory?( guess )
 		if @code_maker == guess
 
-			Board.message(%q(You Win! Let's play again))
+			if @cpu_guess != []
+			  Board.message(%q(CPU wins! Let's play again))
+			else
+				Board.message(%q(You win! Let's play again))
+			end
 			game_reset
 
 		end
@@ -64,30 +68,20 @@ class Mastermind
 
 		end
 
-	return position_match( guess_dup, code_dup, hint )
+	place_hint( position_match( guess_dup, code_dup, hint ) )
 
 	end
+
+
+
+
+
 
 
 
 	def result
 
 		puts "The Code was : #{@code_maker.join}"
-
-	end
-
-
-
-
-	def position_match( guess, code, hint )
-
-		guess.each do |x|
-
-			hint << :w if code.include?(x) unless x == ""
-
-		end
-
-		return hint
 
 	end
 
@@ -160,6 +154,8 @@ class Mastermind
 
 private
 
+
+
 	def generate_code
 
 		4.times {	@code_maker << CODE.sample }
@@ -167,5 +163,17 @@ private
 	end
 
 
+
+	def position_match( guess, code, hint )
+
+		guess.each do |x|
+
+			hint << :w if code.include?(x) unless x == ""
+
+		end
+
+		return hint
+
+	end
 
 end
