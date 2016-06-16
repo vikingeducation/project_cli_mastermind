@@ -24,42 +24,79 @@ QUIT = ["q", "quit", "exit"]
 
 
 
-	def run_player_as_breaker
+private
+
+
+
+	def quit?( input )
+
+ 	  QUIT.include?( input )
+
+	end
+
+
+
+	def self.select_player
 
 		input = ""
 
-		begin
+		until input == 'MAKER' || input == 'BREAKER'
 
+			puts %q(Please enter 'maker' or 'breaker':)
 
-			Board.message("Choosing from R, G or B, enter a guess in form OOOO")
+			input = gets.strip.upcase
 
-			input = gets.strip
+		end
 
-			process(input)
-
-			Board.render( @mastermind )
-
-		end until quit?( input ) || ( @mastermind.max_turn )
-
-		@mastermind.result
+		return input
 
 	end
+
+
+
+
+	def run_player_as_breaker
+
+			input = ""
+
+			begin
+
+
+				Board.message("Choosing from R, G or B, enter a guess in form OOOO")
+
+				input = gets.strip
+
+				process(input)
+
+				Board.render( @mastermind )
+
+			end until quit?( input ) || ( @mastermind.max_turn )
+
+			@mastermind.result
+
+	end
+
+
+
 
 	def get_player_code
 
 			input = [""]
 
-			until @mastermind.valid_move?( input )
+			begin
 
 				Board.message ("Enter the code for CPU to guess")
 
 			  input = gets.upcase.strip.split("")
-			end
 
+			end until @mastermind.valid_move?( input ) || quit?( input )
 
 			@mastermind.code_maker = input
 
 	end
+
+
+
 
 	def run_player_as_maker
 
@@ -71,18 +108,20 @@ QUIT = ["q", "quit", "exit"]
 
 			Board.render( @mastermind )
 
+			@mastermind.check_victory?( @mastermind.cpu_guess )
+
 			Board.message("Please enter your hint. Your code is #{@mastermind.code_maker}")
 
 			input = gets.strip
 
 			@mastermind.place_hint( input )
 
-
 		end until quit?(input) || @mastermind.max_turn
 
-
-
 	end
+
+
+
 
 	def process( input )
 
@@ -106,28 +145,5 @@ QUIT = ["q", "quit", "exit"]
 
 	end
 
-
-
-
-	private
-
-		def quit?( input )
-
-    QUIT.include?( input )
-
-  	end
-
-	def self.select_player
-
-		input = ""
-
-		until input == 'MAKER' || input == 'BREAKER'
-			puts %q(Please enter 'maker' or 'breaker':)
-			input = gets.strip.upcase
-		end
-
-		return input
-
-	end
 
 end

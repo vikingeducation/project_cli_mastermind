@@ -5,10 +5,12 @@
 class Mastermind
 
 	attr_accessor :board, :code_maker
+	attr_reader :cpu_guess
 
 	NUM_ROWS = 12
 	NUM_COLS = 4
-	CODE = ["R", "G", "B"]
+	CODE = ["R", "G"]
+
 
 	def initialize( game_state = nil )
 
@@ -21,6 +23,7 @@ class Mastermind
 
 		@board = Hash.new(0)
 		@turn = 0
+
 	end
 
 
@@ -28,15 +31,20 @@ class Mastermind
 
 	def check_victory?( guess )
 		if @code_maker == guess
-			system 'clear'
+
 			Board.message(%q(You Win! Let's play again))
 			game_reset
+
 		end
 	end
 
 
 	def game_reset
+
+		result
+
 		Player.new
+
 	end
 
 
@@ -102,7 +110,9 @@ class Mastermind
 		count = 0
 
 		guess.each do |x|
+
 			count += 1 if CODE.include?(x)
+
 		end
 
 		if count == 4
