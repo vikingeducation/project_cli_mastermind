@@ -99,7 +99,7 @@ private
 
 			@mastermind.place_hint( input )
 
-		end until quit?(input) || @mastermind.max_turn
+		end until quit?(input) || @mastermind.turn == 13
 
 		@mastermind.game_reset
 

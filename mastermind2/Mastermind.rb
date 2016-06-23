@@ -4,7 +4,7 @@
 
 class Mastermind
 
-	attr_accessor :board, :code_maker
+	attr_accessor :board, :code_maker, :turn
 	attr_reader :cpu_guess
 
 	NUM_ROWS = 12
