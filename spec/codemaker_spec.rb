@@ -6,10 +6,10 @@ describe Codemaker do
 	end
 
 	it 'accepts a code upon creation' do
-		expect(Codemaker.new(['red','blue','yellow','orange']))to be_valid
+		expect{Codemaker.new(['red','blue','yellow','orange'])}.not_to raise_error
 	end
 
 	it 'accepts no parameters upon creation' do
-		expect(Codemaker.new()).to be_valid
+		expect{Codemaker.new()}.not_to raise_error
 	end
 end
