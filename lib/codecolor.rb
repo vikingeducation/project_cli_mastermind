@@ -1,4 +1,4 @@
 module Codecolor
 	NUM_COLORS = 4
-	COLORS = ['red','green','blue','yellow','brown','orange','black','white']
+	COLORS = ['r','g','b','y','b','o','b','w']
 end
