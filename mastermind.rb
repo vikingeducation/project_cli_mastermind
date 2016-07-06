@@ -1,3 +1,5 @@
+require 'pry'
+
 class Peg
 
   attr_reader :color
@@ -53,10 +55,11 @@ class Codemaker < Player
 
   def make_pattern
     case @mode
-    when :human
-      pattern = gets.chomp.gsub(" ","").split(",")
-      @pattern = Board.new(pattern)
-    when :computer
+      when :human
+        puts "Type in your pattern."
+        pattern = gets.chomp.gsub(" ","").split(",")
+        @pattern = Board.new(pattern).pattern
+      when :computer
     end
   end
 
@@ -87,6 +90,11 @@ class Codebreaker < Player
     when :human
       guess = gets.chomp.gsub(" ", "").split(",")
     when :computer
+      guess = []
+      4.times do 
+        guess << CodePeg::COLORS.values.sample
+      end
+      guess
     end
   end
 
@@ -97,7 +105,6 @@ class Game
   def initialize
     welcome
     play
-
   end
 
   def welcome
@@ -129,13 +136,21 @@ class Game
   end
 
   def play
+    binding.pry
     @board = @maker.make_pattern
-    loop do
-      render
-      guess = @breaker.get_guess
-      feedback = @maker.feedback(guess)
-      end?(feedback)
-    end
+    puts @board
+    render
+    guess = @breaker.get_guess
+    p guess
+    feedback = @maker.feedback(guess)
+    p feedback
+    abort
+    # loop do
+    #   render
+    #   guess = @breaker.get_guess
+    #   feedback = @maker.feedback(guess)
+    #   end?(feedback)
+    # end
   end
 
   def end?(feedback)
@@ -149,7 +164,7 @@ end
 
 
 def test
-  board = Board.new(['r','b','r'])
+  Game.new
 end
 
 test
