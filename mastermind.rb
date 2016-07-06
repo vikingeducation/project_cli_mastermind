@@ -1,4 +1,6 @@
 class Mastermind
+  include Display
+
   def initialize
     @guess_board = Board.new
     @fb_board = Board.new
