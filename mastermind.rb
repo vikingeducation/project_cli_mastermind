@@ -10,9 +10,9 @@ class Mastermind
 
   def initialize
     # assign codebreaker -> Player.create_player
-    @codebreaker = Player.create_player
+    @codebreaker = Player.create_player("the Codebreaker")
     # assign codemaker -> Player.create_player
-    @codemaker = Player.create_player
+    @codemaker = Player.create_player("the Codemaker")
     # create new board with setup from codebreaker
     @board = Board.new(@codebreaker)
   end
@@ -74,9 +74,9 @@ end
 
 
 class Player
-
-  #initialize
-    #name
+  def initialize(name)
+    @name = name
+  end 
 
   #get_move
     #prompt for move
@@ -92,16 +92,52 @@ class Player
 
   # ask board for possible colors
 
-  #create player
-    # determine if computer or human and return new player
+  def self.create_player(position)
+    input = ""
+
+    until %w[ human h computer c].include(input)
+      puts "Will #{position} be a computer or a human?"
+      input = gets.chomp.downcase
+    end
+
+    if %w[ human h ].include(input)
+      Human.new(position)
+    else
+      Computer.new(position)
+    end
+  end
 
 end
-   
+
+1: [ R G R B R R R ]  Correct: 3 Wrong place: 1 Wrong: 2
+2: [ R G R B 5 6 7 ]
+3: [ R G R B 5 6 7 ]  
+
+Current: [ R G R B 5 6 7 ]
+What do you want in position 1?
+(R=Red B=Blue ... 1 = Quit 2 = Render board) ? 
+Current: [ R G R B 5 6 7 ]
+What do you want in position 2?
+(R=Red B=Blue...) ? 
+
 
 class Human < Player
   #input_code
     #ask for input
     #check for format
+  def input_code(prompt)
+    input = ""
+    until [].include?(input)
+      puts prompt
+      input = gets.chomp
+    end
+
+    #return
+  end
+
+  def parse_input
+
+  end
 
   def get_pegs
     
