@@ -7,22 +7,30 @@ class Game
     @code = Code.new
   end
 
+
+  def display_available_colors
+    puts "The following colors are available:"
+    COLORS.each do |color|
+      print color + " "
+    end
+    3.times {puts}
+  end
+
   def play
     until over?
-      @board.display_board
+      @board.display_board    
+      display_available_colors 
       guess = @player.get_guess
-      if win?(guess)
-        puts "You cracked the code! Congrats!"
-        exit
-      end
-      b_and_w = check_combination(guess, @code.answer)
-      @board.rows[@player.guesses] = guess.concat b_and_w
+      exit if win?(guess)
+      guess_to_board(guess)
       @board.display_board
-      ####Should next three lines be a different method
-      
-      
-      @player.guesses = 12
     end
+    puts "The codemaster won! This was the answer: #{@code.answer}"
+  end
+
+  def guess_to_board(guess)
+      @board.rows[@player.guesses] = guess.concat([check_for_black(guess, @code.answer), (check_for_white(guess, @code.answer) - check_for_black(guess, @code.answer))])
+      @player.guesses += 1
   end
 
   def over?
@@ -30,27 +38,34 @@ class Game
   end
 
   def win?(guess)
-    guess == @code.answer
+    if guess == @code.answer 
+      puts "You cracked the code! Congrats!" 
+      true
+    end
   end
 
-  def check_combination(guess, answer)
+  def check_for_black(guess,answer)
     black = 0
-    white = 0
-    new_answer = answer.dup
     guess.each_with_index do |color, index|
       if answer[index] == color
         black += 1
       end
     end
+    black
+  end
+
+  def check_for_white(guess, answer)
+    white = 0
+    new_answer = answer.dup
     guess.each_with_index do |color|
       if new_answer.include?(color)
         white += 1
         new_answer.delete_at(new_answer.index(color))
       end
     end
-    
-    [black, white - black]
+    white
   end
+
 end
 
 
@@ -62,11 +77,11 @@ class Board
   end
 
   def display_board
+    system 'clear'
     @rows.each_with_index do |row, index|
       print "#{index+1} #{row[0]} #{row[1]} #{row[2]} #{row[3]}"
       print "\tblack=#{row[4]}" unless row[4].nil?
       print "\twhite=#{row[5]}" unless row[5].nil?
-      
       puts
     end
     puts "   x x x x"
