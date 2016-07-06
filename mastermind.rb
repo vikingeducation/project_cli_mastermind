@@ -17,7 +17,6 @@ class Game
     puts "Y = Yellow"
     assign_players
     @codemaker.set_master_code
-    puts "Your Master Code is #{@codemaker.master_code}"
     @board.master_code = @codemaker.master_code
     12.times do
       turn

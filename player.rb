@@ -16,7 +16,7 @@ end
 class Human < Player
 
   def guess_code
-    puts "Codebreaker enter your code: e.g. brgo"
+    puts "Codebreaker enter your code (e.g. brgo): "
     @code = get_code_input
   end
 
@@ -34,8 +34,6 @@ class Human < Player
     end
     colors
   end
-
-
 end
 
 class Computer < Player

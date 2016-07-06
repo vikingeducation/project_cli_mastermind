@@ -52,7 +52,6 @@ class Board
   end
 
   def render
-    puts "Your master_code in the board class is #{@master_code}"
     @game_board.each do |line|
       line.first.chars.each { |char| print char + ' ' }
       print '*|* '
@@ -61,5 +60,4 @@ class Board
     end
     puts "-----------"
   end
-
 end
