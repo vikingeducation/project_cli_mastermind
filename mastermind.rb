@@ -11,6 +11,7 @@
 #   input colors
 #   guess
 # Board class
+#   holds the key
 #   render board
 #   check guesses
 

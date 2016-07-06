@@ -1,4 +1,5 @@
 class Player
+@@VALID_COLORS=[:r,:b,:y,:g]
 
   def get_guess
 
