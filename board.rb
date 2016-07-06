@@ -19,17 +19,18 @@ class Board
 
   def get_feedback(guess, secret_code)
     temp_code = secret_code.dup
-    temp_code = exact_color_count(guess, temp_code) #count num nil
+    temp_code = adjust_temp_code_exact(guess, temp_code) #count num nil
+
     close = close_color_count(guess, temp_code)
+    exact = exact_color_count(temp_code)
     puts '#' * 10
-    puts "You have #{close} correct colors in the wrong spot and #{temp_code.count nil} in the correct spot."
+    puts "You have #{close} correct colors in the wrong spot and #{exact} in the correct spot."
   end
 
-  def exact_color_count(guess, secret_code)
-    # guess.select.with_index do |peg, location|
-    #   peg == secret_code[location]
-    # end.length
-    secret_code.map.with_index do |peg, location|
+  def adjust_temp_code_exact(guess, temp_code)
+
+    temp_code.map.with_index do |peg, location|
+      
       if peg == guess[location]
         nil
       else
@@ -38,9 +39,20 @@ class Board
     end
   end
 
-  def close_color_count(guess, secret_code)
+  def exact_color_count(temp_code)
+    temp_code.count nil
+  end
+
+  def close_color_count(guess, temp_code)
     counter = 0
-    guess.each { |peg| counter += 1 if secret_code.include? peg }
+
+    guess.each do |peg| 
+      if temp_code.include?(peg)
+        counter += 1 
+        i = temp_code.index(peg)
+        temp_code[i] = 0
+      end
+    end
     counter
 
     # counter = 0

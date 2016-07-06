@@ -16,7 +16,8 @@ class Game
     @breaker = Breaker.new
     @maker = Maker.new
     @turn = 0
-    @secret_code = @maker.get_code
+    @secret_code = ['r', 'r', 'r', 'g']
+    #@maker.get_code
   end
 
   def play
@@ -49,8 +50,8 @@ class Game
   end
 
   def out_of_turns?
-    puts "Sorry, you lost" if @turn > 12
-    @turn > 12
+    puts "Sorry, you lost" if @turn > 11
+    @turn > 11
   end
 end
 
