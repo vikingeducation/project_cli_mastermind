@@ -1,4 +1,4 @@
-et up the game initially [Mastermind]
+Set up the game initially [Mastermind]
   create board  [Board]
   create players and roles [Player]
 Start the game loop [Mastermind]

@@ -1,8 +1,9 @@
 class Mastermind
   def initialize
-    #create board
-    #create codemaker
-    #create codebreaker
+    @guess_board = Board.new
+    @fb_board = Board.new
+    codemaker = Maker.new(@fb_board)
+    codebreaker = Breaker.new(@guess_board)
     #var # of game turns max
   end
 
@@ -23,33 +24,62 @@ class Mastermind
     victory? || end_of_turns?
   end
 
+  def victory?
+    # recent guess == code
+  end
+
+  def end_of_turns?
+    # @board.full
+  end
 
 end
 
 
 class Player
 
-  def initialize(board)
-    @board = board
-  end
+    def initialize(board)
+      @board = board
+    end
 
-  # private_class_method :new
-    # factory method to create codemaker
-    #
-    #
-    # factory method to create codebreaker
+    def get_code_input
+
+    end
+
 end
 
-# Set up the game initially [Mastermind]
-#   create board  [Board]
-#   create players and roles [Player]
-# Start the game loop [Mastermind]
-#   Render the board  [Board]
-#   Ask for and codebreakers guess [Player]
-#   If the game should end  [Mastermind]
-#     Display the proper victory / lose msg
-#     stop looping
-#   else
-#     Codemaker gives feedback with white and red signals [Player]
+class Maker < Player
+  def set_code
+    get_code_input
+    set game code
+
+  end
+
+  def feedback
+
+  end
+end
+
+class Breaker < Player
+  def guess
+    get_code_input
+    make guess
+
+  end
+end
+
+class Board
+  def initialize
+    @arr =[]
+    12.times do
+      arr2=[]
+      4.times {arr2 << "-"}
+      @arr << arr
+    end
+  end
 
 
+end
+
+class FeedBackBoard < Board
+
+end
