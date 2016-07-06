@@ -8,14 +8,16 @@ class Game
     puts "Welcome to Mastermind!!"
     assign_players
     @codemaker.set_master_code
-    until game_over?
+    12.times do
       turn
+      break if win?
     end
     final_message
   end
 
   def turn
     @codebreaker.guess_code
+    @board.enter_guess(@codebreaker.code)
   end
 
   def assign_players
@@ -33,48 +35,46 @@ class Game
   end
 end
 
+def win?
+  @codemaker.master_code == @codebreaker.code
+end
+
 class Player
+
+  attr_accessor :code, :master_code
+
   def valid_code?(code)
     return false unless code.length == 4 && valid_chars?(code.chars)
     true
   end
 
   def valid_chars?(chars)
-    valid_chars = %w(r b g y o p)
+    valid_chars = %w(R B G Y O P)
     chars.all?{ |char| valid_chars.include?(char) }
   end
 end
 
-
-
 class Human < Player
 
   def guess_code
-    get_code_input
+    puts "Codebreaker enter your code: e.g. brgo"
+    @code = get_code_input
   end
 
-  def set_master_code(code)
-    @master_code = code
+  def set_master_code
+    puts "Choose your master code (e.g. brgo): "
+    @master_code = get_code_input
   end
 
   def get_code_input
     colors = nil
     loop do
-      puts "Codebreaker enter your code: e.g. brgo"
-      colors = convert_to_code(gets.chomp)
+      colors = gets.chomp.upcase
       break if valid_code?(colors)
       puts "That wasn't a valid code! Enter in 'bgor' format!"
     end
-    @code = colors
+    colors
   end
-
-#todo
-  def convert_chars_to_code(chars)
-    colors_hash = { r: :red, b: :blue, g: :green,
-                    y: :yellow, o: :orange, p: :purple }
-    colors = chars.map { |color| colors_hash[color.to_sym] }
-  end
-
 
 
 end
@@ -82,14 +82,34 @@ end
 class Computer < Player
 
   def guess_code
+    @code = generate_code
   end
+
+  def set_master_code
+    @master_code = generate_code
+  end
+
+  def generate_code
+    code = ""
+    valid_chars = %w(R B G Y O P)
+    4.times do {code << valid_chars.sample}
+    code
 end
 
-class Peg
-end
+class Board
 
-class KeyPeg < Peg
-end
+  def initialize
+    @game_board = []
+  end
 
-class CodePeg < Peg
+  def enter_guess(code)
+    @game_board << code
+  end
+
+  def render
+
+  end
+
+
+
 end
