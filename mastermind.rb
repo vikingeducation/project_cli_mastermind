@@ -34,9 +34,19 @@ class Mastermind
   end
 
   def opening_message
-    puts "Would you like to be Codemaker (M) or Code breaker (B)?"
-    #possible validation here
-    choice=gets.chomp
+    loop do
+      puts "Would you like to be Codemaker (M) or Code breaker (B)?"
+      choice=gets.chomp
+      if validate_choice(choice)
+        break
+      else
+        p "Please enter a valid choice"
+      end
+    end
+  end
+
+  def validate_choice(choice)
+    ["B","M"].include?(choice)
   end
 
   def play

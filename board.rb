@@ -1,5 +1,5 @@
 class Board
-  
+
   attr_reader :guesses, :key, :VALID_COLORS
   def initialize
     @key=[]
@@ -21,16 +21,20 @@ class Board
   end
 
   def set_key(key)
-    @key=key
+    if valid?(key)
+      @key = key
+    else
+      puts "please enter a valid code"
+    end
   end
 
   def correct?
-    @guess==@key
+    @guess == @key
   end
 
   def update_display(guess)
       @guess=guess
-    if valid_guess?
+    if valid?(@guess)
       @display << guess
       check_accuracy
     else
@@ -38,8 +42,8 @@ class Board
     end
   end
 
-  def valid_guess?
-    @guess.length == 4 && @guess.all?{ |color| @VALID_COLORS.include?(color)}
+  def valid?(entry)
+    entry.length == 4 && entry.all?{ |color| @VALID_COLORS.include?(color)}
   end
 
   def check_accuracy
@@ -50,7 +54,7 @@ class Board
 
   def exact_check
     exacts = 0
-    @guess.length.each do |i|
+    @guess.length.times do |i|
       if @key[i]==@guess[i] 
         exacts +=1 
       end

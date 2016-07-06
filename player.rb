@@ -5,5 +5,5 @@ attr_reader :key
     @board = board
     @key=[]
   end
-  
+
 end

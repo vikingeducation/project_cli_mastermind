@@ -3,7 +3,7 @@ class Computer < Player
   def get_guess
     guess=random_colors
     @board.update_display(guess)
-    sleep(1)
+    sleep(0.5)
   end
   def input_colors
     @key=random_colors
