@@ -7,7 +7,7 @@ end
 
 class CodePeg < Peg
   
-  COLORS = { :r => "red", :b => "blue", :y => "yellow", :g => "green", :o => "orange", :v => "violet"}
+  COLORS = { :r => "r", :b => "b", :y => "y", :g => "g", :o => "o", :v => "v"}
 
   def initialize(color)
     @color = COLORS[color]
@@ -61,12 +61,20 @@ class Codemaker < Player
   end
 
   def feedback(guess)
-    guess.each do |g|
-
+    key_pegs = []
+    guess.each_index do |i|
+      key_pegs << check_guess(i, guess)
     end
+    puts key_pegs
+    key_pegs
   end
 
-  def check_guess(guess)
+  def check_guess(i, guess)
+    if @pattern[i].color == guess[i]
+      return KeyPeg.new(:w)
+    else 
+      return KeyPeg.new(:b)
+    end
   end
 
 end
@@ -93,10 +101,10 @@ class Game
   end
 
   def welcome
-    "Welcome to Mastermind"
-    "What is your name"
+    puts "Welcome to Mastermind"
+    puts "What is your name"
     name = gets.chomp
-    "Do you want to be the Codemaker or Codebreaker?"
+    puts "Do you want to be the Codemaker or Codebreaker?"
     get_role(name)
   end
 
@@ -113,20 +121,28 @@ class Game
   end
 
   def render
-
+    output = []
+    @board.each do |peg|
+      output << peg.color
+    end
+    p output
   end
 
   def play
-    @maker.make_pattern
+    @board = @maker.make_pattern
     loop do
+      render
       guess = @breaker.get_guess
-      @maker.feedback(guess)
-      end?
+      feedback = @maker.feedback(guess)
+      end?(feedback)
     end
   end
 
-  def end?
-
+  def end?(feedback)
+    if feedback.all? { |f| f.color == "w" }
+      puts "Codebreaker wins!"
+      abort
+    end
   end
 
 end
