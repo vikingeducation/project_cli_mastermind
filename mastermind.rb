@@ -16,8 +16,10 @@ class Game
   end
 
   def turn
+    @board.render(@codemaker.master_code)
     @codebreaker.guess_code
     @board.enter_guess(@codebreaker.code)
+    @board.add_keys(@codemaker.master_code, @codebreaker.code)
   end
 
   def assign_players
@@ -103,12 +105,44 @@ class Board
   end
 
   def enter_guess(code)
-    @game_board << code
+    @game_board << [code]
   end
 
-  def render
+  def add_keys(master_code, code)
+    return_string = ''
+    @blacks = count_black_keys(master_code, code)
+    @whites = count_white_keys(master_code, code)
+    @blacks.times { return_string += 'b' }
+    @whites.times { return_string += 'w' }
+    @game_board.last << return_string
+  end
+
+  def count_white_keys(master_code, code)
+    num_of_whites = 0
+    code.chars.each do |char|
+      num_of_whites += 1 if master_code.include?(char)
+    end
+    num_of_whites - @blacks
+  end
+
+  def count_black_keys(master_code, code)
+    num_of_blacks = 0
+    code.chars.each_with_index do |char, index|
+      num_of_blacks += 1 if master_code[index] == char
+    end
+    num_of_blacks
+  end
+
+  def render(master_code)
+    @game_board.each do |line|
+      line.first.chars.each { |char| print char + ' ' }
+      print '*|* '
+      line.last.chars.each  { |char| print char + ' ' }
+      print "\n"
+    end
 
   end
+
 
 
 
