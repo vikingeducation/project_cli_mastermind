@@ -19,13 +19,12 @@ class Mastermind
     "Welcome to Mastermind!"
 
     codemaker.set_code
-    
+
     loop
       Display.render(codebreaker.guess_board,
                      codemaker.fb_board)
-      #
-      # codebreaker guesses
-      #
+      codebreaker.guess
+      
       break if game_over?
       # else
       # => Codemaker provides feedback (white/red signals)
