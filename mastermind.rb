@@ -1,4 +1,13 @@
 # Game class
+require_relative 'board'
+require_relative 'breaker'
+require_relative 'maker'
+require_relative 'player'
+require_relative 'peg'
+
+
+COLOR_TO_NUM = { r:1, g:2, b:3, y:4, o:5, p:6 }
+
 class Game
 
   def initialize
@@ -23,118 +32,9 @@ class Game
   end
 
 end
-# Player class
-class Player
-  attr_reader :guess
-
-  def initialize
-    @guess = []
-  end
-
-  def get_code
-    puts "What is your guess?"
-    @guess = gets.chomp.split(' ').map { |color| Peg.new(color) }
-  end
-
-  def valid_input?
-    correct_length? &&
-    correct_colors?
-  end
-
-  def correct_length?
-    @guess.length == 4
-  end
-
-  def correct_colors?
-    @guess.all? { |peg| peg.color_num }
-  end
-
-end
-# Human
-class Breaker < Player
-  attr_reader :guess
-
-  def initialize
-
-  end
-
-end
-
-class Maker < Player
-  def initialize
-  end
-
-  def get_code
-  end
-
-end
-
-# Maker class
-# Board class
-class Board
-
-  def initialize
-    @board = []
-  end
-
-  def render
-  end
-
-  def add_guess(guess)
-    @board << guess
-    get_feedback
-  end
-
-end
-# Code class
-class Code
-
-  attr_reader :code
-
-  def initialize
-    @code = []
-  end
 
 
-end
 
-class AutoCode < Code
-  def initialize
-    super
-  end
-
-  def get_code
-    response = []
-    4.times do
-      response << Peg.new($COLOR_TO_NUM[keys].sample)
-    end
-  end
-
-end
-
-class Peg
-  attr_reader :color_num
-  $COLOR_TO_NUM = { r:1, g:2, b:3, y:4, o:5, p:6 }
-
-  def initialize(color)
-    @color_num = $COLOR_TO_NUM[color.to_sym]
-  end
-end
-
-class Feedback
-  def initialize(code)
-    @code = code
-  end
-
-  def close_color_count
-    @code.each do
-    end
-  end
-
-  def exact_color_count
-  end
-
-end
 
 # Initialize Game [Game]
   # Initialize Board [Board]
