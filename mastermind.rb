@@ -1,53 +1,95 @@
-#Game Class
-#Play method that runs everything
-#Turn method that handles turns
+class Game
 
-#Board Class
-#Board will be an array of arrays
-# => Last array in board is the MasterCode
-#Set line method
-#Check/compare with MasterCode
-#Inserts key pegs
-#Render
+  def initialize
+    @board = Board.new
+  end
 
-#Player Class
-#Asks for line
-#Validate the line
+  def play
+    puts "Welcome to Mastermind!!"
+    assign_players
+    @codemaker.set_master_code
+    until game_over?
+      turn
+    end
+    final_message
+  end
 
-#Include CodeBreakerModule
-#Generate guess
+  def turn
+    @codebreaker.guess_code
+  end
 
-#Include CodeMakerModule
-#Generate Code
+  def assign_players
+    until @codemaker
+      puts "Would you like to play as Codemaker(m) or Codebreaker(b)? "
+      choice = gets.chomp
+      if choice == "m"
+        @codemaker = Human.new
+        @codebreaker = Computer.new
+      elsif choice == "b"
+        @codemaker = Computer.new
+        @codebreaker = Human.new
+      end
+    end
+  end
+end
 
-#Human < Player
+class Player
+  def valid_code?(code)
+    return false unless code.length == 4 && valid_chars?(code.chars)
+    true
+  end
 
-#Computer < Player
-
-#Peg
-#Color
-
-#CodePeg < Peg
-#Check: Is this a valid color?
-
-#KeyPeg < Peg
-#Check: Is this a valid color?
+  def valid_chars?(chars)
+    valid_chars = %w(r b g y o p)
+    chars.all?{ |char| valid_chars.include?(char) }
+  end
+end
 
 
-* Game Class
-** Initialize
-*** Instantiate Players
-*** Instantiate Board
-*** Instantiate Pegs
 
-* Board Class
-** Initialize
+class Human < Player
 
-* Player
-** Initialize
-*** Instantiate Pegs
-** Method to create pegs
+  def guess_code
+    get_code_input
+  end
 
-* CodeMaker
-** Initialize
-*** Instantiate MasterCode
+  def set_master_code(code)
+    @master_code = code
+  end
+
+  def get_code_input
+    colors = nil
+    loop do
+      puts "Codebreaker enter your code: e.g. brgo"
+      colors = convert_to_code(gets.chomp)
+      break if valid_code?(colors)
+      puts "That wasn't a valid code! Enter in 'bgor' format!"
+    end
+    @code = colors
+  end
+
+#todo
+  def convert_chars_to_code(chars)
+    colors_hash = { r: :red, b: :blue, g: :green,
+                    y: :yellow, o: :orange, p: :purple }
+    colors = chars.map { |color| colors_hash[color.to_sym] }
+  end
+
+
+
+end
+
+class Computer < Player
+
+  def guess_code
+  end
+end
+
+class Peg
+end
+
+class KeyPeg < Peg
+end
+
+class CodePeg < Peg
+end
