@@ -19,7 +19,7 @@ end
 
 class KeyPeg < Peg
 
-  COLORS = { :b => "black", :w => "white" }
+  COLORS = { :b => "b", :w => "w" }
 
   def initialize(color)
     @color = COLORS[color]
@@ -101,9 +101,10 @@ class Codebreaker < Player
 end
 
 class Game
-
+  
   def initialize
     welcome
+    @counter = 0
     play
   end
 
@@ -136,27 +137,31 @@ class Game
   end
 
   def play
-    binding.pry
     @board = @maker.make_pattern
-    puts @board
-    render
-    guess = @breaker.get_guess
-    p guess
-    feedback = @maker.feedback(guess)
-    p feedback
-    abort
-    # loop do
-    #   render
-    #   guess = @breaker.get_guess
-    #   feedback = @maker.feedback(guess)
-    #   end?(feedback)
-    # end
+
+    until game_over? || win?
+      render
+      @guess = @breaker.get_guess
+      @feedback = @maker.feedback(@guess)
+    
+      @counter += 1
+    end
+    
   end
 
-  def end?(feedback)
-    if feedback.all? { |f| f.color == "w" }
-      puts "Codebreaker wins!"
+  def game_over?
+    if @counter == 12
+      puts "You are out of turns"
       abort
+    end
+  end
+
+  def win?
+    if @feedback
+      if @feedback.all? { |f| f.color == "w" }
+        puts "Codebreaker wins!"
+        abort
+      end
     end
   end
 
