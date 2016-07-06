@@ -10,29 +10,55 @@ class Game
   def play
     until over?
       @board.display_board
-      @player.get_guess
-
-
-
+      guess = @player.get_guess
+      @board.rows[@player.guesses] = guess
+      @board.display_board
+      ####Should next three lines be a different method
+      if win?(guess)
+        puts "You cracked the code! Congrats!"
+        exit
+      end
+      check_combination(guess, @code.answer)
       @player.guesses = 12
     end
-
-
   end
 
   def over?
     @player.guesses == 12 
   end
+
+  def win?(guess)
+    guess == @code.answer
+  end
+
+  def check_combination(guess, answer)
+    black = 0
+    white = 0
+    new_answer = answer
+    guess.each_with_index do |color, index|
+      if answer[index] == color
+        black += 1
+      end
+    guess.each_with_index do |color|
+      if new_answer.include?(color)
+        white += 1 
+        new_answer.delete_at(new_answer.index(color))
+      end
+    end
+    return [black, white - black]
+  end
 end
 
 
 class Board
+  attr_accessor :rows
+
   def initialize
-    @board = 12.times.map {[]}
+    @rows = 12.times.map {[]}
   end
 
   def display_board
-    @board.each_with_index do |row, index|
+    @rows.each_with_index do |row, index|
       print "#{index+1} #{row[0]} #{row[1]} #{row[2]} #{row[3]}"
       puts
     end
@@ -48,12 +74,14 @@ class Player
   end
 
   def get_guess
+    guess = ""
     loop do
       puts "what is your guess?"
       guess =  gets.chomp.downcase.gsub(/\s+/, "").split(',')
       break if valid?(guess)
       puts "That's not a valid guess. Enter 4 colors separated by commas, e.g. r, g, b, y"
     end
+    guess
   end
 
   def valid?(guess)
