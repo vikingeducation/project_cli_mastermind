@@ -5,41 +5,87 @@ class Game
     @board = Board.new
     @breaker = Breaker.new
     @maker = Maker.new
-    @secret_code = AutoCode.get_code
   end
 
   def play
+    secret_code = Maker.get_code
+    until victory?
+      # Guess [Player::Human]
+      @breaker.get_code until @breaker.valid_input?
+      @board.add_guess(@breaker.guess)
+      # Feedback [Feedback]
+      # Render board [Board]
+      # check if Code matches secret Code [Game]
+      # check if 12 attempts are up [Game]
+    end
+    # Display Code
+    # Congratulate or try agian
   end
 
 end
 # Player class
 class Player
+  attr_reader :guess
 
   def initialize
+    @guess = []
   end
 
-  def get_move
+  def get_code
+    puts "What is your guess?"
+    @guess = gets.chomp.split(' ').map { |color| Peg.new(color) }
   end
 
   def valid_input?
+    correct_length? &&
+    correct_colors?
+  end
+
+  def correct_length?
+    @guess.length == 4
+  end
+
+  def correct_colors?
+    @guess.all? { |peg| peg.color_num }
   end
 
 end
 # Human
 class Breaker < Player
+  attr_reader :guess
 
   def initialize
-    @guess = Code.new
+
   end
 
 end
 
 class Maker < Player
-  def
+  def initialize
+  end
+
+  def get_code
+  end
+
 end
 
 # Maker class
 # Board class
+class Board
+
+  def initialize
+    @board = []
+  end
+
+  def render
+  end
+
+  def add_guess(guess)
+    @board << guess
+    get_feedback
+  end
+
+end
 # Code class
 class Code
 
@@ -48,12 +94,6 @@ class Code
   def initialize
     @code = []
   end
-
-  def get_code
-    puts "What is your guess?"
-    response = gets.chomp.split(' ').map { |color| Peg.new(color) }
-  end
-
 
 
 end
@@ -73,10 +113,11 @@ class AutoCode < Code
 end
 
 class Peg
+  attr_reader :color_num
   $COLOR_TO_NUM = { r:1, g:2, b:3, y:4, o:5, p:6 }
 
   def initialize(color)
-    @color_num = COLOR_TO_PEG[color.to_sym]
+    @color_num = $COLOR_TO_NUM[color.to_sym]
   end
 end
 
@@ -87,6 +128,7 @@ class Feedback
 
   def close_color_count
     @code.each do
+    end
   end
 
   def exact_color_count
@@ -94,21 +136,7 @@ class Feedback
 
 end
 
-
-#sample input: "r g b r"
-# Feedback class
-# Peg class
-
 # Initialize Game [Game]
   # Initialize Board [Board]
     # Create secret code [Computer]
   # Initialize Players [Player]
-# Loop until
-  # Guess [Player::Human]
-  # Feedback [Feedback]
-  # Render board [Board]
-  # check if Code matches secret Code [Game]
-  # check if 12 attempts are up [Game]
-#end
-# Display Code
-# Congratulate or try agian
