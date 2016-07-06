@@ -1,16 +1,9 @@
 class Player
-@@VALID_COLORS=[:r,:b,:y,:g]
+attr_reader :key
 
   def initialize(board)
     @board = board
+    @key=[]
   end
-
-  def get_guess
-
-  end
-
-  def validate_guess
-
-  end
-
+  
 end

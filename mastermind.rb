@@ -22,14 +22,21 @@ require_relative "board"
 
 class Mastermind
 
-  def initialize(players)
+  def initialize
     @board = Board.new
-    @player1 = Human.new(@board)
-    if players == 2
-      @player2 = Human.new(@board)
-    else
+    if opening_message == "B"
+      @player1 = Human.new(@board)
       @player2 = Computer.new(@board)
+    else
+      @player1 = Computer.new(@board)
+      @player2 = Human.new(@board)
     end
+  end
+
+  def opening_message
+    puts "Would you like to be Codemaker (M) or Code breaker (B)?"
+    #possible validation here
+    choice=gets.chomp
   end
 
   def play
@@ -59,11 +66,11 @@ class Mastermind
   end
 
   def lose?
-    @board.guesses >= 2
+    @board.guesses >= 12
   end
 
 
 end
 
-m=Mastermind.new(1)
+m=Mastermind.new
 m.play

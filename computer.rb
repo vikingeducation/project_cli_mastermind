@@ -1,18 +1,21 @@
 class Computer < Player
-attr_reader :key
 
-  def initialize(board)
-    super(board)
-    @key=[]
-  end
-
-  def gets_guess
-    # rand
+  def get_guess
+    guess=random_colors
+    @board.update_display(guess)
+    sleep(1)
   end
   def input_colors
-    4.times do
-     @key << @@VALID_COLORS.sample
-    end
+    @key=random_colors
     @board.set_key(@key)
   end
+
+  def random_colors
+    result=[]
+    4.times do
+      result << @board.VALID_COLORS.sample
+    end
+    result
+  end
+
 end

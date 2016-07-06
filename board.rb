@@ -1,11 +1,12 @@
 class Board
-  @@VALID_COLORS=[:r,:b,:y,:g]
-  attr_reader :guesses, :key
+  
+  attr_reader :guesses, :key, :VALID_COLORS
   def initialize
     @key=[]
     @display=[]
     @guesses = 0
     @guess=[]
+    @VALID_COLORS=[:r,:b,:y,:g]
   end
 
   def render
@@ -38,7 +39,7 @@ class Board
   end
 
   def valid_guess?
-    @guess.length == 4 && @guess.all?{ |color| @@VALID_COLORS.include?(color)}
+    @guess.length == 4 && @guess.all?{ |color| @VALID_COLORS.include?(color)}
   end
 
   def check_accuracy
@@ -49,7 +50,7 @@ class Board
 
   def exact_check
     exacts = 0
-    (0..3).each do |i|
+    @guess.length.each do |i|
       if @key[i]==@guess[i] 
         exacts +=1 
       end
