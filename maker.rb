@@ -12,14 +12,24 @@ class Maker < Player
   end
 
   def feedback(guess)
-    feedback_arr = Array.new(4)
+    feedback_arr = []]
 
-    guess.each_with_index do |ele, i|
-
-      feedback_arr[i] = "w" if @code.include? ele
-      feedback_arr[i] = "r" if ele == @code[i]
-
+    copy = guess
+    code_copy = @code
+    copy.each_with_index do |ele, i|
+      if code_copy[i] == copy[i]
+        feedback_arr.push("r")
+        copy[i] = "-"
+      end
+    end
+    copy.each_with_index do |ele, i|
+      if code_copy.include?(ele)
+        feedback_arr.push "w"
+        code_copy[code_copy.find_index(ele)] = "-"
+      end
     end
 
   end
+
+
 end
