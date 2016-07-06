@@ -48,8 +48,14 @@ class Maker < Player
 
   def partial_match_at(guess)
     arr_partial = []
-    color_hash = {}
     guess.delete_at(exact_match_at(guess))
+    match_hash = Hash.new(0)
+    code_hash = Hash.new(0)
+    guess.each {|x| guess_hash[x] += 1}
+    code.each {|x| code_hash[x] += 1}
+    guess_hash.each do |key, value|
+      guess_hash[key] = code_hash[]
+
     guess.sort
     guess.each_with_index do |ele, i|
 
