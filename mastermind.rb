@@ -37,7 +37,7 @@ computer class
 
 class Game
 
-  attr_accessor :player_guess, :secret_code 
+  attr_accessor :player_guess, :secret_code
 
   def initialize
     @board = Board.new
@@ -49,21 +49,40 @@ class Game
   end
   
   def play
+    welcome_message
     until over?
       increase_turns
       @board.render
       @player_guess = @player1.get_move
       render
     end
+    exit_message
   end
 
+  def welcome_message
+    puts "Welcome to Mastermind."
+  end
+
+  def exit_message
+    puts "Thanks for playing Mastermind!"
+  end
 
   def increase_turns 
     @turns += 1
   end
 
   def over?
-    @turns == 12 || @player_guess == @secret_code
+
+    if @turns == 12 
+      puts "You are out of turns."
+      true
+    elsif @player_guess == @secret_code
+      puts "You solved the secret code."
+      true
+    else
+      false
+    end
+
   end
 
 end
@@ -72,6 +91,8 @@ end
 
 
 class Board
+
+
   def initialize
 
   end
@@ -92,21 +113,20 @@ class Board
   end
 
   def feedback
-    absolute_correct_moves = 0
+    semi = 0
+    correct_moves = 0
     Game.secret_code.each do |item|
       if current_board.include?(item)
-        somewhat_correct_moves += 1
+        semi += 1
       end
     end
     Game.secret_code.each_with_index do |item1, index1|
       if current_board[index1] == item1
-          absolute_correct_moves += 1
-          somewhat_correct_moves -= 1
+          correct_moves += 1
+          semi -= 1
       end
     end
-    if current_board.include? ()
-    somewhat_correct_moves = 0
-
+    puts "You have #{semi} almost correct, and #{correct_moves} correct pegs."
   end 
 
 
