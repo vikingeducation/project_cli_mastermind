@@ -1,3 +1,4 @@
+require_relative 'player'
 class Maker < Player
   def initialize
   end
@@ -7,6 +8,7 @@ class Maker < Player
     4.times do
       response << LEGAL_COLORS.sample
     end
+    response
   end
 
 end

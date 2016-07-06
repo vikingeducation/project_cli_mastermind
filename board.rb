@@ -10,7 +10,6 @@ class Board
 
   def add_guess(guess)
     @board << guess
-    get_feedback(guess, secret_code)
   end
 
   def get_feedback(guess, secret_code)
