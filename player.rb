@@ -1,6 +1,5 @@
 # Player class
 class Player
-  attr_reader :guess
 
   def initialize
     @guess = []
@@ -8,7 +7,7 @@ class Player
 
   def get_code
     puts "What is your guess?"
-    @guess = gets.chomp.split(' ').map { |color| Peg.new(color) }
+    @guess = gets.chomp.split(' ').downcase
   end
 
   def valid_input?
@@ -21,7 +20,9 @@ class Player
   end
 
   def correct_colors?
-    @guess.all? { |peg| peg.color_num }
+    @guess.all? { |peg| LEGAL_COLORS.include? peg }
   end
+
+
 
 end

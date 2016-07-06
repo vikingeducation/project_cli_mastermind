@@ -5,7 +5,7 @@ class Maker < Player
   def get_code
     response = []
     4.times do
-    response << Peg.new(COLOR_TO_NUM[keys].sample)
+      response << LEGAL_COLORS.sample
     end
   end
 

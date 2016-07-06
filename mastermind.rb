@@ -6,7 +6,7 @@ require_relative 'player'
 require_relative 'peg'
 
 
-COLOR_TO_NUM = { r:1, g:2, b:3, y:4, o:5, p:6 }
+LEGAL_COLORS = ['r','g','b','y','o','p']
 
 class Game
 
@@ -21,7 +21,8 @@ class Game
     until victory?
       # Guess [Player::Human]
       @breaker.get_code until @breaker.valid_input?
-      @board.add_guess(@breaker.guess)
+      @board.add_guess(@breaker.guess, secret_code)
+      @board.render
       # Feedback [Feedback]
       # Render board [Board]
       # check if Code matches secret Code [Game]
@@ -32,6 +33,8 @@ class Game
   end
 
 end
+
+
 
 
 
