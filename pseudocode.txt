@@ -5,7 +5,7 @@ setup game (game)
   - create code (code)
 
 play (game)
-until turns == 12
+until over?(game)
  - display board (board)
  - ask player for a combination (game)
  - get player combination (guess)
@@ -16,6 +16,7 @@ until turns == 12
     similar?
       - return result (guess)
       - display result (board)
+    end
 end
 
 if win?
@@ -23,6 +24,7 @@ if win?
 else
   no more turns left (game)
   display code (board)
+end
 
 
 classes:
