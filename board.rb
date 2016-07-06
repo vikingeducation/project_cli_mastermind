@@ -26,11 +26,20 @@ class Board
     code
   end
 
+  #go through code and see if master code contains char.
+  # if it does, remove the first instance of the match from master code
+
   def count_white_keys
-    code = replace_matches(@code)
     num_of_whites = 0
+    master_code = @master_code
     code.chars.each do |char|
-      num_of_whites += 1 if @master_code.include?(char)
+      if @master_code.include?(char)
+        num_of_whites += 1
+        index = master_code.chars.find_index(char)
+        chars = master_code.chars
+        chars.delete_at(index)
+        master_code = chars.join('')
+      end
     end
     num_of_whites
   end
