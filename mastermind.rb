@@ -20,7 +20,7 @@ class Game
   end
 
   def play
-    
+
 
     until game_over?
       @breaker.guess = []
@@ -28,7 +28,7 @@ class Game
 
       @board.add_guess(@breaker.guess)
       @board.get_feedback(@breaker.guess, @secret_code)
-      @board.render
+      @board.render(@secret_code)
       # Feedback [Feedback]
       # Render board [Board]
       # check if Code matches secret Code [Game]
