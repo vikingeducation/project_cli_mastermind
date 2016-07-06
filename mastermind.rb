@@ -1,6 +1,5 @@
 require_relative 'player.rb'
 require_relative 'board.rb'
-
 class Game
 
   def initialize
@@ -18,6 +17,7 @@ class Game
     puts "Y = Yellow"
     assign_players
     @codemaker.set_master_code
+    puts "Your Master Code is #{@codemaker.master_code}"
     @board.master_code = @codemaker.master_code
     12.times do
       turn
@@ -27,9 +27,9 @@ class Game
   end
 
   def turn
-    @board.code = @codebreaker.code
     @board.render
     @codebreaker.guess_code
+    @board.code = @codebreaker.code
     @board.enter_guess
     @board.add_keys
   end
