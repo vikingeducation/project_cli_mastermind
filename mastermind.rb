@@ -1,9 +1,42 @@
-class Board
+class Peg
 
-  
+  attr_reader :color
 
 end
 
+
+class CodePeg < Peg
+  
+  COLORS = { :r => "red", :b => "blue", :y => "yellow", :g => "green", :o => "orange", :v => "violet"}
+
+  def initialize(color)
+    @color = COLORS[color]
+  end
+
+end
+
+class KeyPeg < Peg
+
+  COLORS = { :b => "black", :w => "white" }
+
+  def initialize(color)
+    @color = COLORS[color]
+  end
+
+end
+
+class Board
+
+  attr_reader :pattern
+
+  def initialize(pattern)
+    pegs = pattern.map do |c|
+      CodePeg.new(c.to_sym)
+    end
+    @pattern = pegs
+  end
+
+end
 
 class Player
   def initialize(role)
@@ -18,12 +51,19 @@ end
 
 class Codemaker < Player
 
-
-
   def make_pattern
+    case @mode
+    when :human
+      pattern = gets.chomp.gsub(" ","").split(",")
+      @pattern = Board.new(pattern)
+    when :computer
+    end
   end
 
-  def feedback
+  def feedback(guess)
+    guess.each do |g|
+
+    end
   end
 
   def check_guess(guess)
@@ -62,10 +102,11 @@ class Game
 
   def get_role(name)
     role = gets.chomp
-    if /\Acodemaker\z/i.match role
+    case role.downcase
+    when 'codemaker'
       @maker = Codemaker.new(name)
       @breaker = Codebreaker.new(:computer)
-    elsif /\Acodebreaker\z/i.match role
+    when 'codebreaker'
       @breaker = Codebreaker.new(name)
       @maker = Codemaker.new(:computer)
     end
@@ -76,6 +117,7 @@ class Game
   end
 
   def play
+    @maker.make_pattern
     loop do
       guess = @breaker.get_guess
       @maker.feedback(guess)
@@ -90,22 +132,8 @@ class Game
 end
 
 
-class Peg
-
-  def color
-
-  end
-
+def test
+  board = Board.new(['r','b','r'])
 end
 
-
-class CodePeg < Peg
-  CODE_COLORS = {:r => "red", :b => "blue", :y => "yellow", :g => "green", :o => "orange", :v => "violet"}
-
-
-
-end
-
-class KeyPeg < Peg
-
-end
+test
