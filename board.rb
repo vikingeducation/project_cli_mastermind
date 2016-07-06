@@ -21,16 +21,24 @@ class Board
 
   def replace_matches(code)
     code.chars.map.with_index do |char, index|
-      '' if @master_code[index] == char
+      char = 'm' if @master_code[index] == char
+      char
     end
-    code
+  end
+
+  def replace_matches2(code)
+    code.chars.map.with_index do |char, index|
+      char = 'n' if @code[index] == char
+      char
+    end
   end
 
   def count_white_keys
-    code = replace_matches(@code)
+    code = replace_matches(@code).join("")
+    master_code = replace_matches2(@master_code).join("")
     num_of_whites = 0
     code.chars.each do |char|
-      num_of_whites += 1 if @master_code.include?(char)
+      num_of_whites += 1 if master_code.include?(char)
     end
     num_of_whites
   end
