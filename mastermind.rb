@@ -15,6 +15,11 @@
 #   render board
 #   check guesses
 
+require_relative "player"
+require_relative "computer"
+require_relative "human"
+require_relative "board"
+
 class Mastermind
 
   def initialize(players)
@@ -30,8 +35,14 @@ class Mastermind
   def play
     @player2.input_colors
     until finish?
-    @board.check_accuracy(@player1.get_guess)
+    @player1.get_guess
+    @board.render
     end
+    closing_message
+  end
+
+  def closing_message
+    win? ? puts "You won!" : puts "Better luck next time..."
   end
 
   def finish?
@@ -48,3 +59,6 @@ class Mastermind
 
 
 end
+
+m=Mastermind.new(1)
+m.play

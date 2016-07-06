@@ -1,7 +1,8 @@
 class Computer < Player
 attr_reader :key
 
-  def initialize
+  def initialize(board)
+    super(board)
     @key=[]
   end
 
@@ -12,5 +13,6 @@ attr_reader :key
     4.times do 
      @key << @@VALID_COLORS.sample
     end
+    @board.set_key(@key)
   end
 end
