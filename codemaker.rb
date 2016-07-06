@@ -17,5 +17,5 @@ class CodeMaker < Player
     4.times {|index| h[index] = %w(a e i o u y).rand(6) }
     code
   end
-
+  
 end
