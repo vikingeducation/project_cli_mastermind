@@ -1,25 +1,38 @@
+require_relative 'board.rb'
+require_relative 'breaker.rb'
+require_relative 'display.rb'
+require_relative 'feedback_board.rb'
+require_relative 'maker.rb'
+require_relative 'player.rb'
+
+
 class Mastermind
   include Display
 
   def initialize
-    @guess_board = Board.new
-    @fb_board = Board.new
-    codemaker = Maker.new(@fb_board)
-    codebreaker = Breaker.new(@guess_board)
-    #var # of game turns max
+    codemaker = Maker.new
+    codebreaker = Breaker.new
+
   end
 
   def play
+    "Welcome to Mastermind!"
 
-    # render board
-    #
-    # codebreaker guesses
-    #
-    # if victory / lose conditions are met
-    # => Display the victory / lose msg
-    # => break loop
-    # else
-    # => Codemaker provides feedback (white/red signals)
+    codemaker.set_code
+    
+    loop
+      Display.render(codebreaker.guess_board,
+                     codemaker.fb_board)
+      #
+      # codebreaker guesses
+      #
+      break if game_over?
+      # else
+      # => Codemaker provides feedback (white/red signals)
+    end
+
+    # Game over message
+
   end
 
   def game_over?
