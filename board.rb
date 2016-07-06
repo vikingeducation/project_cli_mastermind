@@ -22,11 +22,6 @@ class Board
     #
   end
 
-  def current_board
-    # contains an array of the current placed colored pegs
-    # gets passed the player move
-    Game.player_guess 
-  end
 
   def feedback
     semi = 0
@@ -44,12 +39,6 @@ class Board
     end
     puts "You have #{semi} almost correct, and #{correct_moves} correct pegs."
   end 
-
-
-  def render 
-    current_board
-    feedback
-  end
 
 
 end
