@@ -19,35 +19,28 @@ class Board
     @game_board.last << return_string
   end
 
-  #go through code and see if master code contains char.
-  # if it does, remove the first instance of the match from master code
+  def replace_matches(code)
+    code.chars.map.with_index do |char, index|
+      char = 'm' if @master_code[index] == char
+      char
+    end
+  end
+
+  def replace_matches2(code)
+    code.chars.map.with_index do |char, index|
+      char = 'n' if @code[index] == char
+      char
+    end
+  end
 
   def count_white_keys
+    code = replace_matches(@code).join("")
+    master_code = replace_matches2(@master_code).join("")
     num_of_whites = 0
-    master_code = remove_black_matches
     code.chars.each do |char|
-      if master_code.include?(char)
-        num_of_whites += 1
-        remove_first_char(char, master_code)
-      end
+      num_of_whites += 1 if master_code.include?(char)
     end
     num_of_whites
-  end
-
-
-  def remove_first_char(char, word)
-    index = word.chars.find_index(char)
-    chars = word.chars
-    chars.delete_at(index)
-    word = chars.join('')
-  end
-
-  def remove_black_matches
-    master_code = @master_code
-    @code.chars.each_with_index do |char, index|
-      remove_first_char(char, master_code) if master_code.include?(char) && master_code[index] == char
-    end
-    master_code
   end
 
   def count_black_keys
