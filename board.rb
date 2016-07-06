@@ -4,24 +4,30 @@ class Board
 
   attr_reader :pegs, :colors, :moves
 
-  def initialize(player)
+  def initialize(codebreaker, codemaker)
     # number of turns
     @player_turns = 0
     # array of moves
     @moves = []
     # get number of pegs [ask player]
-    @pegs = player.get_pegs
+    @pegs = codebreaker.get_pegs
     # get number of colors
-    @colors = set_colors(player.get_colors)
+    @colors = set_colors(codebreaker.get_colors)
+    @solution = codemaker.make_answer(self)
   end
 
-  # render
+  def render
+    @moves.each_with_index do |move, index|
+      puts "Move #{index + 1}: " + move.to_s
+    end
+  end
     # start as number_of_turns lines
     # array of pegs with color
     # go through each move so far and print that line, plus feedback for that line
 
-  #  move
-    # add move to board
+  def move(move)
+    @moves << move
+  end
 
   def set_colors(number_of_colors)
     $COLORS.keys.sample(number_of_colors)
@@ -32,7 +38,9 @@ class Board
       # count number of correct, half-correct, and wrong
     # return
 
-  #check for game over
+  def game_over?
+    false
+  end
     # did they win?
     # are the moves over?
 

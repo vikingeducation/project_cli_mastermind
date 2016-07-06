@@ -1,30 +1,10 @@
-# 1: [ R G R B R R R ]  Correct: 3 Wrong place: 1 Wrong: 2
-# 2: [ R G R B 5 6 7 ]
-# 3: [ R G R B 5 6 7 ]  
-
-# Current: [ R G R B 5 6 7 ]
-# What do you want in position 5?
-# (R=Red B=Blue ... 1 = Quit 2 = Render board) ? G
-
-# Current: [ R G R B G 6 7 ]
-# What do you want in position 6?
-# (R=Red B=Blue ...)
-# example ? 
-
-# What colors do want for the pegs?
-# separate pegs by spaces
-# r = Red, g = Green
-# r g r b r r
-
 class Human < Player
-  #input_code
-    #ask for input
-    #check for format
   def input_code(board)
     begin
-      print_turn_prompt
+      print_turn_prompt(board)
       input = gets.chomp.split
     end until parse(input, board)
+    input
   end
 
   def parse(input, board)
@@ -32,10 +12,13 @@ class Human < Player
      input.length == board.pegs
   end
 
-  def print_turn_prompt
+  def print_turn_prompt(board)
     puts "What colors do you want for the pegs?"
-    puts "Separate by spaces."
-    puts
+    puts "Please enter #{board.pegs} pegs separated by spaces."
+    board.colors.each do |color|
+      print color + " = " + $COLORS[color] + ", "
+    end
+    print "\n"
   end
 
   def get_pegs

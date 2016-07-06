@@ -3,7 +3,7 @@ require "./player.rb"
 require "./human.rb"
 require "./computer.rb"
 
-$COLORS {
+$COLORS = {
   'r' => "Red",
   'b' => "Blue",
   'g' => "Green",
@@ -22,7 +22,7 @@ class Mastermind
     # assign codemaker -> Player.create_player
     @codemaker = Player.create_player("the Codemaker")
     # create new board with setup from codebreaker
-    @board = Board.new(@codebreaker)
+    @board = Board.new(@codebreaker, @codemaker)
   end
 
   def play
@@ -41,6 +41,7 @@ class Mastermind
 
   # end game
 end
+  
   
 
 
