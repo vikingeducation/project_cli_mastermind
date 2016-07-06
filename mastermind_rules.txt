@@ -36,9 +36,11 @@ Codebreaker
 - a. make a pattern
 - b. place pattern on row
 
-Win State
+End Condition
 - Codemaker gives feedback using KEY PEGS
 - a. can provide 0 to 4 key pegs
 - b. black key peg => CORRECT in color and position
 - c. white key peg => CORRECT in color, but not position
-
+- loop feedback and guessing until:
+- a. guess is correct; or
+- b. 12 guess are made
