@@ -11,20 +11,22 @@ class Game
     until over?
       @board.display_board
       guess = @player.get_guess
-      @board.rows[@player.guesses] = guess
-      @board.display_board
-      ####Should next three lines be a different method
       if win?(guess)
         puts "You cracked the code! Congrats!"
         exit
       end
-      check_combination(guess, @code.answer)
+      b_and_w = check_combination(guess, @code.answer)
+      @board.rows[@player.guesses] = guess.concat b_and_w
+      @board.display_board
+      ####Should next three lines be a different method
+      
+      
       @player.guesses = 12
     end
   end
 
   def over?
-    @player.guesses == 12 
+    @player.guesses == 12
   end
 
   def win?(guess)
@@ -34,18 +36,20 @@ class Game
   def check_combination(guess, answer)
     black = 0
     white = 0
-    new_answer = answer
+    new_answer = answer.dup
     guess.each_with_index do |color, index|
       if answer[index] == color
         black += 1
       end
+    end
     guess.each_with_index do |color|
       if new_answer.include?(color)
-        white += 1 
+        white += 1
         new_answer.delete_at(new_answer.index(color))
       end
     end
-    return [black, white - black]
+    
+    [black, white - black]
   end
 end
 
@@ -60,6 +64,9 @@ class Board
   def display_board
     @rows.each_with_index do |row, index|
       print "#{index+1} #{row[0]} #{row[1]} #{row[2]} #{row[3]}"
+      print "\tblack=#{row[4]}" unless row[4].nil?
+      print "\twhite=#{row[5]}" unless row[5].nil?
+      
       puts
     end
     puts "   x x x x"
@@ -85,20 +92,20 @@ class Player
   end
 
   def valid?(guess)
-    guess.size == 4 && 
-    guess.all? {|item| COLORS.include?(item)}
+    guess.size == 4 &&
+      guess.all? {|item| COLORS.include?(item)}
   end
 end
 
 
 class Code
-  
+  attr_reader :answer
   def initialize(answer = Code.generate)
     @answer = answer
   end
 
   def self.generate
-    4.times.map {COLORS.sample} 
+    4.times.map {COLORS.sample}
   end
 end
 
