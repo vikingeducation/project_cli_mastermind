@@ -31,7 +31,6 @@ class Player
   end
 
 end
-<<<<<<< HEAD
 
 # def test
 #   player = Player.new(Board.new)
@@ -40,6 +39,4 @@ end
 # end
 
 # test
-=======
-###########################
->>>>>>> 31b9ead346fbc975bfa6517fedb1d7a4d9e05c3c
+
