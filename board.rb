@@ -4,12 +4,10 @@ class Board
     @board = []
   end
 
-  def render(code)
+  def render
     puts
-    p @board
+    p @board.last
     puts
-    print "Secret Code: "
-    p code
     puts
   end
 
@@ -19,7 +17,7 @@ class Board
 
   def get_feedback(guess, secret_code)
     temp_code = secret_code.dup
-    temp_code = adjust_temp_code_exact(guess, temp_code) #count num nil
+    temp_code = adjust_temp_code_exact(guess, temp_code)
 
     close = close_color_count(guess, temp_code)
     exact = exact_color_count(temp_code)
@@ -30,7 +28,7 @@ class Board
   def adjust_temp_code_exact(guess, temp_code)
 
     temp_code.map.with_index do |peg, location|
-      
+
       if peg == guess[location]
         nil
       else
@@ -46,9 +44,9 @@ class Board
   def close_color_count(guess, temp_code)
     counter = 0
 
-    guess.each do |peg| 
+    guess.each do |peg|
       if temp_code.include?(peg)
-        counter += 1 
+        counter += 1
         i = temp_code.index(peg)
         temp_code[i] = 0
       end

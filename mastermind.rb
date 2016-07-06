@@ -1,9 +1,8 @@
 # Game class
 require "pry"
-
 require_relative 'board'
-require_relative 'breaker'
-require_relative 'maker'
+require_relative 'human'
+require_relative 'computer'
 require_relative 'peg'
 
 
@@ -13,31 +12,36 @@ class Game
 
   def initialize
     @board = Board.new
-    @breaker = Breaker.new
-    @maker = Maker.new
-    @turn = 0
-    @secret_code = ['r', 'r', 'r', 'g']
-    #@maker.get_code
+    get_choice
+    @turn = 12
+    @secret_code = @maker.get_secret_code
+  end
+
+  def get_choice
+    puts "Would you like to make the code or break the code?"
+    choice = gets.chomp.downcase
+    if choice == 'make'
+      @breaker = Computer.new
+      @maker = Human.new
+    elsif choice == 'break'
+      @breaker = Human.new
+      @maker = Computer.new
+    else
+      puts "invalid choice, please enter 'make' or 'break'"
+      get_choice
+    end
   end
 
   def play
-
-
     until game_over?
+      puts "You have #{@turn} turns left."
       @breaker.guess = []
       @breaker.get_code until @breaker.valid_input?
-
       @board.add_guess(@breaker.guess)
       @board.get_feedback(@breaker.guess, @secret_code)
-      @board.render(@secret_code)
-      # Feedback [Feedback]
-      # Render board [Board]
-      # check if Code matches secret Code [Game]
-      # check if 12 attempts are up [Game]
-      @turn += 1
+      @board.render
+      @turn -= 1
     end
-    # Display Code
-    # Congratulate or try agian
   end
 
   def game_over?
@@ -45,13 +49,13 @@ class Game
   end
 
   def guessed_correctly?
-    puts "Congrats, you won!" if @breaker.guess == @secret_code
+    puts "Breaker won" if @breaker.guess == @secret_code
     @breaker.guess == @secret_code
   end
 
   def out_of_turns?
-    puts "Sorry, you lost" if @turn > 11
-    @turn > 11
+    puts "The Breaker lost the code was #{@secret_code}" if @turn == 0
+    @turn == 0
   end
 end
 
