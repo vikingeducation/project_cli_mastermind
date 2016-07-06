@@ -7,8 +7,7 @@ class Breaker < Player
   end
 
   def guess
-    get_code_input
+    guess = get_input
     make guess
-
   end
 end

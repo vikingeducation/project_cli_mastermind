@@ -1,3 +1,5 @@
+require_relative 'board.rb'
+
 class Player
 
   def initialize(board)
@@ -29,9 +31,11 @@ class Player
   end
 
 end
-###########################
 
+# def test
+#   player = Player.new(Board.new)
+#   input = player.get_input
+#   puts input
+# end
 
-    end
-
-end
+# test
