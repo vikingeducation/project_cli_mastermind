@@ -35,14 +35,19 @@ class Mastermind
   def play
     @player2.input_colors
     until finish?
-    @player1.get_guess
-    @board.render
+      @player1.get_guess
+      @board.render
     end
     closing_message
   end
 
   def closing_message
-    win? ? puts "You won!" : puts "Better luck next time..."
+    if win?
+      puts "You won!"
+    else
+      puts "The code was #{@board.key}"
+      puts "Better luck next time..."
+    end
   end
 
   def finish?
@@ -54,7 +59,7 @@ class Mastermind
   end
 
   def lose?
-    @board.guesses >= 12
+    @board.guesses >= 2
   end
 
 

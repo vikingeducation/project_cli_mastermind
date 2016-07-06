@@ -10,7 +10,7 @@ attr_reader :key
     # rand
   end
   def input_colors
-    4.times do 
+    4.times do
      @key << @@VALID_COLORS.sample
     end
     @board.set_key(@key)
