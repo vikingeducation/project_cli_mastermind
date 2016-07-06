@@ -60,6 +60,11 @@ class Codemaker < Player
         pattern = gets.chomp.gsub(" ","").split(",")
         @pattern = Board.new(pattern).pattern
       when :computer
+        pattern = []
+        4.times do
+          pattern.push CodePeg::COLORS.values.sample
+        end
+        @pattern = Board.new(pattern).pattern
     end
   end
 
@@ -68,8 +73,7 @@ class Codemaker < Player
     guess.each_index do |i|
       key_pegs << check_guess(i, guess)
     end
-    puts key_pegs
-    key_pegs
+    key_pegs.map { |peg| peg.color }
   end
 
   def check_guess(i, guess)
@@ -128,22 +132,22 @@ class Game
     end
   end
 
-  def render
-    output = []
-    @board.each do |peg|
-      output << peg.color
-    end
-    p output
-  end
+  ### FOR TESTING PURPOSES ONLY ###
+  # def render
+  #   output = []
+  #   @board.each do |peg|
+  #     output << peg.color
+  #   end
+  #   puts "Render: #{output}"
+  # end
 
   def play
     @board = @maker.make_pattern
-
     until game_over? || win?
-      render
       @guess = @breaker.get_guess
+      puts "Breaker's guess:\n#{@guess}"
       @feedback = @maker.feedback(@guess)
-    
+      puts "Maker's feedback:\n#{@feedback}"
       @counter += 1
     end
     
@@ -158,7 +162,7 @@ class Game
 
   def win?
     if @feedback
-      if @feedback.all? { |f| f.color == "w" }
+      if @feedback.all? { |f| f == "w" }
         puts "Codebreaker wins!"
         abort
       end
