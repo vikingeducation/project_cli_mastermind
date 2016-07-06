@@ -1,8 +1,9 @@
 class Board
-
+  attr_reader :guesses
   def initialize
     @key=[]
     @display=[]
+    @guesses = 0
   end
 
   def render
@@ -16,12 +17,15 @@ class Board
     guess==@key
   end
 
+  # @display << guess
+
   def check_accuracy(guess)
-    puts "You have #{check_position} exact guesses."
-    check_color
+    puts "You have #{exact_check(guess)} exact guesses."
+    puts "You have #{close_check(guess)} close guesses."
+    @guesses += 1
   end
 
-  def check_position(guess)
+  def exact_check(guess)
     exacts=0
     (0..3) each do |i|
       exacts +=1 if @key[i]==guess[i]
@@ -29,9 +33,20 @@ class Board
     exacts
   end
 
-  def check_color(guess)
-    
+  def color_check(guess)
+    match = 0
+    dup_key = @key.dup
+    guess.each do |i|
+      if dup_key.include?(i)
+        dup_key.delete_at(dup_key.index(i))
+        match += 1
+      end
+    end
+    match
   end
 
+  def close_check
+    color_check - exact_check
+  end
 
 end

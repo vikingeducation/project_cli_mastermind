@@ -19,20 +19,31 @@ class Mastermind
 
   def initialize(players)
     @board = Board.new
-    @player1 = Human.new
+    @player1 = Human.new(@board)
     if players == 2
-      @player2 = Human.new
+      @player2 = Human.new(@board)
     else
-      @player2 = Computer.new
+      @player2 = Computer.new(@board)
     end
   end
 
+  def play
+    @player2.input_colors
+    until finish?
+    @board.check_accuracy(@player1.get_guess)
+    end
+  end
 
-  def end?
+  def finish?
+    win? || lose?
   end
+
   def win?
+    @board.correct?
   end
+
   def lose?
+    @board.guesses >= 12
   end
 
 
