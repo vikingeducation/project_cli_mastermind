@@ -50,5 +50,3 @@ class Computer
     end
   end
 end
-# ~> -:2:in `<class:Computer>': uninitialized constant Computer::Correctitudable (NameError)
-# ~> 	from -:1:in `<main>'
