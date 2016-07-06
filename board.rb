@@ -8,37 +8,20 @@
 
 # make more methods accept parameters
 
+require_relative 'game'
+
 class Board
 
+  attr_accessor :answer
 
   def initialize
-
+    @answer = generate_code
   end
 
   def generate_code
-    #orange, green, red, blue, purple, yellow
     code = []
     code = 4.times {code << COLORS.sample}
-    #
+    code
   end
-
-
-  def feedback
-    semi = 0
-    correct_moves = 0
-    Game.secret_code.each do |item|
-      if current_board.include?(item)
-        semi += 1
-      end
-    end
-    Game.secret_code.each_with_index do |item1, index1|
-      if current_board[index1] == item1
-          correct_moves += 1
-          semi -= 1
-      end
-    end
-    puts "You have #{semi} almost correct, and #{correct_moves} correct pegs."
-  end 
-
 
 end
