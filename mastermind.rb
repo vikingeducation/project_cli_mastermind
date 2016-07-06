@@ -25,7 +25,7 @@ class Mastermind
     # check for game over [Board]
       break if @board.game_over?
     # allow player to guess or quit and send to Board[Player]
-      @board.move(@codebreaker.get_move)
+      @board.move(@codebreaker.get_move(@board))
     end
 
   end
@@ -37,6 +37,8 @@ end
 class Board
   # COLORS
   @game_turns = 12
+
+  attr_reader :pegs :colors :moves
 
   def initialize(player)
     # number of turns
@@ -78,19 +80,17 @@ class Player
     @name = name
   end 
 
-  #get_move
-    #prompt for move
-    #input_code
+  def get_move(board)
+    puts "Let's get your next move."
+    input_code(board)
+  end
 
-  #make_answer
-    #prompt for answer
-    #input_code
+  def make_answer(board)
+    puts "Let's set up the secret answer."
+    input_code(board)
+  end
 
-  # get board conditions
-    #get pegs
-    #get colors (possible colors)
 
-  # ask board for possible colors
 
   def self.create_player(position)
     input = ""
@@ -125,18 +125,27 @@ class Human < Player
   #input_code
     #ask for input
     #check for format
-  def input_code(prompt)
-    input = ""
-    until [].include?(input)
-      puts prompt
-      input = gets.chomp
+  def input_code(board)
+    
+    current_turn = (1..board.pegs).to_a
+    board.pegs.times do |peg|
+      print_current_turn(current_turn)
+      input = receive_input
+      current_turn[peg] = input
     end
+    current_turn
 
-    #return
+    
   end
 
-  def parse_input
+  def receive_input
 
+
+  end
+
+  def print_current_turn
+    print "Current turn: " 
+    print current_turn
   end
 
   def get_pegs
