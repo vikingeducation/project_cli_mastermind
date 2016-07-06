@@ -14,10 +14,14 @@ class Breaker #< Player
   end
 end
 
-def test
-  newboard = Array.new(2){Array.new(4)}
-  puts newboard
-  input = %w[r b g y]
-  newboard[newboard.find_index(Array.new(4))] = input
-  puts newboard
-end
+###################################
+
+# def test
+#   newboard = Array.new(2){Array.new(4)}
+#   p newboard
+#   input = %w[r b g y]
+#   newboard[newboard.find_index(Array.new(4))] = input
+#   p newboard
+# end
+#
+# test
