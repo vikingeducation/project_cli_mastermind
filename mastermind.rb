@@ -35,7 +35,9 @@ computer class
   secret_code class
 =end
 
-class Game 
+class Game
+
+  attr_accessor :player_guess, :secret_code 
 
   def initialize
     @board = Board.new
@@ -43,17 +45,21 @@ class Game
     @turns = 0
     @player1 = Player.new
     $COLORS = %w[orange green red blue purple yellow]
-
+    @player_guess = []
   end
   
   def play
     until over?
-      @turns += 1
+      increase_turns
+      @board.render
+      @player_guess = @player1.get_move
       render
-      @player1.get_move
-
-
     end
+  end
+
+
+  def increase_turns 
+    @turns += 1
   end
 
   def over?
@@ -61,6 +67,9 @@ class Game
   end
 
 end
+
+
+
 
 class Board
   def initialize
@@ -77,10 +86,33 @@ class Board
   end
 
   def current_board
-    contains an array of the current placed colored pegs
-    gets passed the player move
+    # contains an array of the current placed colored pegs
+    # gets passed the player move
+    Game.player_guess 
+  end
+
+  def feedback
+    absolute_correct_moves = 0
+    Game.secret_code.each do |item|
+      if current_board.include?(item)
+        somewhat_correct_moves += 1
+      end
+    end
+    Game.secret_code.each_with_index do |item1, index1|
+      if current_board[index1] == item1
+          absolute_correct_moves += 1
+          somewhat_correct_moves -= 1
+      end
+    end
+    if current_board.include? ()
+    somewhat_correct_moves = 0
+
+  end 
 
 
+  def render 
+    current_board
+    feedback
   end
 
 
