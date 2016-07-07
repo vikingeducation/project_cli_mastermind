@@ -36,13 +36,16 @@ class Mastermind
       @board.move(@codebreaker.get_move(@board))
     end
 
+  puts "The solution was:"
+  puts @board.solution.inspect
+  puts "Goodbye!"
+  
   end
-
-
-  # end game
+  
 end
 
 g = Mastermind.new
+
 g.play
   
   

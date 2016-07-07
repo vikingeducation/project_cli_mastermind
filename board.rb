@@ -1,6 +1,6 @@
 class Board
 
-  attr_reader :pegs, :colors, :moves, :player_turns
+  attr_reader :pegs, :colors, :moves, :solution
 
   def initialize(codebreaker, codemaker)
     # number of turns
@@ -8,6 +8,7 @@ class Board
     @game_turns = 12
     # array of moves
     @moves = []
+    @feedback = []
     # get number of pegs [ask player]
     @pegs = codebreaker.get_pegs
     # get number of colors
@@ -18,10 +19,9 @@ class Board
   def render
     puts
     puts "--------------------------------"
-    puts
 
     @moves.each_with_index do |move, index|
-      puts "Move #{index + 1}: " + move.to_s
+      puts "Move #{index + 1}: #{ move } #{@feedback[index]}"
     end
 
     puts "--------------------------------"
@@ -33,6 +33,7 @@ class Board
 
   def move(move)
     @moves << move
+    @feedback << get_feedback(move)
     @player_turns += 1
   end
 
@@ -40,16 +41,46 @@ class Board
     $COLORS.keys.sample(number_of_colors)
   end 
 
-  # give feedback
-    # look at current turn
-      # count number of correct, half-correct, and wrong
-    # return
+  def get_feedback(move)
+    format_feedback(count_correct(move), count_misplaced(move))
+  end
+
+  def count_correct(move)
+    count = 0
+    move.each_index do |index|
+      count += 1 if move[index] == @solution[index]
+    end
+    count
+  end
+
+  def count_misplaced(move)
+    move = move.dup
+    solution = @solution.dup
+
+    move.length.times do |count|
+      solution[count] = nil if move[count] == solution[count]
+    end
+    
+    count = 0
+    move.each do |element|
+      solution.each_index do |index|
+        if solution[index] == element
+          solution[index] = nil
+          count += 1
+          break
+        end
+      end
+    end
+    count
+  end
+
+  def format_feedback(correct, misplaced)
+    "\t\tCorrect: #{ correct }\tMisplaced: #{ misplaced }"
+  end
 
   def game_over?
     win? || no_moves_left?
   end
-    # did they win?
-    # are the moves over?
 
   def win?
     if @moves.any? { |turn| turn == @solution } 
@@ -59,7 +90,6 @@ class Board
       false
     end
   end
-
 
   def no_moves_left?
     if @player_turns >= @game_turns
