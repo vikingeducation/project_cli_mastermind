@@ -14,21 +14,20 @@ class Maker < Player
     @code = get_input
   end
 
-  def feedback(guess, code)
-    reds = exact_match_at(guess, code)
-    puts reds
-    whites = partial_match_at(guess, code) - reds
-    puts whites
-    puts partial_match_at(guess, code)
+  def feedback(guess)
+    reds = exact_match_at(guess)
+    whites = partial_match_at(guess) - reds
     fb_arr = []
     reds.times {fb_arr << "r"}
     whites.times {fb_arr << "w"}
+
+    @fb_board[@fb_board.find_index(Array.new(4))] = fb_arr
     fb_arr
   end
 
 
 
-  def exact_match_at(guess, code)
+  def exact_match_at(guess)
     arr_exact = []
     guess.each_with_index do |ele, i|
       arr_exact << i if ele == code[i]
@@ -36,7 +35,7 @@ class Maker < Player
     arr_exact.length
   end
 
-  def partial_match_at(guess, code)
+  def partial_match_at(guess)
     copy = code
     count = 0
     guess.each do |x|
