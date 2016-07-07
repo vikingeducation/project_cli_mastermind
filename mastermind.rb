@@ -1,3 +1,4 @@
+require 'pry'
 load 'board.rb'
 load 'breaker.rb'
 load 'display.rb'
@@ -12,32 +13,22 @@ class Mastermind
   def initialize
     @codemaker = Maker.new
     @codebreaker = Breaker.new
-
+    @turn = 1
   end
 
   def play
-    puts "Welcome to Mastermind!"
-
+    intro
     @codemaker.set_code
-
+    render(@codebreaker.board,
+           @codemaker.board)
     loop do
-      render(@codebreaker.guess_board,
-             @codemaker.fb_board)
-      @codebreaker.current_guess
-
-      break if game_over?
-      # else
-      # => @Codemaker provides feedback (white/red signals)
+      @codebreaker.guess
       @codemaker.feedback(@codebreaker.current_guess)
-
-
+      render(@codebreaker.board,
+             @codemaker.board)
+      break if game_over?
     end
-
-    render(@codebreaker.guess_board,
-           @codemaker.fb_board)
-
-    # Game over message
-
+    salutations
   end
 
   def game_over?
@@ -45,11 +36,19 @@ class Mastermind
   end
 
   def victory?
-    @codemaker.code == @codebreaker.current_guess
+    if (@codemaker.code.join == @codebreaker.current_guess.join)
+      puts "Congrats you actually won.."
+      return true
+    end
+    false
   end
 
   def end_of_turns?
-    return true unless @codebreaker.guess_board.include?(Array.new(4))
+    if @turn == 12
+      puts "That's a shame, you lose......."
+      return true
+    end
+    @turn += 1
     false
   end
 

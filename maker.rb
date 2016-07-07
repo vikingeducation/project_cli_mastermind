@@ -1,11 +1,14 @@
 require_relative 'player.rb'
+# require_relative 'board.rb'
+require 'pry'
 
 class Maker < Player
-  attr_reader :fb_board, :name
-  attr_accessor :code
+  # attr_reader :name, :code, :board
+  attr_reader :name, :code, :board
+  # attr_accessor :code, :board
 
   def initialize
-    @fb_board = Board.new
+    super
     @name = "Code Maker"
     @code = []
   end
@@ -15,36 +18,37 @@ class Maker < Player
   end
 
   def feedback(guess)
-    reds = exact_match_at(guess)
-    whites = partial_match_at(guess) - reds
-    fb_arr = []
-    reds.times {fb_arr << "r"}
-    whites.times {fb_arr << "w"}
-
-    @fb_board[@fb_board.find_index(Array.new(4))] = fb_arr
-    fb_arr
+    # binding.pry
+    reds = exact_matches(guess)
+    whites = partial_matches(guess) - reds
+    fb_arr = Array.new(reds, "r") + Array.new(whites, "w")
+    (4 - reds - whites).times {fb_arr.push("*")} unless fb_arr.length == 4
+    add_feedback_to_board(fb_arr.shuffle)
   end
 
+  # def add_feedback_to_board(arr)
+  #   @board[@board.find_index(Array.new(4))] = arr.shuffle
+  #   fb_arr
+  # end
 
-
-  def exact_match_at(guess)
-    arr_exact = []
+  def exact_matches(guess)
+    exact_matches = 0
     guess.each_with_index do |ele, i|
-      arr_exact << i if ele == code[i]
+      exact_matches += 1 if ele == @code[i]
     end
-    arr_exact.length
+    exact_matches
   end
 
-  def partial_match_at(guess)
-    copy = code
-    count = 0
+  def partial_matches(guess)
+    copy = code.dup
+    partial_matches = 0
     guess.each do |x|
       if copy.include?(x)
-        count += 1
-        copy[copy.find_index(x)] = "-"
+        partial_matches += 1
+        copy[copy.find_index(x)] = nil
       end
     end
-    count
+    partial_matches
   end
 
 
@@ -54,27 +58,26 @@ end
 def test
 
   maker = Maker.new
-  code= %w[r r r r]
+  maker.code = %w[r r r r]
   guess = %w[r r r r]
-  p maker.feedback(guess, code)
+  maker.feedback(guess)
 
-  code= %w[b r w r]
+  maker.code= %w[b r w r]
   guess = %w[b y r b]
-  p maker.feedback(guess, code)
+  maker.feedback(guess)
 
-  code= %w[b r w r]
+  maker.code= %w[b r w r]
   guess = %w[r b r w]
-  p maker.feedback(guess, code)
+  maker.feedback(guess)
 
-  code= %w[b r w r]
+  maker.code= %w[b r w r]
   guess = %w[b w r r]
-  p maker.feedback(guess, code)
+  maker.feedback(guess)
 
-  code= %w[b b w y]
+  maker.code= %w[b b w y]
   guess = %w[g r o p]
-  p maker.feedback(guess, code)
-
-
+  maker.feedback(guess)
+  puts maker.board[0..4]
 end
 
 # test

@@ -13,7 +13,15 @@ module Display
         end
         puts
     end
-    puts
+    puts " Br  |  Mk\n\n"
   end
 
+  def intro
+    puts "Welcome to Mastermind!"
+    puts "Try and guess the secret code before your 12 turns is up!\n\n"
+  end
+
+  def salutations
+    puts "Thanks for playing\n\n"
+  end
 end
