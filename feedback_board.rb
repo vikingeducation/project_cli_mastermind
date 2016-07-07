@@ -1,0 +1,3 @@
+class FeedBackBoard < Board
+
+end
