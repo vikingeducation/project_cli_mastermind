@@ -21,15 +21,14 @@ class Board
     puts
 
     @moves.each_with_index do |move, index|
-      puts "Move #{index + 1}: " + move.to_s
+      print "Move #{index + 1}: " + move.to_s + " "
+      feedback(move)
     end
 
     puts "--------------------------------"
     puts
   end
-    # start as number_of_turns lines
-    # array of pegs with color
-    # go through each move so far and print that line, plus feedback for that line
+  
 
   def move(move)
     @moves << move
@@ -40,16 +39,34 @@ class Board
     $COLORS.keys.sample(number_of_colors)
   end 
 
-  # give feedback
-    # look at current turn
-      # count number of correct, half-correct, and wrong
-    # return
+  def feedback(move)
+    temp_arr = @solution.dup
+    half_correct = 0
+    correct = 0
+    move.each_with_index do |item, index|
+      if temp_arr.include?(move[index])
+        half_correct += 1
+        temp_arr.delete_at(temp_arr.index(move[index]))
+      end
+    end
+    move.each_with_index do |item, index|
+      if item == @solution[index]
+        half_correct -= 1 if half_correct > 0
+        correct += 1
+      end
+    end
+
+    give_feedback(correct, half_correct)
+  end
+
+  def give_feedback(correct, half_correct)
+    puts "You got #{correct} correct and #{half_correct} half_correct"
+  end
+ 
 
   def game_over?
     win? || no_moves_left?
   end
-    # did they win?
-    # are the moves over?
 
   def win?
     if @moves.any? { |turn| turn == @solution } 
