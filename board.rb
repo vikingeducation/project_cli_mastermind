@@ -19,23 +19,25 @@ class Board
 
   def set_blacks_whites
     master_code = @master_code
-    code = @code
-    num_of_whites = 0
-    num_of_blacks = 0
+    num_of_whites, num_of_blacks = [0, 0]
     @code.chars.each_with_index do |peg, index|
       if master_code[index] == peg
         num_of_blacks += 1
-        next
+        master_code = set_first_matching_char(peg, '*', master_code)
       elsif master_code.include?(peg)
         num_of_whites += 1
-        match_index = master_code.chars.index(peg)
-        master_code = master_code.chars
-        master_code[match_index] = '*'
-        master_code = master_code.join('')
+        master_code = set_first_matching_char(peg, '*', master_code)
       end
     end
-    @blacks = num_of_blacks
-    @whites = num_of_whites
+    @blacks, @whites = [num_of_blacks, num_of_whites]
+  end
+
+
+  def set_first_matching_char(match, replacement, word)
+    match_index = word.chars.index(match)
+    word = word.chars
+    word[match_index] = "#{replacement}"
+    word = word.join('')
   end
 
   def render

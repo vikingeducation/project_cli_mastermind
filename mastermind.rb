@@ -10,6 +10,7 @@ class Game
     print_color_options
     assign_players
     @codemaker.set_master_code
+    @board.master_code = @codemaker.master_code
     12.times do
       turn
       break if win?
