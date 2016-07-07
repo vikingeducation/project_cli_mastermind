@@ -1,4 +1,4 @@
-# require_relative 'player.rb'
+require_relative 'player.rb'
 
 class Maker < Player
   attr_reader :fb_board, :name

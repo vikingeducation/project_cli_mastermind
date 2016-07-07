@@ -1,4 +1,4 @@
-class Board
+class Board < Array
 
   def initialize
     @board = Array.new(12){ Array.new(4) }

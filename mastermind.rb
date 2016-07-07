@@ -1,9 +1,9 @@
-require_relative 'board.rb'
-require_relative 'breaker.rb'
-require_relative 'display.rb'
-require_relative 'feedback_board.rb'
-require_relative 'maker.rb'
-require_relative 'player.rb'
+load 'board.rb'
+load 'breaker.rb'
+load 'display.rb'
+load 'feedback_board.rb'
+load 'maker.rb'
+load 'player.rb'
 
 
 class Mastermind
@@ -45,7 +45,7 @@ class Mastermind
   end
 
   def victory?
-    codemaker.code == @codebreaker.current_guess
+    @codemaker.code == @codebreaker.current_guess
   end
 
   def end_of_turns?
