@@ -1,4 +1,4 @@
-require_relative 'player.rb'
+# require_relative 'player.rb'
 
 class Maker < Player
   attr_reader :fb_board, :name
@@ -38,28 +38,28 @@ class Maker < Player
     # feedback_arr
   end
 
-  def exact_match_at(guess)
-    arr_exact = []
-    guess.each_with_index do |ele, i|
-      arr_exact << i if ele == code[i]
-    end
-    arr_exact
-  end
+  # def exact_match_at(guess)
+  #   arr_exact = []
+  #   guess.each_with_index do |ele, i|
+  #     arr_exact << i if ele == code[i]
+  #   end
+  #   arr_exact
+  # end
 
-  def partial_match_at(guess)
-    arr_partial = []
-    guess.delete_at(exact_match_at(guess))
-    match_hash = Hash.new(0)
-    code_hash = Hash.new(0)
-    guess.each {|x| guess_hash[x] += 1}
-    code.each {|x| code_hash[x] += 1}
-    guess_hash.each do |key, value|
-      guess_hash[key] = code_hash[]
+  # def partial_match_at(guess)
+  #   arr_partial = []
+  #   guess.delete_at(exact_match_at(guess))
+  #   match_hash = Hash.new(0)
+  #   code_hash = Hash.new(0)
+  #   guess.each {|x| guess_hash[x] += 1}
+  #   code.each {|x| code_hash[x] += 1}
+  #   guess_hash.each do |key, value|
+  #     guess_hash[key] = code_hash[]
+  #   end
+  #   guess.sort
+  #   guess.each_with_index do |ele, i|
 
-    guess.sort
-    guess.each_with_index do |ele, i|
-
-  end
+  # end
 
 end
 
@@ -89,4 +89,4 @@ def test
 
 end
 
-test
+# test

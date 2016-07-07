@@ -1,4 +1,4 @@
-require_relative 'player.rb'
+# require_relative 'player.rb'
 
 class Breaker #< Player
   attr_accessor :guess_board, :name, :current_guess

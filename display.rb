@@ -2,7 +2,8 @@ module Display
 
   def render( guess_board, feedback_board )
     display_image = []
-    guess_board.each_with_index {|row, i| display_image[i] = row + feedback_board[i]}
+    # puts guess_board.board.superclass.superclass
+    guess_board.each_with_index {|row, i| display_image[i] = row + [" | "] + feedback_board[i]}
     puts
     # loop through data structure
     display_image.each do |row|
