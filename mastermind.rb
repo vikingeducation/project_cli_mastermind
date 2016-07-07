@@ -19,7 +19,6 @@ class Game
   def play
     until over?
       @board.display_board 
-      puts @code.answer   
       display_available_colors 
       guess = @player.get_guess
       exit if win?(guess)
@@ -85,7 +84,7 @@ class Board
   end
 
   def display_board
-    # system 'clear'
+    system 'clear'
     @rows.each_with_index do |row, index|
       print "#{index+1} \t#{row[0]} #{row[1]} #{row[2]} #{row[3]}"
       print "\tblack=#{row[4]}" unless row[4].nil?
