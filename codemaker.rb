@@ -1,4 +1,5 @@
 #codemaker.rb
+require_relative 'player'
 
 class CodeMaker < Player
 
