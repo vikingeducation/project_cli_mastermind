@@ -18,19 +18,27 @@ class Game
 
   def play
     until over?
-      @board.display_board    
+      @board.display_board 
+      puts @code.answer   
       display_available_colors 
       guess = @player.get_guess
       exit if win?(guess)
-      guess_to_board(guess)
+      add_guess_to_board(guess)
       @board.display_board
     end
     puts "The codemaster won! This was the answer: #{@code.answer}"
   end
 
-  def guess_to_board(guess)
-      @board.rows[@player.guesses] = guess.concat([check_for_black(guess, @code.answer), (check_for_white(guess, @code.answer) - check_for_black(guess, @code.answer))])
+  def add_guess_to_board(guess)
+      guess_with_pegs = guess.concat(black_and_white_result(guess))
+      @board.rows[@player.guesses] = guess_with_pegs
       @player.guesses += 1
+  end
+
+  def black_and_white_result(guess)
+    black = check_for_black(guess, @code.answer)
+    white = check_for_white(guess, @code.answer) - black
+    [black, white]
   end
 
   def over?
@@ -77,14 +85,14 @@ class Board
   end
 
   def display_board
-    system 'clear'
+    # system 'clear'
     @rows.each_with_index do |row, index|
-      print "#{index+1} #{row[0]} #{row[1]} #{row[2]} #{row[3]}"
+      print "#{index+1} \t#{row[0]} #{row[1]} #{row[2]} #{row[3]}"
       print "\tblack=#{row[4]}" unless row[4].nil?
       print "\twhite=#{row[5]}" unless row[5].nil?
       puts
     end
-    puts "   x x x x"
+    puts "\tx x x x"
   end
 end
 
