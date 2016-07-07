@@ -14,7 +14,6 @@ class Game
 
   def initialize
     @board = Board.new
-    @secret_code = @board.generate_code
     @turns = 0
     @player_guess = []
   end

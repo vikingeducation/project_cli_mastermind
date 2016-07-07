@@ -4,14 +4,14 @@
 class Player
 
   def initialize
-    @move_holder = ""
+
   end
 
   def get_move
     puts "Please type the color of pegs you want to place."
     puts "For example: 'red, green, blue, blue' "
     move = gets.chomp.downcase
-    valid_move?(move) ? @move_holder = move : get_move
+    valid_move?(move) ? return move : get_move
   end
 
   def valid_move?(move)
