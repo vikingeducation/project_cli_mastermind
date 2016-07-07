@@ -1,24 +1,15 @@
 require_relative 'player.rb'
 require_relative 'board.rb'
 class Game
-
   def initialize
     @board = Board.new
   end
 
   def play
-    puts "Welcome to Mastermind!!"
-    puts "Here are your color options:"
-    puts "B = Blue"
-    puts "O = Orange"
-    puts "G = Green"
-    puts "R = Red"
-    puts "P = Purple"
-    puts "Y = Yellow"
+    puts 'Welcome to Mastermind!!'
+    print_color_options
     assign_players
     @codemaker.set_master_code
-    puts "Your Master Code is #{@codemaker.master_code}"
-    @board.master_code = @codemaker.master_code
     12.times do
       turn
       break if win?
@@ -36,12 +27,12 @@ class Game
 
   def assign_players
     until @codemaker
-      puts "Would you like to play as Codemaker(m) or Codebreaker(b)? "
+      puts 'Would you like to play as Codemaker(m) or Codebreaker(b)? '
       choice = gets.chomp
-      if choice == "m"
+      if choice == 'm'
         @codemaker = Human.new
         @codebreaker = Computer.new
-      elsif choice == "b"
+      elsif choice == 'b'
         @codemaker = Computer.new
         @codebreaker = Human.new
       end
@@ -54,9 +45,19 @@ class Game
 
   def final_message
     if win?
-      puts "You win!!"
+      puts 'You win!!'
     else
-      puts "You lose!!"
+      puts "You lose!! It was #{@codemaker.master_code}"
     end
+  end
+
+  def print_color_options
+    puts 'Here are your color options:'
+    puts 'B = Blue'
+    puts 'O = Orange'
+    puts 'G = Green'
+    puts 'R = Red'
+    puts 'P = Purple'
+    puts 'Y = Yellow'
   end
 end

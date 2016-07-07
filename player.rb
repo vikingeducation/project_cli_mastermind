@@ -1,5 +1,4 @@
 class Player
-
   attr_accessor :code, :master_code
 
   def valid_code?(code)
@@ -9,19 +8,18 @@ class Player
 
   def valid_chars?(chars)
     valid_chars = %w(R B G Y O P)
-    chars.all?{ |char| valid_chars.include?(char) }
+    chars.all? { |char| valid_chars.include?(char) }
   end
 end
 
 class Human < Player
-
   def guess_code
-    puts "Codebreaker enter your code: e.g. brgo"
+    puts 'Codebreaker enter your code: e.g. brgo'
     @code = get_code_input
   end
 
   def set_master_code
-    puts "Choose your master code (e.g. brgo): "
+    puts 'Choose your master code (e.g. brgo): '
     @master_code = get_code_input
   end
 
@@ -34,12 +32,9 @@ class Human < Player
     end
     colors
   end
-
-
 end
 
 class Computer < Player
-
   def guess_code
     @code = generate_code
   end
@@ -49,9 +44,9 @@ class Computer < Player
   end
 
   def generate_code
-    code = ""
+    code = ''
     valid_chars = %w(R B G Y O P)
-    4.times {code << valid_chars.sample}
+    4.times { code << valid_chars.sample }
     code
   end
 end
