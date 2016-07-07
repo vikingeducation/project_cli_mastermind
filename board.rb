@@ -1,12 +1,11 @@
 class Board
-  # COLORS
-  @game_turns = 12
 
-  attr_reader :pegs, :colors, :moves
+  attr_reader :pegs, :colors, :moves, :player_turns
 
   def initialize(codebreaker, codemaker)
     # number of turns
     @player_turns = 0
+    @game_turns = 12
     # array of moves
     @moves = []
     # get number of pegs [ask player]
@@ -17,9 +16,16 @@ class Board
   end
 
   def render
+    puts
+    puts "--------------------------------"
+    puts
+
     @moves.each_with_index do |move, index|
       puts "Move #{index + 1}: " + move.to_s
     end
+
+    puts "--------------------------------"
+    puts
   end
     # start as number_of_turns lines
     # array of pegs with color
@@ -27,6 +33,7 @@ class Board
 
   def move(move)
     @moves << move
+    @player_turns += 1
   end
 
   def set_colors(number_of_colors)
@@ -39,13 +46,28 @@ class Board
     # return
 
   def game_over?
-    false
+    win? || no_moves_left?
   end
     # did they win?
     # are the moves over?
 
-  # win?
+  def win?
+    if @moves.any? { |turn| turn == @solution } 
+      puts "You're a mastermind!"
+      true
+    else
+      false
+    end
+  end
 
-  # moves left?
+
+  def no_moves_left?
+    if @player_turns >= @game_turns
+      puts "You lose. You're a fool."
+      true
+    else
+      false
+    end
+  end
 
 end

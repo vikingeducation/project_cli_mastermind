@@ -41,6 +41,9 @@ class Mastermind
 
   # end game
 end
+
+g = Mastermind.new
+g.play
   
   
 
