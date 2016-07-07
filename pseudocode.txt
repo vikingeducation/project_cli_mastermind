@@ -1,0 +1,37 @@
+setup game (game)
+  - create board (board)
+  - create player (player)
+    
+  - create code (code)
+
+play (game)
+until over?(game)
+ - display board (board)
+ - ask player for a combination (game)
+ - get player combination (guess)
+ - validate player combination (guess)
+ - check combination (guess)
+    break if win? (guess)
+      - exit loop
+    similar?
+      - return result (guess)
+      - display result (board)
+    end
+end
+
+if win?
+  display congrats (game)
+else
+  no more turns left (game)
+  display code (board)
+end
+
+
+classes:
+board
+player
+code
+game
+piece 
+guess
+
