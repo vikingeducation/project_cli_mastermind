@@ -1,3 +1,3 @@
 ## assignment_mastermind
 
-[An object-oriented Ruby assignment from the Viking Code School](http://www.vikingcodeschool.com)
+Mastermind assignment working in pairs with David Watts[https://github.com/davidjwatts]
