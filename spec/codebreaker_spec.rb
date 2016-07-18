@@ -16,22 +16,26 @@ describe Codebreaker do
 	describe '#render' do
 		it "displays initial board" do
 			codebreaker = Codebreaker.new
-			expect{codebreaker.render}.to output("||_______________||\n").to_stdout
+			expect{codebreaker.render}.to output("||_______________|| E C\n").to_stdout
 		end
 
 		it "displays partial board" do
 			codebreaker = Codebreaker.new
+			codebreaker.make_guess(['r','y','b','y'])
+			codebreaker.make_pegs(['g','y','r','y'])
+
 			codebreaker.make_guess(['r','r','r','r'])
-			codebreaker.make_guess(['b','b','b','y'])
-			expect{codebreaker.render}.to output("|| b , b , b , y ||\n|| r , r , r , r ||\n||_______________||\n").to_stdout
+			codebreaker.make_pegs(['g','y','r','y'])
+			expect{codebreaker.render}.to output("|| r , r , r , r || 1 0\n|| r , y , b , y || 2 1\n||_______________|| E C\n").to_stdout
 		end
 	end
 
 	describe '#make_guess' do
 		it "adds 1 guess to guess board" do
+			guess_arr = ['r','r','r','r']
 			codebreaker = Codebreaker.new
-			codebreaker.make_guess(['r','r','r','r'])
-			expect(codebreaker.guesses_board).to eq([['r','r','r','r']])
+			codebreaker.make_guess(guess_arr)
+			expect(codebreaker.guesses_board).to eq([guess_arr])
 		end
 
 		it "adds multiple guesses to guess board" do
@@ -53,6 +57,15 @@ describe Codebreaker do
 			codebreaker = Codebreaker.new
 			codebreaker.make_guess(['r','r','r','r'])
 			expect(codebreaker.won?(['r','r','r','b'])).to eq(false)
+		end
+	end
+
+	describe '#make_pegs' do
+		it "returns an array of exact & close pegs" do
+			codebreaker = Codebreaker.new
+			codebreaker.make_guess(['r','y','b','y'])
+			codebreaker.make_pegs(['g','y','r','y'])
+			expect(codebreaker.pegs[-1]).to eq([2,1])
 		end
 	end
 end
