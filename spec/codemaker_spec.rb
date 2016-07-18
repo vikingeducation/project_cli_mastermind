@@ -12,4 +12,8 @@ describe Codemaker do
 	it 'accepts no parameters upon creation' do
 		expect{Codemaker.new()}.not_to raise_error
 	end
+
+	#make sure it is an array
+	#loops through colors  -  against base colors
+	
 end

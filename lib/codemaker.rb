@@ -6,16 +6,12 @@ class Codemaker
 	attr_reader :code
 
 	def initialize(code=[])
-		if code.empty?
-			@code = code
-			generate_code
-		else
-			@code = code
-		end
+		@code = code
+		generate_code if code.empty?
+
 	end
 
 	private
-
 	def generate_code
 		NUM_COLORS.times{ @code << COLORS.sample }
 	end
