@@ -1,7 +1,7 @@
 # Board class is here
 class Board
 
-  def initilize
+  def initialize
     @array = Array.new(12){ Array.new(4, 0) }
   end
 
@@ -16,7 +16,7 @@ class Board
     modify_array guess, i
     @array.each do |row|
       row.each do |element|
-        print element.center(8)
+        print element.to_s.center(5)
       end
       puts ""
     end
@@ -50,9 +50,9 @@ class Board
         guess_index_mark << i
       end
     end
-    code.each_with_index do |code_color, code_index|
-      guess.each_with_index do |guess_color, guess_index|
-        if (code_color == guess_color) && (!code_index_mark.include? code_index) && (!guess_index_mark.include? guess_index)
+    code.each_with_index do |code_num, code_index|
+      guess.each_with_index do |guess_num, guess_index|
+        if (code_num == guess_num) && (!code_index_mark.include? code_index) && (!guess_index_mark.include? guess_index)
           result += 1
           code_index_mark << code_index
           guess_index_mark << guess_index

@@ -1,14 +1,13 @@
 # Player class
 class Player
-  attr_accessor :name
-
-  def initilize(name)
-    @name = name
-  end
 
   def pick_codebreaker?
-    binding.pry
-    true if pick_character == 1
+    # binding.pry
+    true if pick_character == '1'
+  end
+
+  def initialize_code
+    make_guess
   end
 
   def make_guess
@@ -28,23 +27,24 @@ class Player
 
   def guess_format guess
     result = []
-    guess.split(",").each { |color| result << color.strip }
+    guess.split(",").each { |num| result << num.strip }
     result
   end
 
   def guess_warning
     puts "Wrong guess input"
-    puts "Availble colors are as follows, four colors should be inserted."
-    puts "red, blue, green, yellow, white, black"
+    puts "Availble numbers are as follows, only four numbers should be inserted."
+    puts "1, 2, 3, 4, 5, 6"
+    puts ""
   end
 
   def valid_guess? guess
-    valid_guess_color?(guess) && valid_guess_length?(guess)
+    valid_guess_num?(guess) && valid_guess_length?(guess)
   end
 
-  def valid_guess_color? guess
-    color_collection = ['red', 'blue', 'green', 'yellow', 'white', 'black']
-    guess.split(",").all? { |color| color_collection.include? color}
+  def valid_guess_num? guess
+    num_collection = ['1', '2', '3', '4', '5', '6']
+    guess.split(",").all? { |num| num_collection.include? num.strip}
   end
 
   def valid_guess_length? guess
@@ -52,9 +52,10 @@ class Player
   end
 
   def guess_instruction
-    puts "Make a guess in the format 'color1, color2, color3, color4'"
-    puts "For Example, 'red, green, blue, white'"
-    puts "Colors above are from left to right in association with the board position"
+    puts "Type in the format 'num1, num2, num3, num4'"
+    puts "For Example, '2, 3, 3, 1'"
+    puts "Numberss above are from left to right in association with the board position"
+    puts ""
   end
 
   def pick_character
@@ -68,6 +69,6 @@ class Player
   end
 
   def character_valid? character
-    true if character == 1 || character == 2
+    true if character == '1' || character == '2'
   end
 end

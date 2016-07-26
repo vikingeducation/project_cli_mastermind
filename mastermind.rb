@@ -35,18 +35,18 @@ require_relative 'computer'
 require_relative 'player'
 require 'pry'
 
+
 class MasterMind
 
-  def initilize
-    @player   = Player.new("Bran")
+  def initialize
+    @player   = Player.new
     @board    = Board.new
     @computer = ComputerAi.new
   end
 
   def play
     welcome
-    @player.guess_warning
-    binding.pry
+    # binding.pry
     if @player.pick_codebreaker?
       playing(@computer, @player)
     else
@@ -65,10 +65,14 @@ class MasterMind
   def playing(maker, coder)
     code = maker.initialize_code
     12.times do |i|
-      break if game_over? guess, code
+      # binding.pry
       guess = coder.make_guess
-      @border.display guess, i
-      @border.feedback code, guess
+      if game_over? guess, code
+        puts "Congradulations! You win!"
+        break
+      end
+      @board.display guess, i
+      @board.feedback code, guess
     end
     show_hidden_code code
   end
@@ -76,11 +80,11 @@ class MasterMind
   private
 
   def game_over? code, guess
-    code = guess
+    code == guess
   end
 
   def show_hidden_code code
-    puts code
+    puts "The hidden code is #{code}"
   end
 
 end
