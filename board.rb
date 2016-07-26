@@ -1,15 +1,23 @@
 # Board class is here
 class Board
+  attr_reader :feedback_result
 
   def initialize
     @array = Array.new(12){ Array.new(4, 0) }
+    @feedback_result = {}
   end
 
   def feedback code, guess
-    result = {}
-    result[:black] = exact_guess code, guess
-    result[:white] = close_guess code, guess
-    puts "There are/is #{result[:black]} exact guess and #{result[:white]} close result"
+    @feedback_result[:black] = exact_guess code, guess
+    @feedback_result[:white] = close_guess code, guess
+    @feedback_result
+  end
+
+  def feedback_for_reguess code, guess
+    feedback_ai = {}
+    feedback_ai[:black] = exact_guess code, guess
+    feedback_ai[:white] = close_guess code, guess
+    feedback_ai
   end
 
   def display guess, i

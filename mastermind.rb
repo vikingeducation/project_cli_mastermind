@@ -66,13 +66,15 @@ class MasterMind
     code = maker.initialize_code
     12.times do |i|
       # binding.pry
-      guess = coder.make_guess
+      guess = coder.make_guess @board
+      @board.display guess, i
       if game_over? guess, code
         puts "Congradulations! You win!"
         break
       end
-      @board.display guess, i
       @board.feedback code, guess
+      puts "There is #{@board.feedback_result[:black]} exact guess and #{@board.feedback_result[:white]} close result"
+      puts ""
     end
     show_hidden_code code
   end

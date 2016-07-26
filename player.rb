@@ -7,10 +7,10 @@ class Player
   end
 
   def initialize_code
-    make_guess
+    make_guess "hihi"
   end
 
-  def make_guess
+  def make_guess useless_parameter
     guess_instruction
     guess = gets.chomp
     until valid_guess? guess
