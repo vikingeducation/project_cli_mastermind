@@ -28,7 +28,7 @@ class Mastermind
     
 
 end
-############################################
+
 class Codebreaker
   def initialize(board, code_sequence)
     @board = board      
@@ -123,7 +123,6 @@ class Codebreaker
     
 end
 
-############################################
 class Board
   def initialize
     @board = Array.new(12){Array.new(4)}
@@ -150,7 +149,7 @@ class Board
   end
 
 end
-############################################
+
 class Computer
   def generate_code
     @colors = %w(r b g o y w).shuffle
@@ -162,5 +161,3 @@ class Computer
   end
 end
 
-game = Mastermind.new
-game.play
