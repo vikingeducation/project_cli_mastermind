@@ -1,9 +1,9 @@
 class Mastermind
 
   def initialize
-    @board = Board.new
-    @player = Player.new
     @code = Code.new
+    @board = Board.new(turn, @code, guess_colours)
+    @player = Player.new(@board)
   end
 
   def instruction_display
@@ -23,10 +23,10 @@ class Mastermind
 
   def welcome_display
     puts "Hello and Welcome to Mastermind game"
-    puts "Please type i to remind the rules of the game or s to start the game"
+    puts "Please type 'i' to remind the rules of the game or 's' to start the game"
   end
 
-  def start_or_rules
+  def start_or_instruction
     loop do
       s_or_i = gets.chomp
       if s_or_i == "i"
@@ -34,14 +34,16 @@ class Mastermind
         break
       elsif s_or_i == "s"
         break
+      else
+        puts "This is not the value we have asked for. We asked for 's' or 'i'"
       end
     end
   end
 
   def play
     welcome_display
-    start_or_rules
-    turn = 1
+    start_or_instruction
+    turn = 0
     while turn <= 12
       @board.render
       @player.get_combination
@@ -69,58 +71,82 @@ class Mastermind
 
 end
 
+#============================================
 class Board
   COLOURS = ["R","B","G","P","Y","O"]
   PEGS = ["w","b"]
 
-  def initialize(turn)
+  def initialize(turn, code, picked_colours)
     @turn = turn
-    @board = {0 => [[nil,nil,nil,nil],[nil,nil,nil,nil]]}
+    @board = [[nil,nil,nil,nil],[nil,nil,nil,nil]]
+    @code = code
+    @stored_scores = {}
   end
 
-  #initialize the board
-    #setup blank data structure
-      #colours data
-      #feedback data
-      #Hash with 2D Array ie. {1 => [[R,B,G,Y], [w,w,e,b]]}
-#
-  #store guesses
+  def add_pegs(picked_colours)
+    @board[0] = picked_colours
+  end
 
-  def feedback_of_guessing
+  def add_turn_to_storage(turn)
+    @stored_scores[turn] = @board
+  end
+
+  def check_in_storage(turn)
+    @stored_scores[turn]
+  end
+
+  def guessed_colour_on_position
     feedback = []
-
-    #feedback provider
-    #provide feedback with code and key pegs
+    4.times do |position|
+      feedback << PEGS[1] if code[position] == @board[0][position]
+    end
+    feedback
   end
 
-  #render
-    #loop through data structure
-      #Display existing guesses if any, else blank
+  def guessed_colour
+    feedback = []
+    code_as_string = @code.join(",")
+    4.times do |position|
+      if code_as_string.include?(@board[0][position]) \
+                          && @code[position] != @board[0][position]
+        feedback << PEGS[0]
+        code_as_string.delete! @board[0][position]
+      end
+    end
+    feedback
+  end
 
-  #checks winning condition 
-    #if colour 
+  def feedback_provider
+    final_feedback = guessed_colour_on_position + guessed_colour
+    final_feedback.size == 4 ? final_feedback : \
+                              (4-final_feedback).size.times {|iterator| final_feedback << nil}
+  end
 
-  #provides feedback about colours only
-    #loop
-    #check if the remaining colours from provides feedback about colours and positions
-      # if matches the one from the original code
-        # generate white peg
+  def winnig_condition
+    @board[0] == @code
+  end
 
-  #provides feedback about colours and positions
-    #loop
-    # if colour macthes the original colour
-      # if colour matches the position
-        #generate black peg
-        #generate array of ramainig not matching this criteria
+  def render(turn)
+    turn.times do |turn_number|
+      board_colours_and_feedback = check_in_storage(turn_number) #ie. [["R", "O", "B", "Y"], ["w","b", nil, nil]]
+      puts "TURN NUMBER #{turn_number}"
+      puts "|*|*|*|*
+            | * * |
+             #{board_colours_and_feedback[1][0]}
+            |#{board_colours_and_feedback[1][1]}|"
+      puts "|#{board_colours_and_feedback[0][0]}
+            |#{board_colours_and_feedback[0][1]}
+            |#{board_colours_and_feedback[0][2]}
+            |#{board_colours_and_feedback[0][3]}
+            | * * |
+             #{board_colours_and_feedback[1][2]}
+            |#{board_colours_and_feedback[1][3]}|"
+    end
+  end
 
-RED
-BLUE
-GREEN
-PURPLE
-YELLOW
-ORANGE
 end
 
+#=======================================
 class Code
   COLOURS = ["R","B","G","P","Y","O"]
 
@@ -133,10 +159,11 @@ class Code
   end
 end
 
+#=========================================
 class Player
   COLOURS = ["R","B","G","P","Y","O"]
 
-  def initialize(board)
+  def initialize
     @board
   end
 
@@ -161,11 +188,9 @@ class Player
 
   def get_combination
     loop do
-      guess = ask_for_combination
+      guess = ask_for_combination #i.e. ["R", "O", "B", "G"]
       if validate_combination(guess)
-        if @board.add_guess(combination)
-          break
-        end
+        break
       end
     end
   end
