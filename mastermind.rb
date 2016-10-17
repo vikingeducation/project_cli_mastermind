@@ -1,3 +1,10 @@
+require_relative "./human_codemaker.rb"
+require_relative "./computer_codemaker.rb"
+require_relative "./human_codebreaker.rb"
+require_relative "./computer_codebreaker.rb"
+require_relative "./board.rb"
+
+
 class Mastermind
 
   COLOURS = ["R", "B", "G", "P", "Y", "O"]
@@ -7,6 +14,25 @@ class Mastermind
     @code = []
     @board = Board.new(@code, PEGS)
   end
+
+  def play
+    welcome_display
+    start_or_instruction
+    code_breaker_maker_decision
+    turn = 1
+    while turn <= 12
+      @board.render(turn)
+      @player.get_combination #it asks player and checks validation
+      @board.score_provider
+      @board.add_turn_to_storage(turn)
+      board_state = @board.check_in_storage(turn)
+      break if is_code_guessed?(board_state[0][0])
+      turn += 1
+      loosing_display if turn > 12
+    end
+  end
+
+  private
 
   def instruction_display
     puts
@@ -94,24 +120,6 @@ class Mastermind
     puts "The right combination you didn't guess is |#{@code.join("|")}|"
   end
 
-  def play
-    welcome_display
-    start_or_instruction
-    code_breaker_maker_decision
-    turn = 1
-    while turn <= 12
-      @board.render(turn)
-      puts "DBG: @player = #{@player.inspect}"
-      @player.get_combination #it asks player and checks validation
-      @board.score_provider
-      @board.add_turn_to_storage(turn)
-      board_state = @board.check_in_storage(turn)
-      break if is_code_guessed?(board_state[0][0])
-      turn += 1
-      loosing_display if turn > 12
-    end
-  end
-
   def is_code_guessed?(new_var)
     if new_var == @code
       puts "Congratulations!!! You have guessed the secret colour code."
@@ -123,201 +131,5 @@ class Mastermind
 
 end
 
-#============================================
-class Board
-
-  def initialize(code, pegs)
-    @board = [[nil,nil,nil,nil],[nil,nil,nil,nil]]
-    @code = code
-    @stored_scores = {}
-    @pegs = pegs
-  end
-
-  def add_pegs(picked_colours)
-    @board[0] = picked_colours
-    @board[1] = score_provider
-  end
-
-  def add_turn_to_storage(turn)
-    @stored_scores[turn] = @board.dup
-  end
-
-  def check_in_storage(turn)
-    @stored_scores.values_at(turn)
-  end
-
-  def score_for_colours_in_position
-    feedback = []
-    4.times do |position|
-      feedback << @pegs[1] if @code[position] == @board[0][position]
-    end
-    feedback
-  end
-
-  def score_for_colours_only
-    feedback = []
-    code_as_string = @code.join(",")
-    4.times do |position|
-      if code_as_string.include?(@board[0][position]) \
-                          && @code[position] != @board[0][position]
-        feedback << @pegs[0]
-        code_as_string.delete! @board[0][position]
-      end
-    end
-    feedback
-  end
-
-  def score_provider
-    final_score = score_for_colours_in_position + score_for_colours_only
-    (4-final_score.size).times {|iterator| final_score << "-"} if final_score.size != 4
-    final_score
-  end
-
-  def render(turn)
-    puts
-    puts
-    puts "    TURN NUMBER #{turn}"
-    1.upto(turn-1) do |turn_number|
-      break if @stored_scores  == {}
-      colour_and_score_pegs = check_in_storage(turn_number)
-      puts "|*|*|*|*| * * |#{colour_and_score_pegs[0][1][0]}|#{colour_and_score_pegs[0][1][1]}|"
-      puts "|#{colour_and_score_pegs[0][0][0]}|#{colour_and_score_pegs[0][0][1]}|#{colour_and_score_pegs[0][0][2]}|#{colour_and_score_pegs[0][0][3]}| * * |#{colour_and_score_pegs[0][1][2]}|#{colour_and_score_pegs[0][1][3]}|"
-      puts
-    end
-  end
-
-end
-
-#=======================================
-class ComputerCodemaker
-
-  def initialize(colours)
-    @colours = colours
-  end
-
-  def get_combination
-    combination = []
-    4.times {|colour_index| combination << @colours[rand(0..5)]}
-    combination
-  end
-end
-
-#=========================================
-
-class ComputerCodebreaker
-
-  def initialize(colours, board) #testing
-    @colours = colours
-    @board = board
-    @stored_guesses = []
-  end
-
-  def ask_for_combination
-    combination = []
-    4.times {|colour_index| combination << @colours[rand(0..5)]}
-    combination
-  end
-
-  def validate_combination(combination)
-    true if @stored_guesses.select {|colour| colour == combination}.empty?
-  end
-
-  def get_combination
-    loop do
-      guess = ask_for_combination #i.e. ["R", "O", "B", "G"]
-      if validate_combination(guess)#it's true
-        @board.add_pegs(guess)
-        break
-      end
-    end
-  end
-
-end
-
-
-#=========================================
-
-class HumanCodemaker
-
-  def initialize(colours)
-    @colours = colours
-  end
-
-  def ask_for_combination
-    puts
-    puts
-    puts "Create a code, a secret combination of the colours for the codebreaker?"
-    puts "Please choose 4 colours from the following... you can duplicate some of them if you choose:"
-    puts "RED BLUE GREEN PURPLE YELLOW ORANGE"
-    puts "You can make a guess by typing the first letter of each colour in the following pattern: R-G-B-B"
-    puts
-    puts
-    gets.strip.upcase.split("-")
-  end
-
-  def validate_combination(combination)
-    correct_picks = combination.select {|colour| (@colours.join).include?(colour)}
-    if correct_picks.size == 4
-      true
-    else
-      puts "You have typed incorrect pattern. Please provide correct colour combination guess."
-    end
-  end
-
-  def get_combination
-    guess = []
-    loop do
-      guess = ask_for_combination #i.e. ["R", "O", "B", "G"]
-      if validate_combination(guess)#it's true
-        break
-      end
-    end
-    guess
-  end
-
-end
-
-#=========================================
-
-
-
-
-class HumanCodebreaker
-
-  def initialize(colours, board)
-    @colours = colours
-    @board = board
-  end
-
-  def ask_for_combination
-    puts
-    puts
-    puts "Take a guess, what is the secret combination of the colours?"
-    puts "Please choose 4 colours from the following (colours might be duplicated):"
-    puts "RED BLUE GREEN PURPLE YELLOW ORANGE"
-    puts "You can make a guess by typing the first letter of each colour in the following pattern: R-G-B-B"
-    puts
-    puts
-    gets.strip.upcase.split("-")
-  end
-
-  def validate_combination(combination)
-    correct_picks = combination.select {|colour| (@colours.join).include?(colour)}
-    if correct_picks.size == 4
-      true
-    else
-      puts "You have typed incorrect pattern. Please provide correct colour combination guess."
-    end
-  end
-
-  def get_combination
-    loop do
-      guess = ask_for_combination #i.e. ["R", "O", "B", "G"]
-      if validate_combination(guess)#it's true
-        @board.add_pegs(guess)
-        break
-      end
-    end
-  end
-
-end
+s = Mastermind.new
+s.play
