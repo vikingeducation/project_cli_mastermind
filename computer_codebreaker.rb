@@ -5,7 +5,7 @@ class ComputerCodebreaker < HumanCodebreaker
     @stored_guesses = []
   end
 
-  protected
+
 
   def validate_combination(combination)
     true if @stored_guesses.select {|colour| colour == combination}.empty?
@@ -19,6 +19,10 @@ class ComputerCodebreaker < HumanCodebreaker
       @stored_guesses << combination if combination.size == 4
     end
     combination
+    # combination = []
+    # 4.times {|colour_index| combination << @colours[rand(0..5)]}
+    # combination
+
   end
 
 end

@@ -1,8 +1,8 @@
-require_relative "./human_codemaker.rb"
-require_relative "./computer_codemaker.rb"
-require_relative "./human_codebreaker.rb"
-require_relative "./computer_codebreaker.rb"
-require_relative "./board.rb"
+require_relative "human_codemaker.rb"
+require_relative "computer_codemaker.rb"
+require_relative "human_codebreaker.rb"
+require_relative "computer_codebreaker.rb"
+require_relative "board.rb"
 
 
 class Mastermind
