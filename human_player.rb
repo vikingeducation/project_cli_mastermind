@@ -1,4 +1,5 @@
-require './player'
+require './config'
+
 class HumanPlayer < Player
 
   def get_choice
@@ -9,12 +10,12 @@ class HumanPlayer < Player
         @board.add_choice(choice)
         break
       end
+      Renderer.invalid_choice_error
     end
   end
 
   def ask_for_choice
-    puts "Try to guess the four letter code from A,B,C,D,E,F: (ie ABCD)"
-    print "> "
+    Renderer.ask_for_choice
     gets.strip.upcase.chars
   end
 

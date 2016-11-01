@@ -1,6 +1,8 @@
+require './config'
+
 class Board 
 
-	MAX_TURNS = 12
+	MAX_TURNS = 3
 	WRONG = 0
 	CORRECT_LETTER = 1
 	CORRECT = 2
@@ -15,19 +17,7 @@ class Board
   end
 
   def render
-    # Guesses    | Feedback
-    # 1. A B D C | 0 0 1 2
-    # 2. 
-    unless @board_guesses.empty?
-      puts "   Guesses | Feedback"
-      @board_guesses.each_with_index do |guess, index|
-        print "#{index + 1}. "
-        print "#{guess.join(" ")}"
-        print " | "
-        print "#{@board_feedback[index].join(" ")}"
-        puts
-      end
-    end
+  	Renderer.render_board(@board_guesses, @board_feedback)
   end
 
   def add_choice(choice)
@@ -53,14 +43,15 @@ class Board
 
   def add_feedback(feedback)
   	@board_feedback << feedback
-    puts "feedback: #{feedback} , #{@board_feedback}"
   end
 
   def victory?
+  	puts "in victory!"
   	@board_guesses.last == @code
   end
 
   def loss?
+  	puts "in loss!"
   	@turn_count == MAX_TURNS
   end
 end

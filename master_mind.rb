@@ -13,10 +13,7 @@
 # output results -- mastermind??
 # play again? -- mastermind
  
- require './board'
- require './human_player'
- require './computer_player'
- require './player'
+require './config'
 
 
 class Mastermind
@@ -30,11 +27,15 @@ class Mastermind
 
 	def play
 		@board.code = @code_maker.make_code
-    puts @board.code
+    puts @board.code.join # For debugging
+    Renderer.welcome
 		loop do
 			@board.render
 			@code_breaker.get_choice
-			break if game_over?
+			if game_over?
+				puts "hit game_over"
+				break 
+			end 
 		end
 	end 
 

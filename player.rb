@@ -1,3 +1,5 @@
+require './config'
+
 class Player
 
   def initialize(board)
