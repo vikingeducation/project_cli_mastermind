@@ -1,25 +1,17 @@
 class HumanPlayer < Player
+  
+  def get_input
+     loop do 
+      input = ask_for_input
 
-  def get_code
-    @board.code = get_input
-  end
-
-  def get_choice
-    @board.add_choice(get_input)
-  end
-
-  private
-
-    def get_input
-       loop do 
-        input = ask_for_input
-
-        if valid_input?(input)
-          return input
-        end
-        Renderer.invalid_input_error
+      if valid_input?(input)
+        return input
       end
+      Renderer.invalid_input_error
     end
+  end
+
+    private
 
     def ask_for_input
       Renderer.ask_for_input

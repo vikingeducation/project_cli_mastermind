@@ -25,11 +25,11 @@ class Mastermind
     Renderer.welcome
     role = get_player_role
     set_players(role)
-		@code_maker.get_code
-    puts @board.code.join # For debugging
+		@board.code = @code_maker.get_input
+		puts @board.code
 		loop do
 			@board.render
-			@code_breaker.get_choice
+			@board.add_choice(@code_breaker.get_input)
 			if game_over?
 				end_game
 				break 

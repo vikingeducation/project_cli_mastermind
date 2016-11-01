@@ -33,9 +33,9 @@ class Renderer
   	puts "and a letter can appear multiple times in the code."
   	puts "You have 12 chances to guess the code."
   	puts "After each guess you will receive feedback to help you narrow your choices:"
-  	puts "0 means that letter is not in the code"
-  	puts "1 means that letter is in the code, but in the wrong position"
-  	puts "2 means that letter is in the correct position!"
+  	puts "#{Rainbow("O").red} means that letter is not in the code"
+  	puts "#{Rainbow("O").yellow} means that letter is in the code, but in the wrong position"
+  	puts "#{Rainbow("O").green} means that letter is in the correct position!"
   	puts "Good luck!"
   end
 

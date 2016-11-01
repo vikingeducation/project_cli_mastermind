@@ -1,9 +1,9 @@
 class Board 
 
 	MAX_TURNS = 12
-	WRONG = 0
-	CORRECT_LETTER = 1
-	CORRECT = 2
+	WRONG = Rainbow("O").red
+	CORRECT_LETTER = Rainbow("O").yellow
+	CORRECT = Rainbow("O").green
 
   attr_accessor :code
 
@@ -36,12 +36,15 @@ class Board
 
 	  def generate_feedback(choice)
 	  	feedback = []
-
+      code_to_check = @code.dup
 	  	choice.each_with_index do |letter, index|
-	  		if @code[index] == letter
+	  		if code_to_check[index] == letter
 	  			feedback << CORRECT
-	  		elsif @code.include? letter
+          code_to_check[index] = '#'
+	  		elsif code_to_check.include?(letter)
 	  			feedback << CORRECT_LETTER
+          change_index = code_to_check.find_index { |char| char == letter }
+          code_to_check[change_index] = '#'
 	  		else
 	  			feedback << WRONG
 	  		end
