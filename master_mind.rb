@@ -24,10 +24,11 @@ class Mastermind
 
 	def play
 		@board.code = @code_maker.make_code
-		@board.render
-		@code_breaker.get_choice
-		break if game_over?
-
+		loop do
+			@board.render
+			@code_breaker.get_choice
+			break if game_over?
+		end
 	end 
 
 	def game_over?
@@ -35,45 +36,16 @@ class Mastermind
 	end
 
 	def victory?
+		@board.victory?
 	end
 
 	def loss?
+		@board.loss?
 	end
 end
 
-class Player
-end
 
-class ComputerPlayer < Player
-	def make_code
-		code = []
-		4.times do 
-			code << Mastermind::CHOICES.sample
-		end
-		code
-	end
-end
 
-class HumanPlayer < Player
-
-	def get_choice
-		puts "Try to guess the four letter code from A,B,C,D,E,F: (ie ABCD)"
-		puts ">"
-		gets.strip.chars
-	end
-end
-
-class Board 
-	attr_writer :code
-
-	def initialize
-		@code = nil
-	end
-
-	def render
-	end
-
-end
 
 
 
