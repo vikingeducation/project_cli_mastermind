@@ -1,18 +1,25 @@
-# There's a
-#   - game
-#     - 12 rounds
-#     - answer
-#     - board
-#       - rows
-#       - pegs
+class Game
+  def initialize(attrs)
+    @turns = 12
+    @code_maker = attrs[:code_maker] || CodeMaker.new
+  end
 
-# Class Game
+  def play
+    welcome
+    @code_maker.generate_secret_code
+  end
+
+  def welcome
+    puts "Welcome to Mastermind!"
+  end
 # - turn
 # - win conditions
+end
 
-# Class Board
+class Board
 # - render (module?)
 # - builds rows
+end
 
 # Class Row
 # - compare (module?)
@@ -27,5 +34,16 @@
 # Class CodeBreaker
 # - guess
 
-# Class CodeMaker
-# - makes code
+class CodeMaker
+  COLORS = ["Red", "Grn", "Blu", "Yel", "Brn", "Ong", "Blk", "Wht"]
+  def generate_secret_code
+    4.times { @secret_code << COLORS.sample }
+  end
+end
+
+
+game = Game.new
+game.play
+
+Red Grn Blu Yel
+Brn Ong Blk Wht
