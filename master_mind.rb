@@ -19,13 +19,12 @@ class Mastermind
 
 	def initialize
 		@board = Board.new
-		@code_maker = ComputerPlayer.new(@board)
-		@code_breaker = HumanPlayer.new(@board)
 	end
 
 	def play
     Renderer.welcome
-    Renderer.player_message
+    role = get_player_role
+    set_players(role)
 		@code_maker.get_code
     puts @board.code.join # For debugging
 		loop do
@@ -38,22 +37,50 @@ class Mastermind
 		end
 	end 
 
-	def game_over?
-		victory? || loss?
-	end
+	private
 
-	def victory?
-		@board.code_guessed?
-	end
+		def get_player_role
+			Renderer.ask_for_role
+			loop do 
+	      input = gets.strip.downcase
 
-	def loss?
-		@board.full?
-	end
+	      if valid_input?(input)
+	        return input
+	      end
+	      Renderer.invalid_role_input_error
+	    end
+		end
 
-  def end_game
-    @board.render
-    victory? ? Renderer.victory_message : Renderer.loss_message
-  end
+		def set_players(role)
+			if role == 'b'
+				@code_maker = ComputerPlayer.new(@board)
+				@code_breaker = HumanPlayer.new(@board)
+			else
+				@code_maker = HumanPlayer.new(@board)
+				@code_breaker = ComputerPlayer.new(@board)
+			end
+		end
+
+		def valid_input?(input)
+			input == 'b' || input == 'm'
+		end
+
+		def game_over?
+			victory? || loss?
+		end
+
+		def victory?
+			@board.code_guessed?
+		end
+
+		def loss?
+			@board.full?
+		end
+
+	  def end_game
+	    @board.render
+	    victory? ? Renderer.victory_message : Renderer.loss_message
+	  end
 end
 
 

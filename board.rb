@@ -1,6 +1,6 @@
 class Board 
 
-	MAX_TURNS = 3
+	MAX_TURNS = 12
 	WRONG = 0
 	CORRECT_LETTER = 1
 	CORRECT = 2
@@ -24,25 +24,6 @@ class Board
   	add_feedback( generate_feedback(choice) )    
   end
 
-  def generate_feedback(choice)
-  	feedback = []
-
-  	choice.each_with_index do |letter, index|
-  		if @code[index] == letter
-  			feedback << CORRECT
-  		elsif @code.include? letter
-  			feedback << CORRECT_LETTER
-  		else
-  			feedback << WRONG
-  		end
-  	end
-    feedback
-  end
-
-  def add_feedback(feedback)
-  	@board_feedback << feedback
-  end
-
   def code_guessed?
   	@board_guesses.last == @code
   end
@@ -50,6 +31,27 @@ class Board
   def full?
   	@turn_count == MAX_TURNS
   end
+
+  private
+
+	  def generate_feedback(choice)
+	  	feedback = []
+
+	  	choice.each_with_index do |letter, index|
+	  		if @code[index] == letter
+	  			feedback << CORRECT
+	  		elsif @code.include? letter
+	  			feedback << CORRECT_LETTER
+	  		else
+	  			feedback << WRONG
+	  		end
+	  	end
+	    feedback
+	  end
+
+	  def add_feedback(feedback)
+	  	@board_feedback << feedback
+	  end
 end
 
 

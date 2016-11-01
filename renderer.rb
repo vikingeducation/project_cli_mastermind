@@ -16,6 +16,11 @@ class Renderer
     end
   end
 
+  def self.ask_for_role
+    puts "Would you like to be the codebreaker or codemaker? (b/m)"
+    print "> "
+  end
+
   def self.ask_for_input
   	puts "Enter a four letter code from A,B,C,D,E,F: (ie ABCD)"
     print "> "
@@ -36,6 +41,11 @@ class Renderer
 
   def self.invalid_input_error
   	puts "Invalid input! Enter a four letter code with letters A-F"
+  end
+
+  def self.invalid_role_input_error
+    puts "Invalid input! Enter 'b' or 'm'"
+    print "> "
   end
 
   def self.victory_message
