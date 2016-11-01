@@ -4,3 +4,6 @@
  require './computer_player'
  require './renderer'
  require './master_mind'
+
+game = Mastermind.new
+game.play

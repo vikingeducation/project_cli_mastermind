@@ -1,6 +1,3 @@
-require './config'
-
-
 class Renderer
 
 	def self.render_board(guesses, feedback)
@@ -19,8 +16,8 @@ class Renderer
     end
   end
 
-  def self.ask_for_choice
-  	puts "Try to guess the four letter code from A,B,C,D,E,F: (ie ABCD)"
+  def self.ask_for_input
+  	puts "Enter a four letter code from A,B,C,D,E,F: (ie ABCD)"
     print "> "
   end
 
@@ -37,7 +34,15 @@ class Renderer
   	puts "Good luck!"
   end
 
-  def self.invalid_choice_error
-  	puts "Invalid guess! Enter a four letter code with letters A-F"
+  def self.invalid_input_error
+  	puts "Invalid input! Enter a four letter code with letters A-F"
+  end
+
+  def self.victory_message
+    puts "You are a Mastermind!"
+  end
+
+  def self.loss_message
+    puts "Sorry, you couldn't crack the code!"
   end
 end

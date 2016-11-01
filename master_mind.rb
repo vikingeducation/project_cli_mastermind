@@ -13,8 +13,6 @@
 # output results -- mastermind??
 # play again? -- mastermind
  
-require './config'
-
 
 class Mastermind
 	CHOICES = %w(A B C D E F)
@@ -26,14 +24,15 @@ class Mastermind
 	end
 
 	def play
-		@board.code = @code_maker.make_code
-    puts @board.code.join # For debugging
     Renderer.welcome
+    Renderer.player_message
+		@code_maker.get_code
+    puts @board.code.join # For debugging
 		loop do
 			@board.render
 			@code_breaker.get_choice
 			if game_over?
-				puts "hit game_over"
+				end_game
 				break 
 			end 
 		end
@@ -44,16 +43,19 @@ class Mastermind
 	end
 
 	def victory?
-		@board.victory?
+		@board.code_guessed?
 	end
 
 	def loss?
-		@board.loss?
+		@board.full?
 	end
+
+  def end_game
+    @board.render
+    victory? ? Renderer.victory_message : Renderer.loss_message
+  end
 end
 
-game = Mastermind.new
-game.play
 
 
 

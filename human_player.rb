@@ -1,30 +1,37 @@
-require './config'
-
 class HumanPlayer < Player
 
-  def get_choice
-    loop do 
-      choice = ask_for_choice
+  def get_code
+    @board.code(get_input)
+  end
 
-      if valid_choice?(choice)
-        @board.add_choice(choice)
-        break
+  def get_choice
+    @board.add_choice(get_input)
+  end
+
+  def get_input
+     loop do 
+      input = ask_for_input
+
+      if valid_input?(input)
+        return input
       end
-      Renderer.invalid_choice_error
+      Renderer.invalid_input_error
     end
   end
 
-  def ask_for_choice
-    Renderer.ask_for_choice
+  def ask_for_input
+    Renderer.ask_for_input
     gets.strip.upcase.chars
   end
 
-  def valid_choice?(choice)
-    return false unless choice.length == 4
-    choice.all? do |char|
+  def valid_input?(input)
+    return false unless input.length == 4
+    input.all? do |char|
       Mastermind::CHOICES.include?(char)
     end
   end
+
+
 end
 
 

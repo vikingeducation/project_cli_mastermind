@@ -1,5 +1,3 @@
-require './config'
-
 class Board 
 
 	MAX_TURNS = 3
@@ -45,13 +43,11 @@ class Board
   	@board_feedback << feedback
   end
 
-  def victory?
-  	puts "in victory!"
+  def code_guessed?
   	@board_guesses.last == @code
   end
 
-  def loss?
-  	puts "in loss!"
+  def full?
   	@turn_count == MAX_TURNS
   end
 end
