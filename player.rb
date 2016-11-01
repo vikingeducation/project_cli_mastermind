@@ -8,26 +8,29 @@ class Player
     raise NotImplementedError
   end
 
+  def valid?(colors)
+    return false unless sequence.length ==4
+    sequence.all? {|letter| colors.include?(letter)}
+  end
+
   private
   attr_writer :sequence
 end
 
 class HumanPlayer
-  def get_sequence
-    until valid?
+  def get_sequence(colors)
+    until valid?(colors)
       sequence = Listener.get_formatted.split
     end
-  end
-
-  def valid?
-    return false unless sequence.length ==4
-    sequence.all? {|letter| colors.include?(letter)}
   end
 end
 
 
 
 class ComputerPlayer
-  def get_sequence
+  def get_sequence(colors)
+    4.times do 
+      sequence << colors.sample
+    end
   end
 end

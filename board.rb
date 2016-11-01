@@ -1,15 +1,26 @@
 class Board
   attr_reader :colors
-  attr_writer :maker_sequence
-  attr_accessor :turns
+  attr_accessor :turns, :maker_sequence
+
   def initialize(args={})
-    @colors = args[:colors] || default_colors
+    @colors = args[:colors] || DEFAULT_COLORS
     @maker_sequence = nil
     @turns = 0
   end
 
   protected
-  def default_colors
-    ['r', 'g', 'b', 'o', 'y', 'p']
+  DEFAULT_COLORS = ['r', 'g', 'b', 'o', 'y', 'p']
+
+  def check_guess(sequence)
+    arr = maker_sequence.dup
+    exact_matches = []
+    near_matches = []
+    sequence.each_with_index do |color, i|
+      if color == arr[i]
+        exact_matches << 1
+      else
+        exact_matches << 0
+      end
+    end
   end
 end

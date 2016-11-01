@@ -19,21 +19,24 @@ class Game
   def play
     Render.welcome @board.colors
     Render.sequence_instuctions @board.colors
-    @board.winning_sequence = @codemaker.get_sequence
+    @board.maker_sequence = @codemaker.get_sequence
     until win? || lose?
       Render.sequence_instuctions @board.colors
-      @guess = @codebreaker.get_sequence
-      @board.check_guess @guess
+      guess = @codebreaker.get_sequence
+      @board.check_guess guess
     end
   end
 
   def win?
-    @guess == @board.winning_sequence
+    guess == @board.maker_sequence
   end
 
   def lose?
     @board.turns > 12
   end
+
+  protected
+  attr_writer :guess
 
 end
 
