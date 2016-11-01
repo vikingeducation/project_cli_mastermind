@@ -10,13 +10,17 @@ class Mastermind
   def play
     instructions
     loop do
-      take_turn
+      take_turn unless game_over?
     end
   end
 
   def take_turn
-    @codebreaker.make_guess
-
+    guess = @codebreaker.make_guess
+    @board.add_row(guess)
+    if guess == @winning_sequence
+      win
+    end
+    @turns_left -= 1
   end
 
   def instructions
@@ -29,10 +33,16 @@ class Mastermind
 
   def gameover
     puts "Game over."
+    exit
   end
 
   def win?
     @game_over  = true
+  end
+
+  def win
+    puts "You win!"
+    exit
   end
 
   def lose?
