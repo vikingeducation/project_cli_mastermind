@@ -13,30 +13,32 @@ class Game
     @board = args[:board]         || Board.new
     @codebreaker = args[:breaker] || HumanPlayer.new
     @codemaker = args[:maker]     || ComputerPlayer.new
-    
+    play
   end
 
   def play
     Render.welcome @board.colors
     Render.sequence_instuctions @board.colors
-    @board.maker_sequence = @codemaker.get_sequence
+
+    @board.maker_sequence = @codemaker.get_sequence(@board.colors)
     until win? || lose?
-      Render.sequence_instuctions @board.colors
-      guess = @codebreaker.get_sequence
-      @board.check_guess guess
+      Render.sequence_instuctions(@board.colors)
+      @guess = @codebreaker.get_sequence(@board.colors)
+      current_guess = @board.check_guess @guess
+      @board.turn
     end
   end
 
   def win?
-    guess == @board.maker_sequence
+    @guess == @board.maker_sequence
   end
 
   def lose?
-    @board.turns > 12
+    @board.turns == 12
   end
 
   protected
-  attr_writer :guess
+  
 
 end
 
@@ -74,7 +76,7 @@ class Setup
     role = nil
     until valid_role?(role)
       puts "Is player one the maker or breaker?"
-      role = listener.get_formatted_input
+      role = listener.get_formatted
     end
     role
   end
@@ -83,7 +85,7 @@ class Setup
     number_of_players = nil
     until valid_number_of_players?(number_of_players)
       puts "1 or 2 players?"
-      number_of_players = listener.get_numeric_input
+      number_of_players = listener.get_numeric
     end
     number_of_players
   end

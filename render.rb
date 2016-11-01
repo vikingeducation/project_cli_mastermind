@@ -6,4 +6,9 @@ class Render
     puts "The CodeBreaker's job is to guess the color sequence"
     puts "in 12 turns or less"
   end
+
+  def self.sequence_instuctions colors
+    puts "enter 4 letters from: #{colors}"
+  end
+
 end

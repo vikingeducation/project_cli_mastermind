@@ -1,36 +1,36 @@
 class Player
-  attr_reader :sequence
-  attr_accessor :colors
-  def initialize
-    @sequence = nil
-  end
+
   def get_sequence
     raise NotImplementedError
   end
 
-  def valid?(colors)
+  def valid?(colors, sequence)
+    return false unless sequence
     return false unless sequence.length ==4
     sequence.all? {|letter| colors.include?(letter)}
   end
 
-  private
-  attr_writer :sequence
+  
 end
 
-class HumanPlayer
+class HumanPlayer < Player
   def get_sequence(colors)
-    until valid?(colors)
-      sequence = Listener.get_formatted.split
+    sequence = nil
+    until valid?(colors, sequence)
+      sequence = Listener.get_formatted.split("")
     end
+    sequence
   end
 end
 
 
 
-class ComputerPlayer
+class ComputerPlayer < Player
   def get_sequence(colors)
+    sequence = []
     4.times do 
       sequence << colors.sample
     end
+    sequence
   end
 end
