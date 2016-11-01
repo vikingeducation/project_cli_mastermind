@@ -29,6 +29,16 @@ class Mastermind
 		break if game_over?
 
 	end 
+
+	def game_over?
+		victory? || loss?
+	end
+
+	def victory?
+	end
+
+	def loss?
+	end
 end
 
 class Player
