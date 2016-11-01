@@ -1,3 +1,4 @@
+require './player'
 class ComputerPlayer < Player
   def make_code
     code = []

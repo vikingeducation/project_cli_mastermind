@@ -13,21 +13,29 @@
 # output results -- mastermind??
 # play again? -- mastermind
  
+ require './board'
+ require './human_player'
+ require './computer_player'
+ require './player'
+
+
 class Mastermind
 	CHOICES = %w(A B C D E F)
 
 	def initialize
 		@board = Board.new
-		@code_maker = ComputerPlayer.new
-		@code_breaker = HumanPlayer.new
+		@code_maker = ComputerPlayer.new(@board)
+		@code_breaker = HumanPlayer.new(@board)
 	end
 
 	def play
 		@board.code = @code_maker.make_code
-		@board.render
-		@code_breaker.get_choice
-		break if game_over?
-
+    puts @board.code
+		loop do
+			@board.render
+			@code_breaker.get_choice
+			break if game_over?
+		end
 	end 
 
 	def game_over?
@@ -35,45 +43,17 @@ class Mastermind
 	end
 
 	def victory?
+		@board.victory?
 	end
 
 	def loss?
+		@board.loss?
 	end
 end
 
-class Player
-end
+game = Mastermind.new
+game.play
 
-class ComputerPlayer < Player
-	def make_code
-		code = []
-		4.times do 
-			code << Mastermind::CHOICES.sample
-		end
-		code
-	end
-end
-
-class HumanPlayer < Player
-
-	def get_choice
-		puts "Try to guess the four letter code from A,B,C,D,E,F: (ie ABCD)"
-		puts ">"
-		gets.strip.chars
-	end
-end
-
-class Board 
-	attr_writer :code
-
-	def initialize
-		@code = nil
-	end
-
-	def render
-	end
-
-end
 
 
 

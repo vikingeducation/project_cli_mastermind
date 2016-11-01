@@ -1,4 +1,4 @@
-
+require './player'
 class HumanPlayer < Player
 
   def get_choice
@@ -14,7 +14,7 @@ class HumanPlayer < Player
 
   def ask_for_choice
     puts "Try to guess the four letter code from A,B,C,D,E,F: (ie ABCD)"
-    puts ">"
+    print "> "
     gets.strip.upcase.chars
   end
 
