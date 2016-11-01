@@ -21,7 +21,8 @@ class Board
   def add_choice(choice)
   	@board_guesses << choice
   	@turn_count += 1
-  	add_feedback( generate_feedback(choice) )    
+  	feedback = choice.dup
+  	add_feedback( populate_feedback(feedback) )    
   end
 
   def code_guessed?
@@ -34,27 +35,83 @@ class Board
 
   private
 
-	  def generate_feedback(choice)
-	  	feedback = []
-      code_to_check = @code.dup
+	  def populate_feedback(choice)  	
+	  	code_to_check = @code.dup
+	  	choice, code = find_green_pegs(choice, code_to_check)
+	  	choice, code = find_yellow_pegs(choice, code)
+	  	final_feedback = find_red_pegs(choice, code)
+	  	final_feedback
+	  end
+
+	  def find_green_pegs(choice, code_to_check)
 	  	choice.each_with_index do |letter, index|
 	  		if code_to_check[index] == letter
-	  			feedback << CORRECT
-          code_to_check[index] = '#'
-	  		elsif code_to_check.include?(letter)
-	  			feedback << CORRECT_LETTER
-          change_index = code_to_check.find_index { |char| char == letter }
-          code_to_check[change_index] = '#'
-	  		else
-	  			feedback << WRONG
-	  		end
+	  			choice[index] = CORRECT
+	  			code_to_check[index] = '*'
+        end
 	  	end
-	    feedback
+	    return choice, code_to_check
+	  end
+
+	  def find_yellow_pegs(choice, code_to_check)
+	  	choice.each_with_index do |letter, index|
+	  		next if letter == CORRECT
+	  		if code_to_check.include? letter
+	  			choice[index] = CORRECT_LETTER
+	  			change_index = code_to_check.find_index { |l| l == letter }
+	  			code_to_check[change_index] = '*'
+        end
+	  	end
+	    return choice, code_to_check
+	  end
+
+	  def find_red_pegs(choice, code_to_check)
+	  	choice.each_with_index do |letter, index|
+	  		next if letter == CORRECT 
+	  		next if letter == CORRECT_LETTER
+	  		choice[index] = WRONG
+	  	end
+	  	choice
 	  end
 
 	  def add_feedback(feedback)
 	  	@board_feedback << feedback
 	  end
 end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
