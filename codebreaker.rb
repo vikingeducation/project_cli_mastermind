@@ -5,7 +5,7 @@ class Codebreaker
     guess = gets.chomp
     @guess_array = guess.split(' ')
     if valid_input?
-      guess_array
+      @guess_array
     else
       make_guess
     end
@@ -25,10 +25,3 @@ class Codebreaker
     end
   end
 end
-
-#Codebreaker
-  # enter_pegs
-  #valid_input?
-  #right number of pegs
-  #make_guess
-  # correct colors?

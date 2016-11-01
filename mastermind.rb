@@ -1,3 +1,7 @@
+require_relative 'codebreaker'
+require_relative 'codemaker'
+require_relative 'board'
+
 class Mastermind
   def initialize()
     @board = Board.new
@@ -16,10 +20,11 @@ class Mastermind
 
   def take_turn
     guess = @codebreaker.make_guess
-    @board.add_row(guess)
-    if guess == @winning_sequence
-      win
-    end
+    win?
+    number_of_exact_answers = @board.exact_answers
+    number_of_right_colors = @board.exact_colors
+    @board.add_row(guess)#(guess, number_of_exact_answers, number_of_right_colors)
+    @board.render
     @turns_left -= 1
   end
 
@@ -27,7 +32,7 @@ class Mastermind
     #
   end
 
-  def gameover?
+  def game_over?
     gameover if @turns_left < 1
   end
 
@@ -37,7 +42,7 @@ class Mastermind
   end
 
   def win?
-    @game_over  = true
+    win if guess == @winning_sequence
   end
 
   def win
