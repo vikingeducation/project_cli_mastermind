@@ -11,4 +11,9 @@ class Render
     puts "enter 4 letters from: #{colors}"
   end
 
+  def self.game_board(results, guess)
+    guess.each { |color| print "|#{color}" }
+    puts "|"
+    
+  end
 end

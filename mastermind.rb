@@ -24,7 +24,8 @@ class Game
     until win? || lose?
       Render.sequence_instuctions(@board.colors)
       @guess = @codebreaker.get_sequence(@board.colors)
-      current_guess = @board.check_guess @guess
+      results = @board.check_guess @guess
+      Render.game_board(results, @guess)
       @board.turn
     end
   end
