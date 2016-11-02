@@ -21,14 +21,9 @@ class Board
 
   def render
     @board.each do |row|
-      puts row
+      p row
     end
+    puts
   end
 
 end
-
-#Board
-  #render
-  #full?
-  #number_of_right_answers
-  #number_of_right_colors: green, blue, yellow, red, black, white

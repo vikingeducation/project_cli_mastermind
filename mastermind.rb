@@ -19,17 +19,16 @@ class Mastermind
   end
 
   def take_turn
+    puts "You have #{@turns_left} turns left"
     guess = @codebreaker.make_guess
-    win?
-    number_of_exact_answers = @board.exact_answers
-    number_of_right_colors = @board.exact_colors
-    @board.add_row(guess)#(guess, number_of_exact_answers, number_of_right_colors)
+    win?(guess)
+    @board.add_row(guess)
     @board.render
     @turns_left -= 1
   end
 
   def instructions
-    #
+    puts "See Wikipedia: https://en.wikipedia.org/wiki/Mastermind_(board_game)"
   end
 
   def game_over?
@@ -41,7 +40,7 @@ class Mastermind
     exit
   end
 
-  def win?
+  def win?(guess)
     win if guess == @winning_sequence
   end
 
@@ -50,16 +49,6 @@ class Mastermind
     exit
   end
 
-  def lose?
-    #
-  end
 end
 
 Mastermind.new.play
-
-
-#Mastermind
-  #play
-  #gameover?
-  #win?
-  #lose?

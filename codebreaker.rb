@@ -3,6 +3,7 @@ class Codebreaker
   def make_guess
     puts "Enter pegs in the format: red green blue yellow"
     guess = gets.chomp
+    puts
     @guess_array = guess.split(' ')
     if valid_input?
       @guess_array
