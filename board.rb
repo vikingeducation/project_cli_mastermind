@@ -17,18 +17,6 @@ class Board
     { near: near_matches, exact: exact_matches }
   end
 
-  def check_near(secret, guess)
-    near_matches = 0
-    guess.each do |color|
-      i = secret.find_index(color)
-      if i
-        near_matches += 1
-        secret.delete_at(i)
-      end
-    end
-    near_matches
-  end
-
   def check_exact(sequence)
     secret = maker_sequence.dup
     guess = []
@@ -41,7 +29,19 @@ class Board
         guess << color
       end
     end
-    return { exact: exact_matches, secret: secret, guess: guess }
+    { exact: exact_matches, secret: secret, guess: guess }
+  end
+
+  def check_near(secret, guess)
+    near_matches = 0
+    guess.each do |color|
+      i = secret.find_index(color)
+      if i
+        near_matches += 1
+        secret.delete_at(i)
+      end
+    end
+    near_matches
   end
 
   def turn

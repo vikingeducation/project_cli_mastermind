@@ -14,6 +14,8 @@ class Render
   def self.game_board(results, guess)
     guess.each { |color| print "|#{color}" }
     puts "|"
+    puts "Exact Matches: #{results[:exact]}"
+    puts "Near Matches: #{results[:near]}"
     
   end
 end
