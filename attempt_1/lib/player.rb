@@ -29,6 +29,7 @@ class ComputerPlayer < Player
     4.times do 
       sequence << colors.sample
     end
-    sequence
+    # sequence ########### TEMP
+    ['b','b','b','r'] ########### TEMP
   end
 end
