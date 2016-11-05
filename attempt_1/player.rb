@@ -23,8 +23,6 @@ class HumanPlayer < Player
   end
 end
 
-
-
 class ComputerPlayer < Player
   def get_sequence(colors)
     sequence = []
