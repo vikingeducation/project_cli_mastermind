@@ -1,3 +1,5 @@
+#!/usr/bin/ruby
+
 require 'rainbow'
 require './board'
 require './player'

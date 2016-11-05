@@ -3,7 +3,7 @@ class Renderer
 	def self.render_board(guesses, feedback)
     # Guesses    | Feedback
     # 1. A B D C | 0 0 1 2
-    # 2. 
+    # 2.
     unless guesses.empty?
       puts "   Guesses | Feedback"
       guesses.each_with_index do |guess, index|
@@ -33,7 +33,6 @@ class Renderer
   	puts "and a letter can appear multiple times in the code."
   	puts "You have 12 chances to guess the code."
   	puts "After each guess you will receive feedback to help you narrow your choices:"
-  	puts "#{Rainbow("O").red} means that letter is not in the code"
   	puts "#{Rainbow("O").yellow} means that letter is in the code, but in the wrong position"
   	puts "#{Rainbow("O").green} means that letter is in the correct position!"
   	puts "Good luck!"
