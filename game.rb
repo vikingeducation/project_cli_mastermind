@@ -5,14 +5,12 @@ class Game
   def initialize
     @turns = 0
     @board = Board.new
-    @player1 = Human.new
-    @player2 = AI.new
-    @code = @player2.generate_code
   end
 
   def play
     puts puts
     intro
+    maker_or_breaker
     @board.render
     loop do
       announce_number_of_turns
@@ -28,6 +26,38 @@ class Game
         break
       end        
     end
+  end
+
+  def maker_or_breaker
+    choice = ""
+    loop do 
+      puts "Would you like to be the codemaker(m) or codebreaker(b)?"
+      puts "Please enter 'm' for codemaker, or 'b' for codebreaker."
+      choice = gets.chomp.downcase.strip
+      break if valid_choice?(choice)
+    end
+    if choice == "m"
+      maker
+    elsif choice == 'b'
+      breaker
+    end
+  end
+
+  def maker
+    @player1 = AI.new
+    @player2 = Human.new
+    @code = @player2.generate_code
+  end
+
+  def breaker
+    @player1 = Human.new
+    @player2 = AI.new
+    @code = @player2.generate_code
+  end
+
+  def valid_choice?(choice)
+    return true if %w(m b).include?(choice)
+    false
   end
 
   def win?
