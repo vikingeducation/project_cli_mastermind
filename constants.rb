@@ -1,3 +1,6 @@
 NO_COLOR = 0
 WHITE    = 1
 BLACK    = 2
+
+HUMAN    = 0
+COMPUTER = 1
