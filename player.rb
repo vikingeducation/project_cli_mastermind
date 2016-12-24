@@ -75,12 +75,13 @@ class AI < Player
 
   def congratulations
     puts "Good game, Hooman!"
-    puts "I had fun cracking that."
-    puts "Well, goodbye!"
+    puts "That was fun."
+    puts "'Til next time!"
   end
 
   def get_code(board, round)
     # dumb version for now
+    return [1,1,2,2] if round == 0
     self.make_code
   end
 end
