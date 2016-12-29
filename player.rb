@@ -81,7 +81,7 @@ class Board
       p "-----------------"
     end
 
-    if(!board.nil?)
+    if(board.length != 0)
       puts "#{feedback[0]} exact peg(s) in the correct position"
       puts "#{feedback[1]} close peg(s) in the wrong position"
     end
@@ -98,7 +98,7 @@ class Game
 
   attr_accessor :codemaker, :codebreaker
   
-  $colors = ["R", "O", "Y", "G", "B", "P"]
+  $colors = %w(R, O, Y, G, B, P)
 
   def initialize
     @board = Board.new
