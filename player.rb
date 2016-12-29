@@ -4,22 +4,22 @@ class Player
 
   def get_guess
     instructions
-    user_input = gets.chomp.strip.split(',')
+    user_input = clean_input(gets.chomp)
     valid_input(user_input) ? @guess = user_input : get_guess
   end
 
   def generate_code
     instructions
-    user_input = gets.chomp.strip.split(',')
+    user_input = clean_input(gets.chomp)
     valid_input(user_input) ? @code = user_input : generate_code
   end
 
   def valid_input(input)
     if(input.length > 4)
-      puts "Not enough colours"
+      puts "Too many colours"
       false
     elsif(input.length < 4)
-      puts "Too many colours"
+      puts "Not enough colours"
       false
     else
       letter_len = true
@@ -31,11 +31,6 @@ class Player
       letter_len
     end
   end
-  
-  # Has the player fit the criteria to make a guess
-  def valid_guess?
-    # Is the user turns still under the maximum number of turns
-  end
 
   private 
 
@@ -46,6 +41,11 @@ class Player
     puts "The colours that are available are R, O, Y, G, B, P"
     puts "Example guess"
     puts "e.g. R,O,Y,G"
+    puts "**********************************************"
+  end
+
+  def clean_input(raw_input)
+    user_input = raw_input.strip.upcase.split(',')
   end
 
 end
@@ -57,7 +57,8 @@ class Computer
 
   def generate_code
     generated_code = []
-    4.times{ generated_code << COLORS[rand(6) + 1] }
+    4.times{ generated_code << $colors[rand(6)] }
+    puts "#{generated_code}"
     generated_code
   end
 end
@@ -75,7 +76,7 @@ class Board
     # display the current state of the board
     @board.each do |x|
       x.each do |y|
-        p "#{y} |"
+        print "#{y} |"
       end
       puts "-----------------"
     end
@@ -92,7 +93,7 @@ class Game
 
   attr_accessor :codemaker, :codebreaker
   
-  COLORS = ["R", "O", "Y", "G", "B", "P"]
+  $colors = ["R", "O", "Y", "G", "B", "P"]
 
   def initialize
     @board = Board.new
@@ -104,12 +105,12 @@ class Game
     puts "**********************************************"
 
     answer = gets.chomp.strip
-    if(answer.downcase == "M")
-      @codemaker = Computer.new
-      @codebreaker = Player.new
-    elsif(answer.downcase == "B")
+    if(answer.upcase == "M")
       @codemaker = Player.new
       @codebreaker = Computer.new
+    elsif(answer.upcase == "B")
+      @codemaker = Computer.new
+      @codebreaker = Player.new
     else 
       puts "Please ensure you enter your input correctly"
       initial_setup
@@ -129,14 +130,17 @@ class Game
       # call the board rendering method
       @board.render
       # Ask the user whether they want to be the codemaker or codebreaker
-      puts "This is guess number #{i}"
+      puts "This is guess number #{i+1}"
       # Ask for a guess from the player
       code = @codemaker.generate_code
       guess = @codebreaker.get_guess
+      @board.add_guess(guess)
       feedback = give_feedback(code, guess)
 
       break if game_over?
-      i == 12 ? reveal_code(code)
+      if (i == 11)
+        reveal_code(code) 
+      end
     end 
   end
 
@@ -169,8 +173,8 @@ class Game
       end
     end
 
-    puts "#{feedback[0]} correct guesses in the correct position"
-    puts "#{feedback[1]} correct guesses in the wrong position"
+    puts "#{feedback[0]} correct guesse(s) in the correct position"
+    puts "#{feedback[1]} correct guesse(s) in the wrong position"
 
     feedback
   end
