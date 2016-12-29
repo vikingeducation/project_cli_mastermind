@@ -72,13 +72,18 @@ class Board
     @board = []
   end
 
-  def render
+  def render(feedback=[0,0])
     # display the current state of the board
     @board.each do |x|
       x.each do |y|
-        print "#{y} |"
+        print " #{y} |"
       end
-      puts "-----------------"
+      p "-----------------"
+    end
+
+    if(!board.nil?)
+      puts "#{feedback[0]} exact peg(s) in the correct position"
+      puts "#{feedback[1]} close peg(s) in the wrong position"
     end
   end
 
@@ -125,17 +130,18 @@ class Game
     puts "**********************************************"
 
     initial_setup
-
+    code = @codemaker.generate_code
     12.times do |i|
       # call the board rendering method
       @board.render
-      # Ask the user whether they want to be the codemaker or codebreaker
+      
       puts "This is guess number #{i+1}"
       # Ask for a guess from the player
-      code = @codemaker.generate_code
       guess = @codebreaker.get_guess
       @board.add_guess(guess)
       feedback = give_feedback(code, guess)
+
+      @board.render(feedback)
 
       break if game_over?
       if (i == 11)
@@ -163,19 +169,13 @@ class Game
   def give_feedback(code, guess)
     feedback = [0,0]
     guess.each_with_index do |value, ind|
-      if value == code[ind]
+      if(value == code[ind])
         feedback[0] += 1
         feedback[1] += 1
-      elsif code.include?(value)
+      elsif(code.include?(value))
         feedback[1] += 1
-      else
-        feedback
       end
     end
-
-    puts "#{feedback[0]} correct guesse(s) in the correct position"
-    puts "#{feedback[1]} correct guesse(s) in the wrong position"
-
     feedback
   end
 
