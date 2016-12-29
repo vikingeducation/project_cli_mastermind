@@ -15,12 +15,20 @@ class Player
   end
 
   def valid_input(input)
-    if(input.length == 4)
-      input.each do |val|
-
-      end
-    else
+    if(input.length > 4)
+      puts "Not enough colours"
       false
+    elsif(input.length < 4)
+      puts "Too many colours"
+      false
+    else
+      letter_len = true
+      input. each do |x|
+        # next in loops instead of conditionals
+        next unless (x.length != 1)  
+          letter_len = false
+      end
+      letter_len
     end
   end
   
@@ -60,11 +68,17 @@ class Board
 
 # Show the board at the beginning of the game
   def initialize
-    @board = Array.new(11)
+    @board = []
   end
 
   def render
     # display the current state of the board
+    @board.each do |x|
+      x.each do |y|
+        p "#{y} |"
+      end
+      puts "-----------------"
+    end
   end
 
 # add_piece
@@ -78,7 +92,7 @@ class Game
 
   attr_accessor :codemaker, :codebreaker
   
-  COLORS = ["R", "O", "Y", "G", "B", "I"]
+  COLORS = ["R", "O", "Y", "G", "B", "P"]
 
   def initialize
     @board = Board.new
@@ -133,7 +147,7 @@ class Game
   def game_over?
     # Is the latest move match the code maker pattern
     if(@codemaker.code == @codebreaker.guess)
-      puts "You won!"
+      puts "Codebreaker won!"
       true
     else
       false
@@ -165,7 +179,7 @@ class Game
 
   def reveal_code(code)
     puts "The winning code is #{code}"
-    puts "Sorry you lost!"
+    puts "Codemaker wins and sorry codebreaker has lost!"
   end
 
   
