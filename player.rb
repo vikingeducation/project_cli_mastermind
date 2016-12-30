@@ -72,18 +72,13 @@ class Board
     @board = []
   end
 
-  def render(feedback=[0,0])
+  def render(feedback)
     # display the current state of the board
     @board.each do |x|
       x.each do |y|
         print " #{y} |"
       end
-      p "-----------------"
-    end
-
-    if(board.length != 0)
-      puts "#{feedback[0]} exact peg(s) in the correct position"
-      puts "#{feedback[1]} close peg(s) in the wrong position"
+      puts "-----------------"
     end
   end
 
@@ -95,7 +90,6 @@ end
 
 # Deals with the running of the game and the rules
 class Game
-
   attr_accessor :codemaker, :codebreaker
   
   $colors = %w(R, O, Y, G, B, P)
@@ -122,7 +116,6 @@ class Game
     end
   end
 
-
   # The game starts here
   def play
     
@@ -132,8 +125,6 @@ class Game
     initial_setup
     code = @codemaker.generate_code
     12.times do |i|
-      # call the board rendering method
-      @board.render
       
       puts "This is guess number #{i+1}"
       # Ask for a guess from the player
@@ -150,9 +141,6 @@ class Game
     end 
   end
 
-  
-
-
   # Check if the player has won the game
   def game_over?
     # Is the latest move match the code maker pattern
@@ -163,8 +151,6 @@ class Game
       false
     end
   end
-
-  
 
   def give_feedback(code, guess)
     feedback = [0,0]
@@ -184,7 +170,5 @@ class Game
   def reveal_code(code)
     puts "The winning code is #{code}"
     puts "Codemaker wins and sorry codebreaker has lost!"
-  end
-
-  
+  end 
 end
