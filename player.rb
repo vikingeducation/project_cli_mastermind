@@ -58,8 +58,16 @@ class Computer
     generated_code = []
     4.times{ generated_code << $colors[rand(6)] }
     puts "#{generated_code}"
-    generated_code
+    @code = generated_code
   end
+
+  def get_guess
+    generated_guess = []
+    4.times{ generated_guess << $colors[rand(6)] }
+    puts "#{generated_guess}"
+    @guess = generated_guess
+  end
+
 end
 
 # Display the Board
@@ -147,7 +155,10 @@ class Game
   # Check if the player has won the game
   def game_over?
     # Is the latest move match the code maker pattern
-    if(@codemaker.code == @codebreaker.guess)
+    cm_code = @codemaker.code
+    cb_guess = @codebreaker.guess
+ 
+    if(cm_code == cb_guess)
       puts "Codebreaker won!"
       true
     else
@@ -158,8 +169,8 @@ class Game
   def give_feedback(code, guess)
     feedback = [0,0]
     guess.each_with_index do |value, ind|
-      puts "The current value is #{value} and the index is #{ind}"
-      puts "The code at the current index is #{code[ind]}"
+      # puts "The current value is #{value} and the index is #{ind}"
+      # puts "The code at the current index is #{code[ind]}"
       if(value == code[ind])
         feedback[0] += 1
         # feedback[1] += 1
@@ -175,6 +186,6 @@ class Game
 
   def reveal_code(code)
     puts "The winning code is #{code}"
-    puts "Codemaker wins and sorry codebreaker has lost!"
+    puts "Codemaker wins and the codebreaker has lost!"
   end 
 end
