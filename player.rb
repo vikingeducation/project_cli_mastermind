@@ -39,8 +39,7 @@ class Player
     puts "Please enter your input"
     puts "Enter a colour separated by a comma"
     puts "The colours that are available are R, O, Y, G, B, P"
-    puts "Example guess"
-    puts "e.g. R,O,Y,G"
+    puts "Example guess e.g. R,O,Y,G"
     puts "**********************************************"
   end
 
@@ -78,8 +77,11 @@ class Board
       x.each do |y|
         print " #{y} |"
       end
+      puts ""
       puts "-----------------"
     end
+    puts "#{feedback[0]} exact peg(s) are the correct colour and in the correct position"
+    puts "#{feedback[1]} close peg(s) are the correct colour but in the wrong position"
   end
 
 # add_piece
@@ -92,7 +94,7 @@ end
 class Game
   attr_accessor :codemaker, :codebreaker
   
-  $colors = %w(R, O, Y, G, B, P)
+  $colors = %w(R O Y G B P)
 
   def initialize
     @board = Board.new
@@ -139,6 +141,7 @@ class Game
         reveal_code(code) 
       end
     end 
+    puts "Game over!"
   end
 
   # Check if the player has won the game
@@ -155,12 +158,15 @@ class Game
   def give_feedback(code, guess)
     feedback = [0,0]
     guess.each_with_index do |value, ind|
+      puts "The current value is #{value} and the index is #{ind}"
+      puts "The code at the current index is #{code[ind]}"
       if(value == code[ind])
         feedback[0] += 1
-        feedback[1] += 1
+        # feedback[1] += 1
       elsif(code.include?(value))
         feedback[1] += 1
       end
+      puts "#{feedback}"
     end
     feedback
   end
