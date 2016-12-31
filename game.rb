@@ -76,24 +76,24 @@ class Game
     code_col_count = colour_count(code)
     guess_col_count = colour_count(guess)
 
-    puts "colour uniq #{code_col_count}"
-    puts "colour uniq #{guess_col_count}"
-
     # Exact guesses
     guess.each_with_index do |value, ind|
       if(value == code[ind])
         feedback[0] += 1
         code_col_count[value.to_sym] -= 1
+        guess_col_count[value.to_sym] -= 1
       end
     end
 
     # Near guesses
     guess.each do |value|
-      puts "colour uniq the value #{value} and #{code_col_count[value.to_sym]}"
-
-      if(code.include?(value) && (code_col_count[value.to_sym] > 0))
-        feedback[1] += 1
-        code_col_count[value.to_sym] -= 1
+      if(code.include?(value))
+        # Check whether we have already accounted for the colour found
+       if((code_col_count[value.to_sym] > 0) && (guess_col_count[value.to_sym] > 0))
+          feedback[1] += 1
+          code_col_count[value.to_sym] -= 1
+          guess_col_count[value.to_sym] -= 1
+        end
       end
     end
     feedback
@@ -107,7 +107,6 @@ class Game
     puts "Codemaker wins and the codebreaker has lost!"
   end 
 
-  # Frequency of each colour in the generated code
   def colour_count(code)
     temp = Hash.new(0)
     code.each do |x|
@@ -116,8 +115,4 @@ class Game
     temp
   end
 end
-
-# colour_count = {R: 0, Y: 2, G: 1}
-# solution = ["Y", "R", "Y", "G"]
-# guess1   = ["R", "R", "R", "R"]
 
