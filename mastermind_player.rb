@@ -4,8 +4,6 @@ class Player
     @player_name = player_name
   end
 
-  private
-
   def validate_format(choice)
     return false unless choice.size == 4
     return true

@@ -35,9 +35,7 @@ class Gui
   end
 
   def self.print_assist(assist, turn)
-    assist.empty? ? tracker = [[0, 0]] : tracker = assist
-    # puts tracker.inspect
-    print "\t W: #{tracker[turn][0]}, B: #{tracker[turn][1]}"
+    print "\t W: #{assist[turn][0]}, B: #{assist[turn][1]}"
   end
 
   def self.make_chocie

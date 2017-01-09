@@ -56,9 +56,6 @@ class Board
     peg_assist[:assist_history][turn] = [peg_assist[:right_peg_NOT_place], peg_assist[:right_peg_AND_place]]
   end
 
-  private
-
-
   def reset_assist
     peg_assist[:right_peg_NOT_place] = 0
     peg_assist[:right_peg_AND_place] = 0

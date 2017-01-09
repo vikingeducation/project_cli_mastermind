@@ -32,8 +32,6 @@ class Mastermind
     end until game_lost?
   end
 
-  private
-
   def check_turn_limit
     return true if @turn > MAX_TURN_COUNT
     false
