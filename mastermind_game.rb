@@ -1,6 +1,6 @@
 class Mastermind
   attr_accessor :turn, :player_choice
-  attr_reader :board
+  attr_reader :board, :player
 
   MAX_TURN_COUNT = 12
 
@@ -11,6 +11,29 @@ class Mastermind
     @player_choice = []
   end
 
+  def play
+    Gui.welcome(player.player_name)
+    board.generate_target(player.player_name)
+    # TEMP CHECK
+    puts
+    begin
+      loop do
+        puts
+        board.render
+        Gui.turn_display(@turn.to_s)
+        self.player_choice = player.choose
+        break if board.validate_choice(player_choice)
+      end
+      board.peg_slots[@turn - 1] = player_choice
+      board.generate_assist(@turn - 1)
+      break if game_won?
+
+      increment_turn
+    end until game_lost?
+  end
+
+  private
+
   def check_turn_limit
     return true if @turn > MAX_TURN_COUNT
     false
@@ -18,28 +41,6 @@ class Mastermind
 
   def check_answer(peg_row)
     board.pegs_target == peg_row
-  end
-
-  def play
-    Gui.welcome(@player.player_name)
-    board.generate_target(@player.player_name)
-    # TEMP CHECK
-    print board.pegs_target
-    puts
-    begin
-      loop do
-        puts
-        board.render
-        Gui.turn_display(@turn.to_s)
-        @player_choice = @player.choose
-        break if board.validate_choice(@player_choice)
-      end
-      board.peg_slots[@turn - 1] = @player_choice
-      board.generate_assist(@turn - 1)
-      break if game_won?
-
-      increment_turn
-    end until game_lost?
   end
 
   def increment_turn

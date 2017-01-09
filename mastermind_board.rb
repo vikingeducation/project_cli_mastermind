@@ -12,17 +12,6 @@ class Board
     }
   end
 
-  def render
-    peg_slots.each_with_index do |row, ind|
-      row.each do |slot|
-        print slot + ' '
-      end
-      Gui.print_assist(peg_assist[:assist_history], ind)
-      puts
-    end
-    nil
-  end
-
   def generate_target(player_type)
     unless player_type == 'CPU'
       4.times do |ind|
@@ -35,12 +24,40 @@ class Board
     return
   end
 
+  def render
+    peg_slots.each_with_index do |row, ind|
+      row.each do |slot|
+        print slot + ' '
+      end
+      Gui.print_assist(peg_assist[:assist_history], ind)
+      puts
+    end
+    nil
+  end
+
+  def validate_choice(choice)
+    all_correct_peg = true
+    choice.each do |peg|
+      all_correct_peg = false unless PEG_COLOURS.include?(peg)
+    end
+
+    if all_correct_peg
+      return true
+    else
+      Gui.redo_selection
+      return false
+    end
+  end
+
   def generate_assist(turn)
     reset_assist
     right_colors_choosen(turn)
     right_peg_in_place(turn)
     peg_assist[:assist_history][turn] = [peg_assist[:right_peg_NOT_place], peg_assist[:right_peg_AND_place]]
   end
+
+  private
+
 
   def reset_assist
     peg_assist[:right_peg_NOT_place] = 0
@@ -67,17 +84,4 @@ class Board
     nil
   end
 
-  def validate_choice(choice)
-    all_correct_peg = true
-    choice.each do |peg|
-      all_correct_peg = false unless PEG_COLOURS.include?(peg)
-    end
-
-    if all_correct_peg
-      return true
-    else
-      Gui.redo_selection
-      return false
-    end
-  end
 end
