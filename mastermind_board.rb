@@ -1,6 +1,6 @@
 class Board
   PEG_COLOURS = %w(B G O P R Y).freeze
-  attr_accessor :peg_slots, :peg_assist, :assist_array, :pegs_target # target TEMP
+  attr_accessor :peg_slots, :peg_assist, :assist_array, :pegs_target
 
   def initialize
     @pegs_target = []
@@ -23,12 +23,16 @@ class Board
     nil
   end
 
-  attr_accessor :pegs_target
-
-  def generate_target
-    4.times do |ind|
-      pegs_target[ind] = PEG_COLOURS.sample
+  def generate_target(player_type)
+    unless player_type == 'CPU'
+      4.times do |ind|
+        pegs_target[ind] = PEG_COLOURS.sample
+      end
+    else
+      Gui.player_created_code
+      self.pegs_target = HumanPlayer.new("DEFAULT").choose
     end
+    return
   end
 
   def generate_assist(turn)
@@ -63,11 +67,6 @@ class Board
     nil
   end
 
-  def insert_guess(turn, guess)
-    peg_slots[turn] = guess
-    nil
-  end
-
   def validate_choice(choice)
     all_correct_peg = true
     choice.each do |peg|
@@ -82,5 +81,3 @@ class Board
     end
   end
 end
-
-# Blue, Green, Orange, Purple, Red, Yellow

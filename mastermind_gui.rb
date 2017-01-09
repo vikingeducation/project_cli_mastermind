@@ -11,6 +11,10 @@ class Gui
     return game_type.to_i
   end
 
+  def self.player_created_code
+    puts "Please enter a code for the CPU to break"
+  end
+
   def self.game_over(correct_guess)
     puts 'You lost the game!'
     puts 'Here was the answer: '

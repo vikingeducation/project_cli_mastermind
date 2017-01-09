@@ -22,7 +22,7 @@ class Mastermind
 
   def play
     Gui.welcome(@player.player_name)
-    board.generate_target
+    board.generate_target(@player.player_name)
     # TEMP CHECK
     print board.pegs_target
     puts
@@ -65,13 +65,13 @@ class Mastermind
   end
 
   def self.Start
-    loop do
+    begin
       game_type = Gui.breaker_or_maker
       if game_type == 1
         Mastermind.new(HumanPlayer.new(Gui.get_player)).play
       elsif game_type == 2
         Mastermind.new(CpuPlayer.new("CPU")).play
       end
-    end
+    end until game_type == 1 || game_type == 2
   end
 end
