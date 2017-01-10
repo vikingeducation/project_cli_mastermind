@@ -6,9 +6,10 @@ class Player
 
   def validate_format(choice)
     return true if choice.size == 4
-      Gui.redo_selection
+    Gui.redo_selection
     return false
   end
+
 end
 
 class HumanPlayer < Player

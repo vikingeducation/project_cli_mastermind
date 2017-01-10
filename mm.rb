@@ -4,4 +4,4 @@ require_relative "mastermind_gui"
 require_relative "mastermind_player"
 require 'pry'
 
-Mastermind.Start
+Mastermind.start

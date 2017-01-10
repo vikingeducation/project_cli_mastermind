@@ -11,7 +11,7 @@ class Mastermind
     @player_choice = []
   end
 
-  def self.Start
+  def self.start
     begin
       game_type = Gui.breaker_or_maker
       if game_type == 1
@@ -25,16 +25,8 @@ class Mastermind
   def play
     Gui.welcome(player.player_name)
     board.generate_target(player.player_name)
-    # TEMP CHECK
-    puts
     begin
-      loop do
-        puts
-        board.render
-        Gui.turn_display(turn.to_s)
-        self.player_choice = player.choose
-        break if board.validate_choice(player_choice)
-      end
+      take_turn
       board.peg_slots[turn - 1] = player_choice
       board.generate_assist(turn - 1)
       break if game_won?
@@ -42,9 +34,19 @@ class Mastermind
       increment_turn
     end until game_lost?
   end
-
-
+  
   private
+
+  def take_turn
+    loop do
+      puts
+      board.render
+      Gui.turn_display(turn.to_s)
+      self.player_choice = player.choose
+      break if board.validate_choice(player_choice)
+    end
+    nil
+  end
 
   def check_turn_limit
     return true if turn > MAX_TURN_COUNT

@@ -70,7 +70,6 @@ class Board
   end
 
   def right_peg_in_place(temp_guess, temp_target)
-    puts temp_guess.object_id
     index = 0
     while index < temp_guess.size
       if temp_guess[index] == temp_target[index]
@@ -85,7 +84,6 @@ class Board
   end
 
   def right_colors_choosen(temp_guess, temp_target)
-    puts temp_guess.object_id
     temp_guess.each do |peg|
       if temp_target.include?(peg)
         peg_assist[:right_peg_NOT_place] += 1
