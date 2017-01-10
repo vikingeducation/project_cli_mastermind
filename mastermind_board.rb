@@ -62,9 +62,15 @@ class Board
   end
 
   def assist_parse(turn)
-    temp_guess = peg_slots[turn].dup # G Y R G
-    temp_target = pegs_target.dup # G G G B
+    temp_guess = peg_slots[turn].dup
+    temp_target = pegs_target.dup
 
+    right_peg_in_place(temp_guess, temp_target)
+    right_colors_choosen(temp_guess, temp_target)
+  end
+
+  def right_peg_in_place(temp_guess, temp_target)
+    puts temp_guess.object_id
     index = 0
     while index < temp_guess.size
       if temp_guess[index] == temp_target[index]
@@ -75,45 +81,22 @@ class Board
         index += 1
       end
     end
+    nil
+  end
 
-    # Check what's left for correct color in wrong position
+  def right_colors_choosen(temp_guess, temp_target)
+    puts temp_guess.object_id
     temp_guess.each do |peg|
       if temp_target.include?(peg)
         peg_assist[:right_peg_NOT_place] += 1
-        # Delete that one copy of the matching guess in the code copy
+
         temp_target.delete_at(temp_target.index(peg))
       end
     end
-
-  end
-
-  def right_peg_in_place(turn)
-    peg_slots[turn].each_with_index do |peg, ind|
-      if pegs_target[ind] == peg
-        peg_assist[:right_peg_AND_place] += 1
-      end
-    end
-    nil
-  end
-
-  def right_colors_choosen(turn)
-    temp = peg_slots[turn].uniq.dup # O G B P
-    temp.each do |peg| # O G B P
-      if pegs_target.include?(peg)
-        peg_assist[:right_peg_NOT_place] += pegs_target.count(peg) # G G G G
-      end
-    end
-    nil
   end
 
   def build_empty_game_array(empty_element, board_height=12, board_width=4)
     Array.new(board_height) { Array.new(board_width) { |i| i = empty_element } }
   end
 
-end
-
-class Array
-  def deep_dup
-    Marshal.load(Marshal.dump(self.dup))
-  end
 end
