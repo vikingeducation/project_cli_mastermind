@@ -1,6 +1,7 @@
 class Gui
-  def self.welcome(player)
-    puts "Welcome to Mastermind #{player}!!"
+  def self.welcome(player_1, player_2)
+    puts "Welcome to Mastermind #{player_1}!!" if player_2 == 'CPU'
+    puts "Welcome to Mastermind #{player_2}!!" if player_1 == 'CPU'
   end
 
   def self.breaker_or_maker

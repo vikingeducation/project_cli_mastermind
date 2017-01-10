@@ -1,5 +1,4 @@
 class Board
-  PEG_COLOURS = %w(B G O P R Y).freeze
   attr_accessor :peg_slots, :peg_assist, :assist_array, :pegs_target
 
   def initialize
@@ -12,18 +11,6 @@ class Board
     }
   end
 
-  def generate_target(player_type)
-    unless player_type == 'CPU'
-      4.times do |ind|
-        pegs_target[ind] = PEG_COLOURS.sample
-      end
-    else
-      Gui.player_created_code
-      self.pegs_target = HumanPlayer.new("DEFAULT").choose
-    end
-    return
-  end
-
   def render
     peg_slots.each_with_index do |row, ind|
       row.each do |slot|
@@ -34,20 +21,6 @@ class Board
     end
     puts
     nil
-  end
-
-  def validate_choice(choice)
-    all_correct_peg = true
-    choice.each do |peg|
-      all_correct_peg = false unless PEG_COLOURS.include?(peg)
-    end
-
-    if all_correct_peg
-      return true
-    else
-      Gui.redo_selection
-      return false
-    end
   end
 
   def generate_assist(turn)
@@ -85,16 +58,14 @@ class Board
 
   def right_colors_choosen(temp_guess, temp_target)
     temp_guess.each do |peg|
-      if temp_target.include?(peg)
-        peg_assist[:right_peg_NOT_place] += 1
+      next unless temp_target.include?(peg)
+      peg_assist[:right_peg_NOT_place] += 1
 
-        temp_target.delete_at(temp_target.index(peg))
-      end
+      temp_target.delete_at(temp_target.index(peg))
     end
   end
 
-  def build_empty_game_array(empty_element, board_height=12, board_width=4)
-    Array.new(board_height) { Array.new(board_width) { |i| i = empty_element } }
+  def build_empty_game_array(empty_element, board_height = 12, board_width = 4)
+    Array.new(board_height) { Array.new(board_width) { |_i| _i = empty_element } }
   end
-
 end
