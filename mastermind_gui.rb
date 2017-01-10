@@ -42,13 +42,13 @@ class Gui
     puts 'Please enter your choice'
     puts 'Choose from B, G, O, P, R, Y:'
     print '> '
-    player_choice = gets.chomp.upcase
-    player_choice.split(',').map!(&:strip)
+    player_choice = gets.chomp.upcase.gsub(/\W+/, '')
+    player_choice.split('').map!(&:strip)
   end
 
   def self.redo_selection
-    puts 'It looks like one of the pegs you input'
-    puts 'Is not a valid choice.'
+    puts 'It looks like you peg input is invalid'
+    puts 'Please enter only 4 options from the list'
     puts 'Please try again'
   end
 

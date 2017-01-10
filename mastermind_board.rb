@@ -4,11 +4,11 @@ class Board
 
   def initialize
     @pegs_target = []
-    @peg_slots = Array.new(12) { Array.new(4) { |i| i = '-' } }
+    @peg_slots = build_empty_game_array('-')
     @peg_assist = {
       right_peg_NOT_place:  0,
       right_peg_AND_place:  0,
-      assist_history: Array.new(12) { Array.new(4) { |i| i = 0 } }
+      assist_history: build_empty_game_array(0)
     }
   end
 
@@ -32,6 +32,7 @@ class Board
       Gui.print_assist(peg_assist[:assist_history], ind)
       puts
     end
+    puts
     nil
   end
 
@@ -51,8 +52,7 @@ class Board
 
   def generate_assist(turn)
     reset_assist
-    right_colors_choosen(turn)
-    right_peg_in_place(turn)
+    assist_parse(turn)
     peg_assist[:assist_history][turn] = [peg_assist[:right_peg_NOT_place], peg_assist[:right_peg_AND_place]]
   end
 
@@ -61,24 +61,59 @@ class Board
     peg_assist[:right_peg_AND_place] = 0
   end
 
+  def assist_parse(turn)
+    temp_guess = peg_slots[turn].dup # G Y R G
+    temp_target = pegs_target.dup # G G G B
+
+    index = 0
+    while index < temp_guess.size
+      if temp_guess[index] == temp_target[index]
+        peg_assist[:right_peg_AND_place] += 1
+        temp_guess.delete_at(index)
+        temp_target.delete_at(index)
+      else
+        index += 1
+      end
+    end
+
+    # Check what's left for correct color in wrong position
+    temp_guess.each do |peg|
+      if temp_target.include?(peg)
+        peg_assist[:right_peg_NOT_place] += 1
+        # Delete that one copy of the matching guess in the code copy
+        temp_target.delete_at(temp_target.index(peg))
+      end
+    end
+
+  end
+
   def right_peg_in_place(turn)
     peg_slots[turn].each_with_index do |peg, ind|
       if pegs_target[ind] == peg
         peg_assist[:right_peg_AND_place] += 1
-        peg_assist[:right_peg_NOT_place] -= 1
       end
     end
     nil
   end
 
   def right_colors_choosen(turn)
-    temp = peg_slots[turn].uniq.dup
-    temp.each do |peg|
+    temp = peg_slots[turn].uniq.dup # O G B P
+    temp.each do |peg| # O G B P
       if pegs_target.include?(peg)
-        peg_assist[:right_peg_NOT_place] += pegs_target.count(peg)
+        peg_assist[:right_peg_NOT_place] += pegs_target.count(peg) # G G G G
       end
     end
     nil
   end
 
+  def build_empty_game_array(empty_element, board_height=12, board_width=4)
+    Array.new(board_height) { Array.new(board_width) { |i| i = empty_element } }
+  end
+
+end
+
+class Array
+  def deep_dup
+    Marshal.load(Marshal.dump(self.dup))
+  end
 end

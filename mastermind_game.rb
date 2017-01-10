@@ -11,6 +11,17 @@ class Mastermind
     @player_choice = []
   end
 
+  def self.Start
+    begin
+      game_type = Gui.breaker_or_maker
+      if game_type == 1
+        Mastermind.new(HumanPlayer.new(Gui.get_player)).play
+      elsif game_type == 2
+        Mastermind.new(CpuPlayer.new('CPU')).play
+      end
+    end until game_type == 1 || game_type == 2
+  end
+
   def play
     Gui.welcome(player.player_name)
     board.generate_target(player.player_name)
@@ -20,20 +31,23 @@ class Mastermind
       loop do
         puts
         board.render
-        Gui.turn_display(@turn.to_s)
+        Gui.turn_display(turn.to_s)
         self.player_choice = player.choose
         break if board.validate_choice(player_choice)
       end
-      board.peg_slots[@turn - 1] = player_choice
-      board.generate_assist(@turn - 1)
+      board.peg_slots[turn - 1] = player_choice
+      board.generate_assist(turn - 1)
       break if game_won?
 
       increment_turn
     end until game_lost?
   end
 
+
+  private
+
   def check_turn_limit
-    return true if @turn > MAX_TURN_COUNT
+    return true if turn > MAX_TURN_COUNT
     false
   end
 
@@ -46,7 +60,7 @@ class Mastermind
   end
 
   def game_won?
-    if check_answer(board.peg_slots[@turn - 1])
+    if check_answer(board.peg_slots[turn - 1])
       Gui.good_game(board.pegs_target.to_s)
       true
     else
@@ -56,21 +70,11 @@ class Mastermind
 
   def game_lost?
     if check_turn_limit
+      board.render
       Gui.game_over(board.pegs_target.to_s)
       true
     else
       false
     end
-  end
-
-  def self.Start
-    begin
-      game_type = Gui.breaker_or_maker
-      if game_type == 1
-        Mastermind.new(HumanPlayer.new(Gui.get_player)).play
-      elsif game_type == 2
-        Mastermind.new(CpuPlayer.new("CPU")).play
-      end
-    end until game_type == 1 || game_type == 2
   end
 end
