@@ -1,50 +1,56 @@
 class Mastermind
-  attr_accessor :turn, :player_choice
-  attr_reader :board, :player
+  attr_accessor :turn, :player_choice, :codebreaker, :codemaker
+  attr_reader :board, :players
 
   MAX_TURN_COUNT = 12
 
-  def initialize(player)
-    @player = player
+  def initialize(players)
+    @codebreaker = players[:codebreaker]
+    @codemaker = players[:codemaker]
     @board = Board.new
     @turn = 1
-    @player_choice = []
   end
 
   def self.start
     begin
       game_type = Gui.breaker_or_maker
       if game_type == 1
-        Mastermind.new(HumanPlayer.new(Gui.get_player)).play
+        players = {
+          codebreaker: HumanPlayer.new(Gui.get_player),
+          codemaker: CpuPlayer.new('CPU')
+        }
       elsif game_type == 2
-        Mastermind.new(CpuPlayer.new('CPU')).play
+        players = {
+          codebreaker: CpuPlayer.new('CPU'),
+          codemaker: HumanPlayer.new(Gui.get_player)
+        }
       end
+      Mastermind.new(players).play
     end until game_type == 1 || game_type == 2
   end
 
   def play
-    Gui.welcome(player.player_name)
-    board.generate_target(player.player_name)
     begin
-      take_turn
-      board.peg_slots[turn - 1] = player_choice
-      board.generate_assist(turn - 1)
-      break if game_won?
-
-      increment_turn
-    end until game_lost?
+      Gui.welcome(codebreaker.player_name, codemaker.player_name)
+      board.pegs_target = codemaker.pick_code
+      begin
+        take_turn
+        break if game_won?
+        increment_turn
+      end until game_lost?
+    rescue SystemExit, Interrupt
+      puts "\nThanks for playing!"
+    end
   end
-  
+
   private
 
   def take_turn
-    loop do
-      puts
-      board.render
-      Gui.turn_display(turn.to_s)
-      self.player_choice = player.choose
-      break if board.validate_choice(player_choice)
-    end
+    puts
+    board.render
+    Gui.turn_display(turn.to_s)
+    board.peg_slots[turn - 1] = codebreaker.choose
+    board.generate_assist(turn - 1)
     nil
   end
 
