@@ -19,7 +19,7 @@ class Mastermind
     @code = @code_maker.make_code
 
     12.times do |round|
-      @guess = @code_breaker.get_code(@board, round)
+      @guess = @code_breaker.get_code(round)
       feedback = @board.get_feedback(@guess, @code)
       @board.update(@guess)
       @board.render

@@ -20,7 +20,7 @@ class Human < Player
     @code
   end
 
-  def get_code(board=nil, round=nil)
+  def get_code(round=nil)
     self.make_code
   end
 
@@ -79,7 +79,7 @@ class AI < Player
     puts "'Til next time!"
   end
 
-  def get_code(board, round)
+  def get_code(round)
     # dumb version for now
     return [1,1,2,2] if round == 0
     self.make_code
