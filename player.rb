@@ -16,7 +16,7 @@ class Player
       code = ask_for_code
 
       # IF validate_code_format is true
-      if validate_code_format
+      if validate_code_format(code)
         # IF code can be set on the board
         if @board.set_code(code)
           # break the loop
@@ -44,7 +44,7 @@ class Player
       guess = ask_for_guess
 
       # IF validate_code_format is true
-      if validate_code_format
+      if validate_code_format(guess)
         # IF guess can be placed on board
         if @board.add_guess(guess)
           # break the loop
@@ -65,6 +65,13 @@ class Player
   end
 
   # validate_code_format
+  def validate_code_format(code)
     # UNLESS code is in the proper format
-    # display error message
+    if code.is_a?(Array) && code.size == 4
+      true
+    else
+      # display error message
+      puts "Your code is in the improper format!"
+    end
+  end
 end
