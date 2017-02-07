@@ -78,7 +78,23 @@ class Board
   # close_pegs(guess)
   def close_pegs(guess)
     # number of pegs in the guess wth correct color, but incorrect location
-    # TODO - Build close_pegs method
+    possible_matches = @secret_code.dup
+    return 0 unless @secret_code
+
+    guess.each_with_index do |peg, i|
+      if possible_matches[i] == peg
+        possible_matches[i] = "exact"
+      end
+    end
+
+    guess.each_with_index do |peg, i|
+      if possible_matches.include?(peg)
+        slot = possible_matches.find_index(peg)
+        possible_matches[slot] = "close"
+      end
+    end
+
+    possible_matches.count("close")
   end
 
   # exact_pegs
@@ -86,11 +102,13 @@ class Board
     # number of pegs in the guess with correct color, and correct location
     matches = 0
     return 0 unless @secret_code
+
     @secret_code.each_with_index do |peg, i|
       if guess[i] == peg
         matches += 1
       end
     end
+
     matches
   end
 
