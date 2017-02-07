@@ -55,4 +55,10 @@ Prompt player if he would like to play again [MasterMind]
   Else
     Exit the game [MasterMind]
 
-      
+### Thoughts      
+1. Object decomposition:
+  1. MasterMind for overall game control and logic
+  2. Board to store and display current state of game
+  3. Player to represent a human player
+  4. Computer to represent a computer player
+2. We could probably create a Player parent class, with HumanPlayer and ComputerPlayer child classes
