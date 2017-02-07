@@ -73,7 +73,10 @@ class Board
   # number of pegs in the guess with correct color, and correct location
 
   # winning_combination?
-  # does the last guess have 4 exact_pegs?
+  def winning_combination?
+    # does the last guess have 4 exact_pegs?
+    exact_pegs(@board.last) == 4
+  end
 
   # full?
   # does every row contain a guess?
