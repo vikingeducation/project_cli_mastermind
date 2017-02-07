@@ -1,7 +1,10 @@
 # Maintains game board state
 class Board
   # initialize board
+  def initialize
     # set up blank data structure
+    @board = Array.new(12) { Array.new(4) }
+  end
 
   # render
     # loop through data structure
@@ -12,6 +15,9 @@ class Board
       # set code
     # ELSE
       # display error message
+
+  # secret_code
+    # If secret_code has been set, return the secret_code
 
   # add_guess
     # IF valid_code?
@@ -32,7 +38,7 @@ class Board
     # number of pegs in the guess with correct color, and correct location
 
   # winning_combination?
-    # does the guess have 4 exact_pegs?
+    # does the last guess have 4 exact_pegs?
 
   # full?
     # does every row contain a guess?
