@@ -4,6 +4,8 @@ class Board
   def initialize
     # set up blank data structure
     @board = Array.new(12) { Array.new(4) }
+    @guess_count = 0
+    @valid_colors = ["red", "orange", "yellow", "green", "blue", "violet"]
   end
 
   # render
@@ -26,7 +28,7 @@ class Board
     if valid_code?(code)
       # set code
       @secret_code = code
-    # ELSE
+      # ELSE
       puts "Your code doesn't follow the rules!"
     end
   end
@@ -38,26 +40,33 @@ class Board
   end
 
   # add_guess
+  def add_guess(guess)
     # IF valid_code?
+    if valid_code(guess)
       # place guess
-    # ELSE
+      @board[guess_count] = guess
+    #ELSE
+    else
       # display error message
+      puts "Your code doesn't follow the rules!"
+    end
+  end
 
   # valid_code?
-    # is each peg in the code a valid_color?
+  # is each peg in the code a valid_color?
 
   # valid_color?
-    # is the peg included in the list of valid_colors?
+  # is the peg included in the list of valid_colors?
 
   # close_pegs
-    # number of pegs in the guess with correct color, but incorrect location
+  # number of pegs in the guess with correct color, but incorrect location
 
   # exact_pegs
-    # number of pegs in the guess with correct color, and correct location
+  # number of pegs in the guess with correct color, and correct location
 
   # winning_combination?
-    # does the last guess have 4 exact_pegs?
+  # does the last guess have 4 exact_pegs?
 
   # full?
-    # does every row contain a guess?
+  # does every row contain a guess?
 end
