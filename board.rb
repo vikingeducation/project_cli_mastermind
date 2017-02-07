@@ -68,11 +68,21 @@ class Board
     valid_colors.include?(peg)
   end
 
-  # close_pegs
+  # close_pegs(guess)
   # number of pegs in the guess wth correct color, but incorrect location
 
   # exact_pegs
-  # number of pegs in the guess with correct color, and correct location
+  def exact_pegs(guess)
+    # number of pegs in the guess with correct color, and correct location
+    matches = 0
+    return 0 unless @secret_code
+    @secret_code.each_with_index do |peg, i|
+      if guess[i] == peg
+        matches += 1
+      end
+    end
+    matches
+  end
 
   # winning_combination?
   def winning_combination?
