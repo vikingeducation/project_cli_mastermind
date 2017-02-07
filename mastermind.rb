@@ -50,6 +50,11 @@ class Mastermind
   end
 
   # check_codebreaker_loss
+  def check_codebreaker_loss
     # IF board says the board is full?
+    if @board.full?
       # display a message for codebreaker not solving code
+      puts "Game over. The correct code was #{@board.secret_code}"
+    end
+  end
 end
