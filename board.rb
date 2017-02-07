@@ -32,7 +32,10 @@ class Board
   end
 
   # secret_code
+  def secret_code
     # If secret_code has been set, return the secret_code
+    @secret_code ? @secret_code : false
+  end
 
   # add_guess
     # IF valid_code?
