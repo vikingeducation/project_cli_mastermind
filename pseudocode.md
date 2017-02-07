@@ -1,10 +1,6 @@
 ## Pseudocoding the solution to Mastermind
 
-###Base assumptions
-1. 6 different colors for code pegs
-2. 12 turns per game
-
-###Program flow
+### Program flow
 Set up the game [MasterMind]
   Create the game board [Board]
   Create a player [Player]
@@ -58,6 +54,5 @@ Prompt player if he would like to play again [MasterMind]
     Reset the game [MasterMind]
   Else
     Exit the game [MasterMind]
-
 
       
