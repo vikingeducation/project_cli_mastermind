@@ -1,6 +1,7 @@
 ## Pseudocoding the solution to Mastermind
 
 ### Program flow
+```
 Set up the game [MasterMind]
   Create the game board [Board]
   Create a player [Player]
@@ -54,6 +55,7 @@ Prompt player if he would like to play again [MasterMind]
     Reset the game [MasterMind]
   Else
     Exit the game [MasterMind]
+```
 
 ### Thoughts      
 1. Object decomposition:
