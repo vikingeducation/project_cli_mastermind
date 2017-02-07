@@ -29,6 +29,7 @@ class Player
   # ask for code to set secret code
   def ask_for_code
     # display message asking for code
+    puts
     puts "#{@name}, please enter four colors to make a secret code."
     puts "You can choose from red, orange, yellow, green, blue and violet."
     puts "Please enter your code in the form color,color,color,color:"
@@ -57,6 +58,7 @@ class Player
   # ask_for_guess
   def ask_for_guess
     # display message asking for guess
+    puts
     puts "#{@name}, please enter four colors to guess the secret code."
     puts "You can choose from red, orange, yellow, green, blue and violet."
     puts "Please enter your code in the form color,color,color,color:"

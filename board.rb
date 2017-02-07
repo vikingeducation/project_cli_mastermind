@@ -15,7 +15,7 @@ class Board
     @board.each do |row|
       # display an existing peg if any, else blank
       row.each do |slot|
-        slot.nil? ? print "-" : print slot
+        slot.nil? ? print("-") : print(slot)
       end
       puts
     end
@@ -28,7 +28,8 @@ class Board
     if valid_code?(code)
       # set code
       @secret_code = code
-      # ELSE
+    #ELSE
+    else
       puts "Your code doesn't follow the rules!"
     end
   end
@@ -42,9 +43,9 @@ class Board
   # add_guess
   def add_guess(guess)
     # IF valid_code?
-    if valid_code(guess)
+    if valid_code?(guess)
       # place guess
-      @board[guess_count] = guess
+      @board[@guess_count] = guess
       # increment guess counter
       @guess_count += 1
       #ELSE
@@ -58,18 +59,22 @@ class Board
   def valid_code?(code)
     # is each peg in the code a valid_color?
     code.each do |peg|
-      return false unless peg.valid_color?
+      return false unless valid_color?(peg)
     end
+    true
   end
 
   # valid_color?
   def valid_color?(peg)
     # is the peg included in the list of valid_colors?
-    valid_colors.include?(peg)
+    @valid_colors.include?(peg)
   end
 
   # close_pegs(guess)
-  # number of pegs in the guess wth correct color, but incorrect location
+  def close_pegs(guess)
+    # number of pegs in the guess wth correct color, but incorrect location
+    # TODO - Build close_pegs method
+  end
 
   # exact_pegs
   def exact_pegs(guess)
@@ -87,7 +92,10 @@ class Board
   # winning_combination?
   def winning_combination?
     # does the last guess have 4 exact_pegs?
-    exact_pegs(@board.last) == 4
+    @board.each do |row|
+      return true if exact_pegs(row) == 4
+    end
+    false
   end
 
   # full?

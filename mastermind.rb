@@ -1,4 +1,5 @@
 require_relative 'board.rb'
+require_relative 'player.rb'
 
 # Controls the game play
 class Mastermind
@@ -26,7 +27,7 @@ class Mastermind
       @codebreaker.get_guess
 
       # break the loop if the game is over
-      break if game_over?
+      break if check_game_over
     end
   end
 
@@ -42,7 +43,7 @@ class Mastermind
     # IF board says last guess is a winning_combination?
     if @board.winning_combination?
       # display a message for codebreaker solving code
-      puts "Congratulations #{codebreaker.name}, you solved the code!"
+      puts "Congratulations #{@codebreaker.name}, you solved the code!"
       true
     else
       false
@@ -54,7 +55,12 @@ class Mastermind
     # IF board says the board is full?
     if @board.full?
       # display a message for codebreaker not solving code
+      @board.render
       puts "Game over. The correct code was #{@board.secret_code}"
+      true
     end
   end
 end
+
+game = Mastermind.new
+game.play
