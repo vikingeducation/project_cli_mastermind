@@ -53,7 +53,12 @@ class Board
   end
 
   # valid_code?
+  def valid_code?(code)
   # is each peg in the code a valid_color?
+    code.each do |peg|
+      return false unless peg.valid_color?
+    end
+  end
 
   # valid_color?
   # is the peg included in the list of valid_colors?
