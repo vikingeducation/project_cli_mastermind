@@ -8,20 +8,27 @@ class Mastermind
     @board = Board.new
 
     # set up the players
-    @player_one = Player.new("Player One", @board)
-    @player_two = Player.new("Player Two", @board)
-
-    # assign the starting player
-    @current_player = @player_one
+    @codemaker = Player.new("Player One", @board)
+    @codebreaker = Player.new("Player Two", @board)
   end
 
   # play
-    # ask for starting player to set code
-    # switch players
+  def play
+    # ask for codemaker to set code
+    @codemaker.set_code
+
     # loop infinitely
+    loop do
       # call the board rendering method
-      # ask for player to make guess
+      @board.render
+
+      # ask for codebreaker to make guess
+      @codebreaker.guess_code
+
       # break the loop if the game is over
+      break if check_game_over
+    end
+  end
 
   # check_game_over
     # check_victory
