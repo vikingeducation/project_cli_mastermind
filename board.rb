@@ -21,10 +21,15 @@ class Board
   end
 
   # set_code
+  def set_code(code)
     # IF valid_code?
+    if valid_code?(code)
       # set code
+      @secret_code = code
     # ELSE
-      # display error message
+      puts "Your code doesn't follow the rules!"
+    end
+  end
 
   # secret_code
     # If secret_code has been set, return the secret_code
