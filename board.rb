@@ -45,6 +45,8 @@ class Board
     if valid_code(guess)
       # place guess
       @board[guess_count] = guess
+      # increment guess counter
+      @guess_count += 1
       #ELSE
     else
       # display error message
@@ -67,7 +69,7 @@ class Board
   end
 
   # close_pegs
-  # number of pegs in the guess with correct color, but incorrect location
+  # number of pegs in the guess wth correct color, but incorrect location
 
   # exact_pegs
   # number of pegs in the guess with correct color, and correct location
@@ -79,5 +81,8 @@ class Board
   end
 
   # full?
+  def full?
   # does every row contain a guess?
+    @guess_count == 12
+  end
 end
