@@ -45,7 +45,7 @@ class Board
     if valid_code(guess)
       # place guess
       @board[guess_count] = guess
-    #ELSE
+      #ELSE
     else
       # display error message
       puts "Your code doesn't follow the rules!"
@@ -54,14 +54,17 @@ class Board
 
   # valid_code?
   def valid_code?(code)
-  # is each peg in the code a valid_color?
+    # is each peg in the code a valid_color?
     code.each do |peg|
       return false unless peg.valid_color?
     end
   end
 
   # valid_color?
-  # is the peg included in the list of valid_colors?
+  def valid_color?(peg)
+    # is the peg included in the list of valid_colors?
+    valid_colors.include?(peg)
+  end
 
   # close_pegs
   # number of pegs in the guess with correct color, but incorrect location
