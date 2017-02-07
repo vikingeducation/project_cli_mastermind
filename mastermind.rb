@@ -3,14 +3,14 @@ class Mastermind
   # initialize
     # set up the board
     # set up the players
-    # assign the codemaker player
-    # assign the codebreaker player
+    # assign the starting player
 
   # play
-    # ask for codebreaker to set code
+    # ask for starting player to set code
+    # switch players
     # loop infinitely
       # call the board rendering method
-      # ask for guess from codebreaker player
+      # ask for player to make guess
       # break the loop if the game is over
 
   # check_game_over
@@ -18,7 +18,7 @@ class Mastermind
     # check_loss
 
   # check_victory
-    # IF board says codebreaker's guess is a winning_combination?
+    # IF board says guess is a winning_combination?
       # display a victory message
 
   # check_loss

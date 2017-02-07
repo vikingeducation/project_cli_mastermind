@@ -1,7 +1,6 @@
 # Manages all player related functionality
 class Player
   # initialize
-    # Set role (codebreaker or codemaker)
 
   # get_code
     # loop infinitely
