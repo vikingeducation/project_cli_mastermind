@@ -15,7 +15,7 @@ class Mastermind
   # play
   def play
     # ask for codemaker to set code
-    @codemaker.set_code
+    @codemaker.get_code
 
     # loop infinitely
     loop do
@@ -23,7 +23,7 @@ class Mastermind
       @board.render
 
       # ask for codebreaker to make guess
-      @codebreaker.guess_code
+      @codebreaker.get_guess
 
       # break the loop if the game is over
       break if game_over?
