@@ -38,8 +38,16 @@ class Mastermind
   end
 
   # check_codebreaker_victory
-    # IF board says guess is a winning_combination?
+  def check_codebreaker_victory
+    # IF board says last guess is a winning_combination?
+    if @board.winning_combination?
       # display a message for codebreaker solving code
+      puts "Congratulations #{codebreaker.name}, you solved the code!"
+      true
+    else
+      false
+    end
+  end
 
   # check_codebreaker_loss
     # IF board says the board is full?
