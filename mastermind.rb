@@ -26,19 +26,22 @@ class Mastermind
       @codebreaker.guess_code
 
       # break the loop if the game is over
-      break if check_game_over
+      break if game_over?
     end
   end
 
-  # check_game_over
-    # check_victory
-    # check_loss
+  # check if game is over
+  def check_game_over
+    # check for codebreaker victory
+    # check for codebreaker loss
+    check_codebreaker_victory || check_codebreaker_loss
+  end
 
-  # check_victory
+  # check_codebreaker_victory
     # IF board says guess is a winning_combination?
-      # display a victory message
+      # display a message for codebreaker solving code
 
-  # check_loss
+  # check_codebreaker_loss
     # IF board says the board is full?
-      # display a loss message
+      # display a message for codebreaker not solving code
 end
