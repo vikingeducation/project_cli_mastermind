@@ -17,7 +17,8 @@ class Board
       row.each do |slot|
         slot.nil? ? print("-") : print(slot)
       end
-      puts
+      print " " * 3
+      puts "Exact: #{exact_pegs(row)}, Close: #{close_pegs(row)}"
     end
     puts
   end
@@ -68,6 +69,10 @@ class Board
   def valid_color?(peg)
     # is the peg included in the list of valid_colors?
     @valid_colors.include?(peg)
+  end
+
+  def valid_colors
+    @valid_colors
   end
 
   # close_pegs(guess)

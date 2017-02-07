@@ -1,5 +1,6 @@
 require_relative 'board.rb'
 require_relative 'player.rb'
+require_relative 'computer_player.rb'
 
 # Controls the game play
 class Mastermind
@@ -9,8 +10,8 @@ class Mastermind
     @board = Board.new
 
     # set up the players
-    @codemaker = Player.new("Player One", @board)
-    @codebreaker = Player.new("Player Two", @board)
+    @codemaker = ComputerPlayer.new("Player One", @board)
+    @codebreaker = ComputerPlayer.new("Player Two", @board)
   end
 
   # play
