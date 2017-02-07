@@ -10,12 +10,24 @@ class Board
 
   # render
   def render
+    line_width = 7
+
     puts
     # loop through data structure
     @board.each do |row|
       # display an existing peg if any, else blank
       row.each do |slot|
-        slot.nil? ? print("-") : print(slot)
+        print "[ "
+
+        if slot.nil?
+            line_width.times { print "-" }
+        else
+          padding = line_width - slot.length || 1
+          print slot
+          padding.times { print " " }
+        end
+
+        print " ] "
       end
       print " " * 3
       puts "Exact: #{exact_pegs(row)}, Close: #{close_pegs(row)}"
@@ -31,7 +43,7 @@ class Board
       @secret_code = code
     #ELSE
     else
-      puts "Your code doesn't follow the rules!"
+      puts "Your code doesn't follow the rules."
     end
   end
 
@@ -52,7 +64,7 @@ class Board
       #ELSE
     else
       # display error message
-      puts "Your code doesn't follow the rules!"
+      puts "Your code doesn't follow the rules."
     end
   end
 
