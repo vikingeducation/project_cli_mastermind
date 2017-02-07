@@ -1,9 +1,19 @@
+require_relative 'board.rb'
+
 # Controls the game play
 class Mastermind
-  # initialize
+  #initialize
+  def initialize
     # set up the board
+    @board = Board.new
+
     # set up the players
+    @player_one = Player.new("Player One", @board)
+    @player_two = Player.new("Player Two", @board)
+
     # assign the starting player
+    @current_player = @player_one
+  end
 
   # play
     # ask for starting player to set code
