@@ -8,6 +8,22 @@ class Player
     @board = board
   end
 
+  def get_role_choice
+    loop do
+      role = ask_role_choice
+      return role if role == "codebreaker" || "codemaker"
+    end
+  end
+
+  # ask game settings
+  def ask_role_choice
+    puts "Welcome to Mastermind."
+    puts "Would you like to play as the codebreaker or codemaker?"
+    puts
+    puts "Please enter 'codebreaker' or 'codemaker' :"
+    gets.strip
+  end
+
   # get secret code
   def get_code
     # loop infinitely
@@ -73,7 +89,7 @@ class Player
       true
     else
       # display error message
-      puts "Your code is in the improper format!"
+      puts "Your code is in the improper format."
     end
   end
 end

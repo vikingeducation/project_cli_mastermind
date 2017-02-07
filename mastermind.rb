@@ -10,12 +10,14 @@ class Mastermind
     @board = Board.new
 
     # set up the players
-    @codemaker = ComputerPlayer.new("Player One", @board)
-    @codebreaker = ComputerPlayer.new("Player Two", @board)
+    @human_player = Player.new("Player One", @board)
+    @computer_player = ComputerPlayer.new("Player Two", @board)
   end
 
   # play
   def play
+
+
     # ask for codemaker to set code
     @codemaker.get_code
 
@@ -29,6 +31,20 @@ class Mastermind
 
       # break the loop if the game is over
       break if check_game_over
+    end
+  end
+
+  def pick_roles
+    human_role = @human_player.get_role_choice
+
+    if human_role == "codebreaker"
+      @codebreaker = @human_player
+      @codemaker = @computer_player
+    elsif human_role == "codemaker"
+      @codemaker = @human_player
+      @codebreaker = @computer_player
+    else
+      puts "Invalid role choice."
     end
   end
 
@@ -57,7 +73,7 @@ class Mastermind
     if @board.full?
       # display a message for codebreaker not solving code
       @board.render
-      puts "Game over. The correct code was #{@board.secret_code}"
+      puts "Game over. The correct code was #{@board.secret_code}."
       true
     end
   end
