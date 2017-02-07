@@ -33,7 +33,7 @@ class Player
     puts "You can choose from red, orange, yellow, green, blue and violet."
     puts "Please enter your code in the form color,color,color,color:"
     # pull code from command line
-    gets.strip.split(","
+    gets.strip.split(",")
   end
 
   # get guess
@@ -55,8 +55,14 @@ class Player
   end
 
   # ask_for_guess
-    # display message asking for code
+  def ask_for_guess
+    # display message asking for guess
+    puts "#{@name}, please enter four colors to guess the secret code."
+    puts "You can choose from red, orange, yellow, green, blue and violet."
+    puts "Please enter your code in the form color,color,color,color:"
     # pull code from command line
+    gets.strip.split(",")
+  end
 
   # validate_code_format
     # UNLESS code is in the proper format
