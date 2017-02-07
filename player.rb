@@ -27,8 +27,14 @@ class Player
   end
 
   # ask_for_code
+  def ask_for_code
     # display message asking for code
+    puts "#{@name}, please enter four colors to make a secret code."
+    puts "You can choose from red, orange, yellow, green, blue and violet."
+    puts "Please enter your code in the form color,color,color,color:"
     # pull code from command line
+    gets.strip.split(","
+  end
 
   # guess_code
     # loop infinitely
