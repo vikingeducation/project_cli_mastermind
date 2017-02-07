@@ -7,8 +7,18 @@ class Board
   end
 
   # render
+  def render
+    puts
     # loop through data structure
+    @board.each do |row|
       # display an existing peg if any, else blank
+      row.each do |slot|
+        slot.nil? ? print "-" : print slot
+      end
+      puts
+    end
+    puts
+  end
 
   # set_code
     # IF valid_code?
