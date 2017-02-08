@@ -3,6 +3,10 @@ class Mastermind
   FEEDBACK_COLORS = [:black, :white]
   QUIT_OPTIONS = ["q", "quit", "exit"]
 
+  # move this to a protected reader method,
+  # this is just for easy testing now
+  attr_accessor :code
+
   def initialize(turns = 12)
     @code = nil
     @turns = turns
@@ -22,6 +26,26 @@ class Mastermind
 
   # gives feedback on the player's guess
   def give_feedback(guess)
+    feedback = {}
+    remaining_code = code
+
+    # first determine the black pegs
+    guess.each_with_index do |guess_peg, i| 
+      if guess_peg == remaining_code[i]
+        feedback[i] = :black 
+        remaining_code[i] = nil
+      end
+    end
+    
+    # now determine the white pegs
+    guess.each_with_index do |guess_peg, i|
+      unless feedback.has_key?(i)
+        feedback[i] = :white if remaining_code.include?(guess_peg)
+        remaining_code.delete(remaining_code.index(guess_peg))
+      end
+    end
+
+    feedback
   end
 
   # prints instructions/rules for game,
@@ -122,3 +146,10 @@ class Player
     guess.length == 4 && guess.all? { |color| code_colors.include?(color) }
   end
 end
+
+# guess = [:red, :orange, :yellow, :green]
+# guess = [:blue, :blue, :yellow, :yellow]
+guess = [:yellow, :blue, :yellow, :blue]
+m = Mastermind.new
+m.code = [:yellow, :yellow, :blue, :blue]
+p m.give_feedback(guess)
