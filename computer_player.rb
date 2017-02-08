@@ -5,7 +5,6 @@ class ComputerPlayer < Player
 
   private
 
-  # ask for code to set secret code
   def ask_for_code
     code = []
 
@@ -18,7 +17,6 @@ class ComputerPlayer < Player
     code
   end
 
-  # ask_for_guess
   def ask_for_guess
     code = []
 
@@ -30,5 +28,4 @@ class ComputerPlayer < Player
 
     code
   end
-
 end
