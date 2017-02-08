@@ -3,6 +3,8 @@ class ComputerPlayer < Player
     super
   end
 
+  private
+
   # ask for code to set secret code
   def ask_for_code
     code = []

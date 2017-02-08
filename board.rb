@@ -24,7 +24,7 @@ class Board
         print "[ "
 
         if slot.nil?
-            line_width.times { print "-" }
+          line_width.times { print "-" }
         else
           padding = line_width - slot.length || 1
           print slot
@@ -45,7 +45,7 @@ class Board
     if valid_code?(code)
       # set code
       @secret_code = code
-    #ELSE
+      #ELSE
     else
       puts "Your code doesn't follow the rules."
     end
@@ -72,6 +72,27 @@ class Board
     end
   end
 
+  # winning_combination?
+  def winning_combination?
+    # does the last guess have 4 exact_pegs?
+    @board.each do |row|
+      return true if exact_pegs(row) == 4
+    end
+    false
+  end
+
+  # full?
+  def full?
+    # does every row contain a guess?
+    @guess_count == 12
+  end
+
+  def valid_colors
+    @valid_colors
+  end
+
+  private
+
   # valid_code?
   def valid_code?(code)
     # is each peg in the code a valid_color?
@@ -85,10 +106,6 @@ class Board
   def valid_color?(peg)
     # is the peg included in the list of valid_colors?
     @valid_colors.include?(peg)
-  end
-
-  def valid_colors
-    @valid_colors
   end
 
   # close_pegs(guess)
@@ -126,20 +143,5 @@ class Board
     end
 
     matches
-  end
-
-  # winning_combination?
-  def winning_combination?
-    # does the last guess have 4 exact_pegs?
-    @board.each do |row|
-      return true if exact_pegs(row) == 4
-    end
-    false
-  end
-
-  # full?
-  def full?
-  # does every row contain a guess?
-    @guess_count == 12
   end
 end

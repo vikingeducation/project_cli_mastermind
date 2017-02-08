@@ -35,6 +35,8 @@ class Mastermind
     end
   end
 
+  private
+
   def pick_roles
     human_role = @human_player.get_role_choice
 
