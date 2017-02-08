@@ -11,7 +11,12 @@ class Player
   def get_role_choice
     loop do
       role = ask_role_choice
-      return role if role == "codebreaker" || "codemaker"
+
+      if role == "codebreaker" || "codemaker"
+          return role
+      else
+        puts "Invalid selection."
+      end
     end
   end
 
@@ -19,8 +24,7 @@ class Player
   def ask_role_choice
     puts "Welcome to Mastermind."
     puts "Would you like to play as the codebreaker or codemaker?"
-    puts
-    puts "Please enter 'codebreaker' or 'codemaker' :"
+    print "Please enter 'codebreaker' or 'codemaker': "
     gets.strip
   end
 
@@ -46,9 +50,9 @@ class Player
   def ask_for_code
     # display message asking for code
     puts
-    puts "#{@name}, please enter four colors to make a secret code."
+    puts "Please enter four colors to make a secret code."
     puts "You can choose from red, orange, yellow, green, blue and violet."
-    puts "Please enter your code in the form color,color,color,color:"
+    print "Please enter your code in the form color,color,color,color: "
     # pull code from command line
     gets.strip.split(",")
   end
@@ -75,9 +79,9 @@ class Player
   def ask_for_guess
     # display message asking for guess
     puts
-    puts "#{@name}, please enter four colors to guess the secret code."
+    puts "Please enter four colors to guess the secret code."
     puts "You can choose from red, orange, yellow, green, blue and violet."
-    puts "Please enter your code in the form color,color,color,color:"
+    print "Please enter your code in the form color,color,color,color: "
     # pull code from command line
     gets.strip.split(",")
   end

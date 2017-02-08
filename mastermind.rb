@@ -16,7 +16,8 @@ class Mastermind
 
   # play
   def play
-
+    # ask user to choose between codebreaker or codemaker
+    pick_roles
 
     # ask for codemaker to set code
     @codemaker.get_code
@@ -60,7 +61,7 @@ class Mastermind
     # IF board says last guess is a winning_combination?
     if @board.winning_combination?
       # display a message for codebreaker solving code
-      puts "Congratulations #{@codebreaker.name}, you solved the code!"
+      winner_message(@codebreaker)
       true
     else
       false
@@ -73,8 +74,20 @@ class Mastermind
     if @board.full?
       # display a message for codebreaker not solving code
       @board.render
-      puts "Game over. The correct code was #{@board.secret_code}."
+      winner_message(@codemaker)
       true
+    end
+  end
+
+  def winner_message(winner)
+    if winner.class == ComputerPlayer
+      puts "Looks like the computer won this round..."
+    else
+      puts "Congratulations, you won!"
+    end
+
+    if @codemaker.class == ComputerPlayer
+      puts "The secret code was #{@board.secret_code}"
     end
   end
 end
