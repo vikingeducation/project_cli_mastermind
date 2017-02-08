@@ -32,20 +32,34 @@ end
 
 class Board
   def initialize
-    board = {}
-    feedback = {}
+    @board = {}
+    @feedback = {}
   end
 
   # print out current game board with feedback
-  def display_board
+  def display_board(turn)
+    puts "Turn: #{turn} | Guess: #{board[turn]} | Feedback: #{feedback[turn]}"
   end
 
   # update the game board with the latest move
   def update_board(turn, move)
+    board[turn] = move
   end
 
   # update the game board with feedback on the latest move
-  def update_feedback(turn, move)
+  def update_feedback(turn, feedback)
+    self.feedback[turn] = feedback
+  end
+
+  # protected accessor methods
+  protected
+
+  def board
+    @board
+  end
+
+  def feedback
+    @feedback
   end
 end
 
@@ -83,3 +97,4 @@ class Player
     guess.length == 4 && guess.all? { |color| code_colors.include?(color)}
   end
 end
+
