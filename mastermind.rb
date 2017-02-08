@@ -37,6 +37,11 @@ class Mastermind
     puts
   end
 
+  def quit_game
+    puts "Goodbye!"
+    exit
+  end
+
   protected
 
   def turns
