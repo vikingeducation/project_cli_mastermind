@@ -17,7 +17,7 @@ class Mastermind
   private
 
   # checks if the guess entered by the player is valid
-  def valid_guess?
+  def valid_guess?(guess)
   end
 
   # checks if the player made a correct guess
@@ -26,6 +26,11 @@ class Mastermind
 
   # gives feedback on the player's guess
   def give_feedback(guess)
+  end
+
+  # prints instructions/rules for game,
+  # e.g. valid input format for guess, how to quit
+  def display_instructions
   end
 end
 
@@ -39,9 +44,11 @@ class Board
   def display_board
   end
 
+  # update the game board with the latest move
   def update_board(turn, move)
   end
 
+  # update the game board with feedback on the latest move
   def update_feedback(turn, move)
   end
 end
