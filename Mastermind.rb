@@ -18,6 +18,7 @@ class Mastermind
 
   # checks if the player made a correct guess
   def player_won?
+    player.guess == code
   end
 
   # gives feedback on the player's guess
