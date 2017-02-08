@@ -14,7 +14,11 @@ class Board
 
     puts
     # loop through data structure
-    @board.each do |row|
+    @board.each_with_index do |row, i|
+      print " " if i < 9
+      print i + 1
+      print " - "
+
       # display an existing peg if any, else blank
       row.each do |slot|
         print "[ "
