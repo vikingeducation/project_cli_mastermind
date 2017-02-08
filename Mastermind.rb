@@ -14,8 +14,6 @@ class Mastermind
   def play
   end
 
-  private
-
   # checks if the player made a correct guess
   def player_won?
     player.guess == code
@@ -28,6 +26,19 @@ class Mastermind
   # prints instructions/rules for game,
   # e.g. valid input format for guess, how to quit
   def display_instructions
+    puts "Welcome to Mastermind!"
+    puts "You have #{turns} turns to guess a code consisting of 4 colored pegs."
+    puts "Each peg can be any of the following colors: #{CODE_COLORS.map(&:to_s).join(", ")}."
+    puts "If your guess is incorrect, you will get feedback in the form of black and white pegs."
+    puts "A black peg indicates your guess includes a peg which is correct in both color and position."
+    puts "A white peg indicates your guess includes a peg which is correct in color, but in the wrong position."
+    puts "Good luck!"
+  end
+
+  protected
+
+  def turns
+    @turns
   end
 end
 
@@ -99,3 +110,5 @@ class Player
   end
 end
 
+m = Mastermind.new
+m.display_instructions
