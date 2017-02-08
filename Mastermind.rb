@@ -71,6 +71,8 @@ class Player
     end
   end
 
+  private
+
   # formats player guess into an expected format
   def format_guess(guess)
     guess.split(/\W+/).map { |color| color.downcase.to_sym }
