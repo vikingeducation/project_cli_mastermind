@@ -31,6 +31,15 @@ class Mastermind
 
         feedback = give_feedback(player.guess)
 
+        board.update_board(current_turn, player.guess)
+        board.update_feedback(current_turn, feedback)
+
+        board.display_gameboard(current_turn)
+
+        defeat if current_turn == turns        
+        
+        # TODO: check this
+        @current_turn += 1
       rescue Interrupt
         quit_game
       end
@@ -70,12 +79,7 @@ class Mastermind
       end
     end
 
-    # convert feedback to a string
-    parse_feedback(feedback)
-  end
-
-  def parse_feedback(feedback)
-    feedback.values.join(", ")
+    feedback
   end
 
   # prints instructions/rules for game,
@@ -98,23 +102,33 @@ class Mastermind
   end
 
   def quit_game
+    puts
     puts "Goodbye!"
     exit
   end
 
   def victory
+    puts
     puts "Congratulations, you won!"
+    exit
+  end
+
+  def defeat
+    puts
+    puts "Sorry, you failed to crack the code!"
+    puts "The secret code was: #{board.process_guess(code)}."
+    puts "Better luck next time!"
     exit
   end
 
   protected
 
-  def turns
-    @turns
-  end
-
   def current_turn
     @current_turn
+  end
+  
+  def turns
+    @turns
   end
 
   def player
@@ -141,8 +155,12 @@ class Board
   end
 
   # print out current game board with feedback
-  def display_board(turn)
-    puts "Turn: #{turn} | Guess: #{board[turn]} | Feedback: #{feedback[turn]}"
+  def display_gameboard(current_turn)
+    puts
+    1.upto(current_turn) do |turn|
+      puts "Turn: #{turn} | Guess: #{process_guess(board[turn])} | Feedback: #{process_feedback(feedback[turn])}"
+    end
+    puts
   end
 
   # update the game board with the latest guess
@@ -153,6 +171,20 @@ class Board
   # update the game board with feedback on the latest guess
   def update_feedback(turn, feedback)
     self.feedback[turn] = feedback
+  end
+
+  # converts guess into a string
+  def process_guess(guess)
+    guess.map(&:to_s).join(", ")
+  end
+
+  # converts feedback into a string
+  def process_feedback(feedback)
+    unless feedback.empty?
+      feedback.values.join(", ")
+    else
+      return "No matches"
+    end
   end
 
   # protected accessor methods
