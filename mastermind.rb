@@ -6,8 +6,8 @@ class Mastermind
   QUIT_OPTIONS = ["q", "quit", "exit"]
 
   # move this to a protected reader method,
-  # this is just for easy testing now
   attr_accessor :code
+  attr_reader :turns, :current_turn, :board, :player
 
   def initialize(turns = 12)
     @code = generate_secret_code
@@ -48,6 +48,8 @@ class Mastermind
       end
     end
   end
+
+  private
 
   def generate_secret_code
     code = []
@@ -122,32 +124,6 @@ class Mastermind
     puts "The secret code was: #{board.process_guess(code)}."
     puts "Better luck next time!"
     exit
-  end
-
-  protected
-
-  def current_turn
-    @current_turn
-  end
-
-  def turns
-    @turns
-  end
-
-  def player
-    @player
-  end
-
-  def board
-    @board
-  end
-
-  def code
-    @code
-  end
-
-  def code=(value)
-    @code = value
   end
 end
 

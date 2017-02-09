@@ -1,4 +1,6 @@
 class Board
+  attr_reader :board, :feedback
+
   def initialize
     @board = {}
     @feedback = {}
@@ -23,6 +25,8 @@ class Board
     self.feedback[turn] = feedback
   end
 
+  private
+
   # converts guess into a string
   def process_guess(guess)
     guess.map(&:to_s).join(", ")
@@ -35,16 +39,5 @@ class Board
     else
       return "No matches"
     end
-  end
-
-  # protected accessor methods
-  protected
-
-  def board
-    @board
-  end
-
-  def feedback
-    @feedback
   end
 end
