@@ -1,6 +1,5 @@
 class Mastermind
   CODE_COLORS = [:red, :blue, :yellow, :green, :orange, :purple]
-  FEEDBACK_COLORS = [:black, :white]
   QUIT_OPTIONS = ["q", "quit", "exit"]
 
   # move this to a protected reader method,
