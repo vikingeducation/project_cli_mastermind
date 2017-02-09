@@ -16,6 +16,7 @@ class Mastermind
 
   # main game loop
   def play
+    display_instructions
   end
 
   # checks if the player made a correct guess
@@ -61,6 +62,12 @@ class Mastermind
     puts "If your guess is incorrect, you will get feedback in the form of black and white pegs."
     puts "A black peg indicates your guess includes a peg which is correct in both color and position."
     puts "A white peg indicates your guess includes a peg which is correct in color, but in the wrong position."
+    puts
+    puts "Please enter your guess in the format: color, color, color, color"
+    puts "For example: red, green, blue, orange"
+    puts
+    puts "Enter (q)uit to quit at any time."
+    puts
     puts "Good luck!"
     puts
   end
@@ -151,9 +158,5 @@ class Player
   end
 end
 
-# guess = [:red, :orange, :yellow, :green]
-# guess = [:blue, :blue, :yellow, :yellow]
-guess = [:yellow, :blue, :yellow, :blue]
 m = Mastermind.new
-m.code = [:yellow, :yellow, :blue, :blue]
-p m.give_feedback(guess)
+m.play
