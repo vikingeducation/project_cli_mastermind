@@ -44,7 +44,12 @@ class Mastermind
       end
     end
 
-    feedback
+    # convert feedback to a string
+    parse_feedback(feedback)
+  end
+
+  def parse_feedback(feedback)
+    feedback.values.join(", ")
   end
 
   # prints instructions/rules for game,
