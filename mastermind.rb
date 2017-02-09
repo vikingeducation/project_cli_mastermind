@@ -17,6 +17,21 @@ class Mastermind
   # main game loop
   def play
     display_instructions
+    p "Shh, the secret code is #{code}."
+
+    loop do
+      begin
+        player.make_guess
+
+        quit_game if QUIT_OPTIONS.include?(player.guess)
+
+        victory if player_won?
+
+
+      rescue Interrupt
+        quit_game
+      end
+    end
   end
 
   # checks if the player made a correct guess
@@ -77,10 +92,27 @@ class Mastermind
     exit
   end
 
+  def victory
+    puts "Congratulations, you won!"
+    exit
+  end
+
   protected
 
   def turns
     @turns
+  end
+
+  def current_turn
+    @current_turn
+  end
+
+  def player
+    @player
+  end
+
+  def board
+    @board
   end
 end
 
@@ -128,9 +160,9 @@ class Player
   def make_guess
     loop do
       print "Please enter your guess: "
-      guess = gets.chomp
+      guess = gets.chomp.downcase
 
-      if Mastermind::QUIT_OPTIONS.include?(guess.downcase)
+      if Mastermind::QUIT_OPTIONS.include?(guess)
         @guess = guess
         break
       end
