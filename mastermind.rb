@@ -1,3 +1,6 @@
+require_relative "board"
+require_relative "player"
+
 class Mastermind
   CODE_COLORS = [:red, :blue, :yellow, :green, :orange, :purple]
   QUIT_OPTIONS = ["q", "quit", "exit"]
@@ -126,7 +129,7 @@ class Mastermind
   def current_turn
     @current_turn
   end
-  
+
   def turns
     @turns
   end
@@ -145,98 +148,6 @@ class Mastermind
 
   def code=(value)
     @code = value
-  end
-end
-
-class Board
-  def initialize
-    @board = {}
-    @feedback = {}
-  end
-
-  # print out current game board with feedback
-  def display_gameboard(current_turn)
-    puts
-    1.upto(current_turn) do |turn|
-      puts "Turn: #{turn} | Guess: #{process_guess(board[turn])} | Feedback: #{process_feedback(feedback[turn])}"
-    end
-    puts
-  end
-
-  # update the game board with the latest guess
-  def update_board(turn, guess)
-    board[turn] = guess
-  end
-
-  # update the game board with feedback on the latest guess
-  def update_feedback(turn, feedback)
-    self.feedback[turn] = feedback
-  end
-
-  # converts guess into a string
-  def process_guess(guess)
-    guess.map(&:to_s).join(", ")
-  end
-
-  # converts feedback into a string
-  def process_feedback(feedback)
-    unless feedback.empty?
-      feedback.values.join(", ")
-    else
-      return "No matches"
-    end
-  end
-
-  # protected accessor methods
-  protected
-
-  def board
-    @board
-  end
-
-  def feedback
-    @feedback
-  end
-end
-
-class Player
-  attr_reader :guess
-
-  def initialize
-    @guess = nil
-  end
-
-  # prompts the user for his next guess
-  def make_guess
-    loop do
-      print "Please enter your guess: "
-      guess = gets.chomp.downcase
-
-      if Mastermind::QUIT_OPTIONS.include?(guess)
-        @guess = guess
-        break
-      end
-
-      formatted_guess = format_guess(guess)
-      if valid_guess?(formatted_guess, Mastermind::CODE_COLORS)
-        @guess = formatted_guess
-        break
-      else
-        puts "That guess is invalid. Please try again."
-      end
-    end
-  end
-
-  private
-
-  # formats player guess into an expected format
-  def format_guess(guess)
-    guess.split(/\W+/).map { |color| color.downcase.to_sym }
-  end
-
-  # checks if the player's guess is valid
-  def valid_guess?(guess, code_colors)
-    guess.length == 4 && guess.all? { |color| code_colors.include?(color) }
   end
 end
 
