@@ -7,7 +7,7 @@ class Mastermind
   attr_accessor :code
 
   def initialize(turns = 12)
-    @code = nil
+    @code = generate_secret_code
     @turns = turns
     @current_turn = 1
     @board = Board.new
@@ -17,7 +17,6 @@ class Mastermind
   # main game loop
   def play
     display_instructions
-    code = generate_secret_code
 
     # obviously we should remove this..
     p "Shh, the secret code is #{code}."
@@ -30,6 +29,7 @@ class Mastermind
 
         victory if player_won?
 
+        feedback = give_feedback(player.guess)
 
       rescue Interrupt
         quit_game
@@ -52,7 +52,7 @@ class Mastermind
   # gives feedback on the player's guess
   def give_feedback(guess)
     feedback = {}
-    remaining_code = code
+    remaining_code = code.dup
 
     # first determine the black pegs
     guess.each_with_index do |guess_peg, i| 
@@ -145,12 +145,12 @@ class Board
     puts "Turn: #{turn} | Guess: #{board[turn]} | Feedback: #{feedback[turn]}"
   end
 
-  # update the game board with the latest move
-  def update_board(turn, move)
-    board[turn] = move
+  # update the game board with the latest guess
+  def update_board(turn, guess)
+    board[turn] = guess
   end
 
-  # update the game board with feedback on the latest move
+  # update the game board with feedback on the latest guess
   def update_feedback(turn, feedback)
     self.feedback[turn] = feedback
   end
