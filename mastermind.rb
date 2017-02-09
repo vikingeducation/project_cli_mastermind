@@ -17,6 +17,9 @@ class Mastermind
   # main game loop
   def play
     display_instructions
+    code = generate_secret_code
+
+    # obviously we should remove this..
     p "Shh, the secret code is #{code}."
 
     loop do
@@ -32,6 +35,13 @@ class Mastermind
         quit_game
       end
     end
+  end
+
+  def generate_secret_code
+    code = []
+    4.times { code << CODE_COLORS.sample }
+    
+    code
   end
 
   # checks if the player made a correct guess
@@ -113,6 +123,14 @@ class Mastermind
 
   def board
     @board
+  end
+
+  def code
+    @code
+  end
+
+  def code=(value)
+    @code = value
   end
 end
 
