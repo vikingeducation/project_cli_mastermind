@@ -25,12 +25,12 @@ class Board
     self.feedback[turn] = feedback
   end
 
-  private
-
   # converts guess into a string
   def process_guess(guess)
     guess.map(&:to_s).join(", ")
   end
+
+  private
 
   # converts feedback into a string
   def process_feedback(feedback)
