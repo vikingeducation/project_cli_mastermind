@@ -21,7 +21,6 @@ class Mastermind
   def play
     display_instructions
 
-    # determine player's role
     player.set_role
 
     if player.role == :codebreaker
@@ -46,6 +45,7 @@ class Mastermind
     @code = value
   end
 
+  # computer breaks the code
   def computer_breaks_code
     @computer = Computer.new
 
@@ -67,6 +67,7 @@ class Mastermind
     end
   end
 
+  # loop for player to break code
   def player_breaks_code
     loop do
       begin
