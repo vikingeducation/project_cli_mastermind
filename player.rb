@@ -8,7 +8,7 @@ class Player
 
   # prompts the user for his next guess/code
   def get_next_move
-    move = role == 'b' ? "guess" : "code"
+    move = role == :codebreaker ? "guess" : "code"
 
     loop do
       puts
