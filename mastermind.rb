@@ -5,9 +5,9 @@ class Mastermind
   CODE_COLORS = [:red, :blue, :yellow, :green, :orange, :purple]
   QUIT_OPTIONS = ["q", "quit", "exit"]
 
-  # move this to a protected reader method,
-  attr_accessor :code
-  attr_reader :turns, :current_turn, :board, :player
+  # move this to a protected reader rethod
+  attr_accessor :code, :current_turn
+  attr_reader :turns, :board, :player
 
   def initialize(turns = 12)
     @code = generate_secret_code
@@ -41,8 +41,7 @@ class Mastermind
 
         defeat if current_turn == turns        
         
-        # TODO: check this
-        @current_turn += 1
+        self.current_turn += 1
       rescue Interrupt
         quit_game
       end
@@ -67,20 +66,24 @@ class Mastermind
   def give_feedback(guess)
     feedback = {}
     remaining_code = code.dup
+    remaining_guess = guess.dup
 
     # first determine the black pegs
     guess.each_with_index do |guess_peg, i| 
       if guess_peg == remaining_code[i]
         feedback[i] = :black 
         remaining_code[i] = nil
+        remaining_guess[i] = nil
       end
     end
     
     # now determine the white pegs
-    guess.each_with_index do |guess_peg, i|
-      unless feedback.has_key?(i)
-        feedback[i] = :white if remaining_code.include?(guess_peg)
-        remaining_code.delete(remaining_code.index(guess_peg))
+    remaining_guess.each_with_index do |guess_peg, i|
+      next if guess_peg.nil?
+
+      if remaining_code.include?(guess_peg)
+        feedback[i] = :white
+        remaining_code.delete_at(remaining_code.index(guess_peg))
       end
     end
 
