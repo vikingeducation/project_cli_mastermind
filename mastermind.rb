@@ -10,7 +10,7 @@ class Mastermind
   attr_reader :turns, :board, :player
 
   def initialize(turns = 12)
-    @code = generate_secret_code
+    @code = nil
     @turns = turns
     @current_turn = 1
     @board = Board.new
@@ -21,9 +21,27 @@ class Mastermind
   def play
     display_instructions
 
-    # obviously we should remove this..
-    p "Shh, the secret code is #{code}."
+    # determine player's role
+    player.set_role
 
+    if player.role == :codebreaker
+      self.code = generate_secret_code
+
+      # obviously we should remove this..
+      p "Shh, the secret code is #{code}."
+
+      player_breaks_code
+    else
+      puts "Functionality yet to be implemented. Stay tuned!"
+
+      # initialize a Computer player
+      # let the Computer attempt to break the code
+    end
+  end
+
+  private
+
+  def player_breaks_code
     loop do
       begin
         player.get_next_move
@@ -47,8 +65,6 @@ class Mastermind
       end
     end
   end
-
-  private
 
   # generates random secret code
   def generate_secret_code
