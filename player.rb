@@ -1,8 +1,9 @@
 class Player
-  attr_reader :guess
+  attr_reader :guess, :role
 
   def initialize
     @guess = nil
+    @role = nil
   end
 
   # prompts the user for his next guess
@@ -22,6 +23,28 @@ class Player
         break
       else
         puts "That guess is invalid. Please try again."
+      end
+    end
+  end
+
+  # checks what role the player wants to be
+  def set_role
+    loop do
+      puts "Please enter what role you'd like to be."
+      puts "You can either (b)reak the code, or (s)et the code."
+      print "Please enter 'b' or 's': "
+
+      input = gets.chomp.downcase
+
+      if input == "b"
+        @role = :codebreaker
+        break
+      elsif input == "s" 
+        @role = :codesetter
+        break
+      else
+        puts "That is an invalid role. Please try again."
+        puts
       end
     end
   end
