@@ -28,6 +28,8 @@ class Player
         puts "That code is invalid. Please try again."
       end
     end
+
+    self.move
   end
 
   # checks what role the player wants to be,
@@ -51,6 +53,8 @@ class Player
         puts
       end
     end
+
+    self.role
   end
 
   private
