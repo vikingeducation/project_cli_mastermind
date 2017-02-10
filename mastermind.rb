@@ -147,5 +147,7 @@ class Mastermind
   end
 end
 
-m = Mastermind.new
-m.play
+if $0 == __FILE__
+  m = Mastermind.new
+  m.play
+end
