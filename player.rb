@@ -11,6 +11,7 @@ class Player
     move = role == 'b' ? "guess" : "code"
 
     loop do
+      puts
       print "Please enter your #{move}: "
       input = gets.chomp.downcase
 
@@ -24,7 +25,7 @@ class Player
         @move = formatted_move
         break
       else
-        puts "That #{input} is invalid. Please try again."
+        puts "That code is invalid. Please try again."
       end
     end
   end
@@ -46,7 +47,7 @@ class Player
         @role = :codesetter
         break
       else
-        puts "That is an invalid role. Please try again."
+        puts "That role is invalid. Please try again."
         puts
       end
     end
