@@ -6,7 +6,7 @@ class Mastermind
   CODE_COLORS = [:red, :blue, :yellow, :green, :orange, :purple]
   QUIT_OPTIONS = ["q", "quit", "exit"]
 
-  attr_reader :code, :current_turn, :turns, :board, :player, :computer
+  attr_reader :current_turn, :turns, :board, :player, :computer
 
   def initialize(turns = 12)
     @code = nil
