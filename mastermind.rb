@@ -1,13 +1,12 @@
-require_relative "board"
-require_relative "player"
+require_relative 'board'
+require_relative 'player'
+require_relative 'computer'
 
 class Mastermind
   CODE_COLORS = [:red, :blue, :yellow, :green, :orange, :purple]
   QUIT_OPTIONS = ["q", "quit", "exit"]
 
-  # move this to a protected reader rethod
-  attr_accessor :code, :current_turn
-  attr_reader :turns, :board, :player
+  attr_reader :code, :current_turn, :turns, :board, :player, :computer
 
   def initialize(turns = 12)
     @code = nil
@@ -15,6 +14,7 @@ class Mastermind
     @current_turn = 1
     @board = Board.new
     @player = Player.new
+    @computer = nil
   end
 
   # main game loop
@@ -27,19 +27,45 @@ class Mastermind
     if player.role == :codebreaker
       self.code = generate_secret_code
 
-      # obviously we should remove this..
-      p "Shh, the secret code is #{code}."
-
       player_breaks_code
     else
-      puts "Functionality yet to be implemented. Stay tuned!"
+      # player sets the code
+      self.code = player.get_next_move
 
-      # initialize a Computer player
-      # let the Computer attempt to break the code
+      computer_breaks_code
     end
   end
 
   private
+
+  def code
+    @code
+  end
+
+  def code=(value)
+    @code = value
+  end
+
+  def computer_breaks_code
+    @computer = Computer.new
+
+    loop do
+      computer.make_guess
+
+      computer_victory if computer_won?
+
+      feedback = give_feedback(computer.guess)
+
+      board.update_board(current_turn, computer.guess)
+      board.update_feedback(current_turn, feedback)
+
+      board.display_gameboard(current_turn)
+
+      computer_defeat if current_turn == turns
+
+      @current_turn += 1
+    end
+  end
 
   def player_breaks_code
     loop do
@@ -48,7 +74,7 @@ class Mastermind
 
         quit_game if QUIT_OPTIONS.include?(player.move)
 
-        victory if player_won?
+        player_victory if player_won?
 
         feedback = give_feedback(player.move)
 
@@ -57,9 +83,9 @@ class Mastermind
 
         board.display_gameboard(current_turn)
 
-        defeat if current_turn == turns        
+        player_defeat if current_turn == turns        
         
-        self.current_turn += 1
+        @current_turn += 1
       rescue Interrupt
         quit_game
       end
@@ -74,12 +100,17 @@ class Mastermind
     code
   end
 
+  # checks if the computer made a correct guess
+  def computer_won?
+    computer.guess == code
+  end
+
   # checks if the player made a correct guess
   def player_won?
     player.move == code
   end
 
-  # gives feedback on the player's guess
+  # gives feedback on a guess
   def give_feedback(guess)
     feedback = {}
     remaining_code = code.dup
@@ -132,17 +163,31 @@ class Mastermind
     exit
   end
 
-  def victory
+  def player_victory
     puts
     puts "Congratulations, you won!"
     exit
   end
 
-  def defeat
+  def computer_victory
+    puts
+    puts "It's only a matter of time before Skynet is born."
+    puts
+  end
+
+  def player_defeat
     puts
     puts "Sorry, you failed to crack the code!"
     puts "The secret code was: #{board.process_guess(code)}."
     puts "Better luck next time!"
+    exit
+  end
+
+  def computer_defeat
+    puts
+    puts "Whew, looks like the machines can't take over the world yet."
+    puts "The secret code was: #{board.process_guess(code)}."
+    puts "We live another day!"
     exit
   end
 end
