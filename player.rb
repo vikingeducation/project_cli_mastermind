@@ -1,33 +1,36 @@
 class Player
-  attr_reader :guess, :role
+  attr_reader :move, :role
 
   def initialize
-    @guess = nil
+    @move = nil
     @role = nil
   end
 
-  # prompts the user for his next guess
-  def make_guess
-    loop do
-      print "Please enter your guess: "
-      guess = gets.chomp.downcase
+  # prompts the user for his next guess/code
+  def get_next_move
+    move = role == 'b' ? "guess" : "code"
 
-      if Mastermind::QUIT_OPTIONS.include?(guess)
-        @guess = guess
+    loop do
+      print "Please enter your #{move}: "
+      input = gets.chomp.downcase
+
+      if Mastermind::QUIT_OPTIONS.include?(input)
+        @move = input
         break
       end
 
-      formatted_guess = format_guess(guess)
-      if valid_guess?(formatted_guess, Mastermind::CODE_COLORS)
-        @guess = formatted_guess
+      formatted_move = format_move(input)
+      if valid_move?(formatted_move, Mastermind::CODE_COLORS)
+        @move = formatted_move
         break
       else
-        puts "That guess is invalid. Please try again."
+        puts "That #{input} is invalid. Please try again."
       end
     end
   end
 
-  # checks what role the player wants to be
+  # checks what role the player wants to be,
+  # either the codebreaker or the codesetter
   def set_role
     loop do
       puts "Please enter what role you'd like to be."
@@ -52,12 +55,12 @@ class Player
   private
 
   # formats player guess into an expected format
-  def format_guess(guess)
-    guess.split(/\W+/).map { |color| color.downcase.to_sym }
+  def format_move(move)
+    move.split(/\W+/).map { |color| color.downcase.to_sym }
   end
 
   # checks if the player's guess is valid
-  def valid_guess?(guess, code_colors)
-    guess.length == 4 && guess.all? { |color| code_colors.include?(color) }
+  def valid_move?(move, code_colors)
+    move.length == 4 && move.all? { |color| code_colors.include?(color) }
   end
 end

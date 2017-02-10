@@ -26,15 +26,15 @@ class Mastermind
 
     loop do
       begin
-        player.make_guess
+        player.get_next_move
 
-        quit_game if QUIT_OPTIONS.include?(player.guess)
+        quit_game if QUIT_OPTIONS.include?(player.move)
 
         victory if player_won?
 
-        feedback = give_feedback(player.guess)
+        feedback = give_feedback(player.move)
 
-        board.update_board(current_turn, player.guess)
+        board.update_board(current_turn, player.move)
         board.update_feedback(current_turn, feedback)
 
         board.display_gameboard(current_turn)
@@ -60,7 +60,7 @@ class Mastermind
 
   # checks if the player made a correct guess
   def player_won?
-    player.guess == code
+    player.move == code
   end
 
   # gives feedback on the player's guess
