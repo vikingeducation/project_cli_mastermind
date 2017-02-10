@@ -54,12 +54,12 @@ class Player
 
   private
 
-  # formats player guess into an expected format
+  # formats player move into an expected format
   def format_move(move)
     move.split(/\W+/).map { |color| color.downcase.to_sym }
   end
 
-  # checks if the player's guess is valid
+  # checks if the player's move is valid
   def valid_move?(move, code_colors)
     move.length == 4 && move.all? { |color| code_colors.include?(color) }
   end
