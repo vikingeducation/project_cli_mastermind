@@ -50,6 +50,7 @@ class Mastermind
 
   private
 
+  # generates random secret code
   def generate_secret_code
     code = []
     4.times { code << CODE_COLORS.sample }
