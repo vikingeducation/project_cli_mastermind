@@ -6,6 +6,8 @@ class Mastermind
   CODE_COLORS = [:red, :blue, :yellow, :green, :orange, :purple]
   QUIT_OPTIONS = ["q", "quit", "exit"]
 
+  # for testing only
+  attr_accessor :code
   attr_reader :current_turn, :turns, :board, :player, :computer
 
   def initialize(turns = 12)
@@ -35,15 +37,15 @@ class Mastermind
     end
   end
 
-  private
+  # private
 
-  def code
-    @code
-  end
+  # def code
+  #   @code
+  # end
 
-  def code=(value)
-    @code = value
-  end
+  # def code=(value)
+  #   @code = value
+  # end
 
   # computer breaks the code
   def computer_breaks_code
@@ -194,6 +196,23 @@ class Mastermind
 end
 
 if $0 == __FILE__
+  # m = Mastermind.new
+  # m.play
+
   m = Mastermind.new
-  m.play
+  m.code = [:red, :red, :red, :blue]
+
+  comp = Computer.new(Mastermind::CODE_COLORS)
+  p comp.build_all_possible_permutations.size
+  p comp.remaining_guesses.size
+
+  comp.guess = comp.first_guess
+  p comp.guess
+  comp.feedback = m.give_feedback(comp.guess)
+  p comp.feedback
+
+  p comp.remove_wrong_guesses(m).size
+  p comp.remaining_guesses.size
+
+  puts
 end
