@@ -49,17 +49,18 @@ class Mastermind
 
   # computer breaks the code
   def computer_breaks_code
-    @computer = Computer.new
+    @computer = Computer.new(Mastermind::CODE_COLORS)
 
     loop do
       computer.make_guess
 
       computer_victory if computer_won?
 
-      feedback = give_feedback(computer.guess)
+      computer.feedback = give_feedback(computer.guess)
+      computer.remove_wrong_guesses(self)
 
       board.update_board(current_turn, computer.guess)
-      board.update_feedback(current_turn, feedback)
+      board.update_feedback(current_turn, computer.feedback)
 
       board.display_gameboard(current_turn)
 
@@ -175,7 +176,7 @@ class Mastermind
   def computer_victory
     puts
     puts "It's only a matter of time before Skynet is born."
-    puts
+    exit
   end
 
   def player_defeat
@@ -196,23 +197,23 @@ class Mastermind
 end
 
 if $0 == __FILE__
-  # m = Mastermind.new
-  # m.play
-
   m = Mastermind.new
-  m.code = [:red, :red, :red, :blue]
+  m.play
 
-  comp = Computer.new(Mastermind::CODE_COLORS)
-  p comp.build_all_possible_permutations.size
-  p comp.remaining_guesses.size
+  # m = Mastermind.new
+  # m.code = [:red, :yellow, :orange, :blue]
 
-  comp.guess = comp.first_guess
-  p comp.guess
-  comp.feedback = m.give_feedback(comp.guess)
-  p comp.feedback
+  # comp = Computer.new(Mastermind::CODE_COLORS)
+  # p comp.build_all_possible_permutations.size
+  # p comp.remaining_guesses.size
 
-  p comp.remove_wrong_guesses(m).size
-  p comp.remaining_guesses.size
+  # comp.guess = comp.first_guess
+  # p comp.guess
+  # comp.feedback = m.give_feedback(comp.guess)
+  # p comp.feedback
 
-  puts
+  # p comp.remove_wrong_guesses(m).size
+  # p comp.remaining_guesses.size
+
+  # puts
 end

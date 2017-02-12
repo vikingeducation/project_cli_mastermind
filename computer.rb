@@ -10,7 +10,11 @@ class Computer
   end
 
   def make_guess
-    naive_random_guess
+    if guess.nil?
+      self.guess = first_guess 
+    else
+      self.guess = remaining_guesses[0]
+    end
   end
 
   # build all possible permutations of 4 pegs from
@@ -29,14 +33,17 @@ class Computer
   # not generate the same feedback
   def remove_wrong_guesses(mastermind)
     possible_correct_guesses = []
+
     remaining_guesses.each do |remaining_guess|
       feedback = mastermind.give_feedback(remaining_guess)
       
-      possible_correct_guesses << remaining_guess if feedback == self.feedback
+      if feedback == self.feedback || (feedback.values.all? { |value| value == :black } && feedback.values.length == 4)
+        possible_correct_guesses << remaining_guess 
+        puts "Guess: #{remaining_guess} | Feedback: #{feedback}"
+      end
     end
 
-    p possible_correct_guesses
-
+    possible_correct_guesses.delete(guess)
     self.remaining_guesses = possible_correct_guesses
   end
 end
