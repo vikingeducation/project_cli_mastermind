@@ -6,8 +6,6 @@ class Mastermind
   CODE_COLORS = [:red, :blue, :yellow, :green, :orange, :purple]
   QUIT_OPTIONS = ["q", "quit", "exit"]
 
-  # for testing only
-  attr_accessor :code
   attr_reader :current_turn, :turns, :board, :player, :computer
 
   def initialize(turns = 12)
@@ -37,83 +35,6 @@ class Mastermind
     end
   end
 
-  # private
-
-  # def code
-  #   @code
-  # end
-
-  # def code=(value)
-  #   @code = value
-  # end
-
-  # computer breaks the code
-  def computer_breaks_code
-    @computer = Computer.new(Mastermind::CODE_COLORS)
-
-    loop do
-      computer.make_guess
-
-      computer_victory if computer_won?
-
-      computer.feedback = give_feedback(computer.guess)
-      computer.remove_wrong_guesses(self)
-
-      board.update_board(current_turn, computer.guess)
-      board.update_feedback(current_turn, computer.feedback)
-
-      board.display_gameboard(current_turn)
-
-      computer_defeat if current_turn == turns
-
-      @current_turn += 1
-    end
-  end
-
-  # loop for player to break code
-  def player_breaks_code
-    loop do
-      begin
-        player.get_next_move
-
-        quit_game if QUIT_OPTIONS.include?(player.move)
-
-        player_victory if player_won?
-
-        feedback = give_feedback(player.move)
-
-        board.update_board(current_turn, player.move)
-        board.update_feedback(current_turn, feedback)
-
-        board.display_gameboard(current_turn)
-
-        player_defeat if current_turn == turns        
-        
-        @current_turn += 1
-      rescue Interrupt
-        quit_game
-      end
-    end
-  end
-
-  # generates random secret code
-  def generate_secret_code
-    code = []
-    4.times { code << CODE_COLORS.sample }
-    
-    code
-  end
-
-  # checks if the computer made a correct guess
-  def computer_won?
-    computer.guess == code
-  end
-
-  # checks if the player made a correct guess
-  def player_won?
-    player.move == code
-  end
-
   # gives feedback on a guess
   def give_feedback(guess)
     feedback = {}
@@ -140,6 +61,84 @@ class Mastermind
     end
 
     feedback
+  end
+
+  private
+
+  def code
+    @code
+  end
+
+  def code=(value)
+    @code = value
+  end
+
+  # computer breaks the code
+  def computer_breaks_code
+    @computer = Computer.new(Mastermind::CODE_COLORS)
+
+    loop do
+      computer.make_guess
+
+      computer.feedback = give_feedback(computer.guess)
+
+      board.update_board(current_turn, computer.guess)
+      board.update_feedback(current_turn, computer.feedback)
+
+      board.display_gameboard(current_turn)
+
+      computer_victory if computer_won?
+
+      computer_defeat if current_turn == turns
+
+      computer.remove_wrong_guesses(self) 
+
+      @current_turn += 1
+    end
+  end
+
+  # loop for player to break code
+  def player_breaks_code
+    loop do
+      begin
+        player.get_next_move
+
+        quit_game if QUIT_OPTIONS.include?(player.move)
+
+        player_victory if player_won?
+
+        feedback = give_feedback(player.move)
+
+        board.update_board(current_turn, player.move)
+        board.update_feedback(current_turn, feedback)
+
+        board.display_gameboard(current_turn)
+
+        player_defeat if current_turn == turns
+
+        @current_turn += 1
+      rescue Interrupt
+        quit_game
+      end
+    end
+  end
+
+  # generates random secret code
+  def generate_secret_code
+    code = []
+    4.times { code << CODE_COLORS.sample }
+    
+    code
+  end
+
+  # checks if the computer made a correct guess
+  def computer_won?
+    computer.guess == code
+  end
+
+  # checks if the player made a correct guess
+  def player_won?
+    player.move == code
   end
 
   # prints instructions/rules for game,
@@ -199,21 +198,4 @@ end
 if $0 == __FILE__
   m = Mastermind.new
   m.play
-
-  # m = Mastermind.new
-  # m.code = [:red, :yellow, :orange, :blue]
-
-  # comp = Computer.new(Mastermind::CODE_COLORS)
-  # p comp.build_all_possible_permutations.size
-  # p comp.remaining_guesses.size
-
-  # comp.guess = comp.first_guess
-  # p comp.guess
-  # comp.feedback = m.give_feedback(comp.guess)
-  # p comp.feedback
-
-  # p comp.remove_wrong_guesses(m).size
-  # p comp.remaining_guesses.size
-
-  # puts
 end
