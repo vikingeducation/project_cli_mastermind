@@ -3,11 +3,23 @@ require 'colorize'
 # row = [:blue, :red, :green, :yellow]
 
 class Game
-  def initialize
+  attr_reader :board, :hints, :guesses
+  def initialize(player)
     @board = Array.new(12, [:white]*4)
-    @code = [:blue, :red, :green, :yellow]
     @hints = Array.new(12, [:yellow]*4)
     @guesses = 0
+    if !player.human?
+      @code = player.ask_input
+    else
+      @code = []
+      4.times { @code += ([:blue, :red, :green, :yellow, :cyan, :magenta].sample(1)) }
+    end
+  end
+
+  def render_a_row(row)
+    out = ""
+    row.each { |x| out += " " + x.to_s.center(12).colorize(:background => x, :color=> :black) }
+    out
   end
 
   def render
@@ -16,7 +28,7 @@ class Game
     @board.each_with_index {
       |row, i|
       stars = ""
-      row.each { |x| to_put += " " + " ".colorize(:background => x) }
+      to_put += render_a_row(row)
       @hints[i].each {|element| stars += "*".colorize(:color =>element)}
       to_put +=  " " + stars + " " + (i+1).to_s + "\n\n\t"
     }
@@ -45,28 +57,11 @@ class Game
     @hints[array_index] = set_hints(array_index)
   end
 
-  def make_a_guess
+  def manage_guess(player)
     self.render
-    my_colors = {:b => :blue, :r => :red, :g => :green,
-                 :c => :cyan, :y => :yellow, :m => :magenta}
-    puts("Write your guess with your for colors initials as so brgc")
-    puts("Remember, there are six colors in this game: b_lue, r_ed, g_reen, c_yan, y_ellow, and m_agenta")
-    raw_player_guess = gets.chomp.split("")
-    if raw_player_guess.length != 4
-      make_a_guess
-    else
-      player_guess = []
-      raw_player_guess.each {|x| player_guess.push(x.to_sym)}
-      if player_guess.all? {|color| my_colors.include?(color)}
-        value_array = []
-        player_guess.each {|char| value_array.push(my_colors[char])} #no validation! are you crazy?!
-        @guesses += 1
-        set_row(@guesses, value_array)
-      else
-        puts("Sorry, there's at least a color I don't know about")
-        make_a_guess
-      end
-    end
+    guess = player.guess(self)
+    @guesses +=1
+    set_row(@guesses, guess)
   end
 
 
@@ -75,7 +70,8 @@ class Game
       puts "Congrats Codebreaker, you won in #{@guesses}"
       true
     elsif @guesses == 12
-      puts "Congrats Codemaker, you won!"
+      puts "The Codemaker won!"
+      puts(render_a_row(@code))
       true
     else
       false
@@ -84,10 +80,69 @@ class Game
 
 end
 
-game = Game.new
+class Codebreaker
+  def initialize
+    puts("Do you want to play as Codebreaker, Y/n")
+    answer = gets.downcase.chomp
+    if answer == "n"
+      @type = :computer
+    else
+      @type = :human
+    end
+  end
 
+  def human?
+    @type == :human
+  end
+
+  def ask_input
+    my_colors = {:b => :blue, :r => :red, :g => :green,
+                 :c => :cyan, :y => :yellow, :m => :magenta}
+
+    puts("Choose four colors by typing its initials, like this: brgc")
+    puts("Remember, there are six colors in this game: b_lue, r_ed, g_reen, c_yan, y_ellow, and m_agenta")
+    raw_guess = gets.chomp.split("")
+    if raw_guess.length != 4
+      ask_input
+    else
+      guess = []
+      raw_guess.each {|x| guess.push(x.to_sym)}
+      if guess.all? {|color| my_colors.include?(color)}
+        value_array = []
+        guess.each {|char| value_array.push(my_colors[char])}
+        puts(value_array)
+        value_array
+      else
+        puts("Sorry, there's at least a color I don't know about")
+        ask_input
+      end
+    end
+  end
+
+  def generate_guess(game)
+      guess = []
+      4.times { guess += ([:blue, :red, :green, :yellow, :cyan, :magenta].sample(1)) }
+      guess
+  end
+
+  def guess(game)
+    if self.human?
+      ask_input
+    else
+      generate_guess(game)
+    end
+  end
+
+
+end
+
+
+
+player = Codebreaker.new
+puts(player.human?)
+game = Game.new(player)
 
 
 until game.over? do
-  game.make_a_guess
+  game.manage_guess(player)
 end
