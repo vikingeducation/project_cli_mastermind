@@ -3,4 +3,6 @@ source "https://rubygems.org"
 
 gem 'require_all'
 gem 'pry'
-gem 'colorize'
+gem 'formatador'
+gem 'highline', require: 'highline/import'
+gem 'rspec'
