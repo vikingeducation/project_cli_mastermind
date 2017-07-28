@@ -1,6 +1,8 @@
 module Mastermind
   module Players
     class Human < Player
+      human true
+
       def make_code(board)
         board.add_secret_code(ask_for_pegs)
       end

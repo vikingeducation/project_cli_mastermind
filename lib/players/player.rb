@@ -6,6 +6,16 @@ module Mastermind
       def initialize
         set_name
       end
+
+      class << self
+        def human(boolean = false)
+          @human ||= boolean
+        end
+      end
+
+      def human?
+        self.class.human
+      end
     end
   end
 end

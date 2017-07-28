@@ -4,6 +4,17 @@ module Mastermind
       @board = Board.new
     end
 
+    def play
+      say "Welcome to Mastermind!!!"
+      set_players_roles
+      display_game_rules
+      codemaker_make_code
+
+      play_round until over?
+    end
+
+    private
+
     def set_players_roles
       human = Players::Human.new
       computer = Players::Computer.new
@@ -42,7 +53,8 @@ module Mastermind
 
     def display_board
       system 'clear'
-      Formatador.display_line "Game over! #{winner.name} won! secret #{@board.secret_code}" if over?
+      Formatador.display_line "secret: #{@board.secret_code}" if @codemaker.human? || over?
+      Formatador.display_line "Game over! #{winner.name} won!" if over?
 
       Formatador.display_table(@board.data)
     end
@@ -55,12 +67,16 @@ module Mastermind
       @board.full? || @board.code_cracked?
     end
 
-    def play
-      say "Welcome to Mastermind!!!"
-      set_players_roles
-      codemaker_make_code
+    def display_game_rules
+      sleep 0.3
+      system 'clear'
 
-      play_round until over?
+      say <<~RULES
+        Here is the game rules:
+        1. Each row must and only have 4 pegs.
+        2. You can use the folowing colors: #{Board::COLORS.join(', ')}.
+        3. You may use a color more than once.
+      RULES
     end
   end
 end

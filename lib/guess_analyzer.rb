@@ -7,6 +7,13 @@ module Mastermind
       @guess = guess
     end
 
+    def feedback
+      pegs = []
+      exact_matches_count.times { pegs << :red }
+      inexact_matches_count.times { pegs << :white }
+      pegs
+    end
+
     def exact_matches_count
       count_with_index(@secret) do |value, index|
         value == @guess[index]
@@ -30,7 +37,7 @@ module Mastermind
           guess[index] = nil
         end
       end
-      
+
       return secret.compact, guess.compact
     end
 
