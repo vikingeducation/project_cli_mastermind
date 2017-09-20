@@ -79,8 +79,9 @@ class Game
   end
 
   def play
-    while @guess != @codemaker.code
-      p @code = @codemaker.code
+    @code = @codemaker.code
+    while @guess != @codemaker.code && @board.guess_number <=12
+      p @code
       @board.prompt_for_guess
       @guess = @codebreaker.make_guess
       @board.add_guess(@guess)
@@ -88,6 +89,7 @@ class Game
       @hint = @board.create_hint(@guess, @code)
       @board.display_board(@hint)
     end
+    @guess == @code ? (puts "Good Job! You win!") : (puts "Sorry, no more guesses!")
   end
 end
 
