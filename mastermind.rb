@@ -1,4 +1,4 @@
-require 'pry'
+PEGS = %w(R G B Y O T)
 
 class Board
   attr_accessor :guess_number
@@ -36,10 +36,10 @@ class Board
 
   def create_hint(guess, code)
     hint = []
-    code.each_with_index do |peg, i|
-      if peg == guess[i]
+    guess.each_with_index do |peg, i|
+      if peg == code[i]
         hint << 'BL'
-      elsif guess.include?(peg)
+      elsif code.include?(peg)
         hint << 'WH'
       end
     end
@@ -51,15 +51,23 @@ class CodeMaker
   attr_reader :code 
 
   def initialize
-    @pegs = %w(R G B Y O T)
     @code = []
-    4.times { @code << @pegs.sample }
+    4.times { @code << PEGS.sample }
   end
 end 
 
 class CodeBreaker
   def make_guess
     @guess = gets.chomp.split('')
+    validate_guess
+    @guess
+  end
+
+  def validate_guess
+    until @guess.length == 4 && @guess.all? { |peg| PEGS.include?(peg) }
+      puts "Not a valid guess - try again!"
+      make_guess
+    end
   end
 end 
 
