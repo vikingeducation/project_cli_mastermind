@@ -9,8 +9,8 @@ class Board
     @guess_number += 1
   end
 
-  def display_board
-    @board.each { |row| p row }
+  def display_board(hint)
+    @board.each { |row| p row, hint }
   end
 
   def prompt_for_guess
@@ -36,6 +36,18 @@ class CodeMaker
     @code = []
     4.times { @code << @pegs.sample }
   end
+
+  def create_hint(guess)
+    @hint = []
+    @code.each_with_index do |peg, i|
+      if peg == guess[i]
+        @hint << 'B'
+      elsif guess.include?(peg)
+        @hint << 'W'
+      end
+    end
+    @hint
+  end
   
 end 
 
@@ -55,12 +67,13 @@ class Game
   def play
     while @guess != @codemaker.code
       p @codemaker.code
-    @board.prompt_for_guess
-    @guess = @codebreaker.make_guess
-    @board.add_guess(@guess)
-    @board.increment_guess_number
-    @board.display_board
-  end
+      @board.prompt_for_guess
+      @guess = @codebreaker.make_guess
+      @board.add_guess(@guess)
+      @board.increment_guess_number
+      @hint = @codemaker.create_hint(@guess)
+      @board.display_board(@hint)
+    end
   end
 end
 
