@@ -1,7 +1,10 @@
+require 'pry'
+
 class Board
   attr_accessor :guess_number
   def initialize
     @board = []
+    @hints = []
     @guess_number = 0
   end
 
@@ -10,7 +13,11 @@ class Board
   end
 
   def display_board(hint)
-    @board.each { |row| p row, hint }
+    @board.each_with_index do |row, i| 
+      print row
+      print @hints[i]
+      print "\n"
+    end
   end
 
   def prompt_for_guess
@@ -26,6 +33,18 @@ class Board
   def add_guess(guess)
     @board << guess
   end
+
+  def create_hint(guess, code)
+    hint = []
+    code.each_with_index do |peg, i|
+      if peg == guess[i]
+        hint << 'BL'
+      elsif guess.include?(peg)
+        hint << 'WH'
+      end
+    end
+    @hints << hint
+  end
 end
 
 class CodeMaker
@@ -36,19 +55,6 @@ class CodeMaker
     @code = []
     4.times { @code << @pegs.sample }
   end
-
-  def create_hint(guess)
-    @hint = []
-    @code.each_with_index do |peg, i|
-      if peg == guess[i]
-        @hint << 'B'
-      elsif guess.include?(peg)
-        @hint << 'W'
-      end
-    end
-    @hint
-  end
-  
 end 
 
 class CodeBreaker
@@ -66,12 +72,12 @@ class Game
 
   def play
     while @guess != @codemaker.code
-      p @codemaker.code
+      p @code = @codemaker.code
       @board.prompt_for_guess
       @guess = @codebreaker.make_guess
       @board.add_guess(@guess)
       @board.increment_guess_number
-      @hint = @codemaker.create_hint(@guess)
+      @hint = @board.create_hint(@guess, @code)
       @board.display_board(@hint)
     end
   end
