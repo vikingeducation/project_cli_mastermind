@@ -57,7 +57,7 @@ end
 
 class CodeBreaker
   def make_guess
-    @guess = gets.chomp.split('')
+    @guess = gets.chomp.upcase.split('')
     validate_guess
     @guess
   end
