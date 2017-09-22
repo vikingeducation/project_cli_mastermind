@@ -35,12 +35,12 @@ class Board
   end
 
   def create_hint(guess, code)
-    hint = []
-    guess.each_with_index do |peg, i|
-      if peg == code[i]
-        hint << 'BL'
-      elsif code.include?(peg)
-        hint << 'WH'
+    hint = [0, 0]
+    code.each_with_index do |peg, i|
+      if peg == guess[i]
+        hint[0] += 1
+      elsif guess.include?(peg) && hint[1] < guess.count(peg)
+        hint[1] += 1
       end
     end
     @hints << hint
