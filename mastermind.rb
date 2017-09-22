@@ -1,4 +1,4 @@
-PEGS = %w(R G B Y O T)
+PEGS = %w(R G B Y O T).freeze
 
 class Board
   attr_accessor :guess_number
@@ -12,8 +12,8 @@ class Board
     @guess_number += 1
   end
 
-  def display_board(hint)
-    @board.each_with_index do |row, i| 
+  def display_board
+    @board.each_with_index do |row, i|
       print row
       print @hints[i]
       print "\n"
@@ -21,12 +21,15 @@ class Board
   end
 
   def prompt_for_guess
-    if @guess_number == 0
-      puts "Enter your first guess. If it matches the code maker's code, 
-            you win! Otherwise, the code maker will give you clues to help
-            you along."
+    if @guess_number.zero?
+      puts '**Welcome to Mastermind!**'
+      puts ''
+      puts '>>Enter your first guess.'
+      puts ">>If it matches the code maker's code, you win!"
+      puts '>>Otherwise, the code maker will give you clues to help you along.'
+      puts '>>You have 12 tries to crack the code.'
     else
-      puts "Nope! Try again!"
+      puts 'Nope! Try again!'
     end
   end
 
@@ -43,18 +46,18 @@ class Board
         hint[1] += 1
       end
     end
-    @hints << hint
+    @hints << " Exact matches: #{hint[0]}, Color matches: #{hint[1]}"
   end
 end
 
 class CodeMaker
-  attr_reader :code 
+  attr_reader :code
 
   def initialize
     @code = []
     4.times { @code << PEGS.sample }
   end
-end 
+end
 
 class CodeBreaker
   def make_guess
@@ -65,31 +68,35 @@ class CodeBreaker
 
   def validate_guess
     until @guess.length == 4 && @guess.all? { |peg| PEGS.include?(peg) }
-      puts "Not a valid guess - try again!"
+      puts 'Not a valid guess - try again!'
       make_guess
     end
   end
-end 
+end
 
-class Game 
-  def initialize 
+class Game
+  def initialize
     @codemaker = CodeMaker.new
     @codebreaker = CodeBreaker.new
     @board = Board.new
   end
 
+  def guess_sequence
+    @board.prompt_for_guess
+    @guess = @codebreaker.make_guess
+    @board.add_guess(@guess)
+    @board.increment_guess_number
+  end
+
   def play
     @code = @codemaker.code
-    while @guess != @codemaker.code && @board.guess_number <=12
+    while @guess != @code && @board.guess_number <= 12
       p @code
-      @board.prompt_for_guess
-      @guess = @codebreaker.make_guess
-      @board.add_guess(@guess)
-      @board.increment_guess_number
-      @hint = @board.create_hint(@guess, @code)
-      @board.display_board(@hint)
+      guess_sequence
+      @board.create_hint(@guess, @code)
+      @board.display_board
     end
-    @guess == @code ? (puts "Good Job! You win!") : (puts "Sorry, no more guesses!")
+    @guess == @code ? (puts 'Good Job! You win!') : (puts 'Sorry, no more guesses!')
   end
 end
 
