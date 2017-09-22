@@ -13,11 +13,7 @@ class Board
   end
 
   def display_board
-    @board.each_with_index do |row, i|
-      print row
-      print @hints[i]
-      print "\n"
-    end
+    @board.each_with_index { |row, i| print row, @hints[i], "\n" }
   end
 
   def prompt_for_guess
@@ -79,6 +75,8 @@ class Game
     @codemaker = CodeMaker.new
     @codebreaker = CodeBreaker.new
     @board = Board.new
+    @code = @codemaker.code
+    @guess_number = @board.guess_number
   end
 
   def guess_sequence
@@ -88,13 +86,15 @@ class Game
     @board.increment_guess_number
   end
 
+  def update_board
+    @board.create_hint(@guess, @code)
+    @board.display_board
+  end
+
   def play
-    @code = @codemaker.code
-    while @guess != @code && @board.guess_number <= 12
-      p @code
+    while @guess != @code && @guess_number <= 12
       guess_sequence
-      @board.create_hint(@guess, @code)
-      @board.display_board
+      update_board
     end
     @guess == @code ? (puts 'Good Job! You win!') : (puts 'Sorry, no more guesses!')
   end
