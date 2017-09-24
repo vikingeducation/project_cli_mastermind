@@ -1,5 +1,6 @@
 class Board
-  attr_accessor :guess_number
+  attr_accessor :guess_number, :board, :hints
+
   def initialize
     @board = []
     @hints = []
@@ -7,15 +8,15 @@ class Board
   end
 
   def increment_guess_number
-    @guess_number += 1
+    self.guess_number += 1
   end
 
   def display_board
-    @board.each_with_index { |row, i| print row, @hints[i], "\n" }
+    board.each_with_index { |row, i| print row, hints[i], "\n" }
   end
 
   def prompt_for_guess
-    if @guess_number.zero?
+    if guess_number.zero?
       puts '**Welcome to Mastermind!**'
       puts ''
       puts '>>Enter your first guess.'
@@ -28,7 +29,7 @@ class Board
   end
 
   def add_guess(guess)
-    @board << guess
+    board << guess
   end
 
   def create_hint(guess, code)
@@ -40,6 +41,6 @@ class Board
         hint[1] += 1
       end
     end
-    @hints << " Exact matches: #{hint[0]}, Color matches: #{hint[1]}"
+    hints << " Exact matches: #{hint[0]}, Color matches: #{hint[1]}"
   end
 end
