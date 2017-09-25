@@ -13,9 +13,9 @@ class Game
   end
 
   def determine_codemaker
-    puts "Enter 1 if you'd like to be the code maker and 2 
-      if you'd like the computer to be the code maker:"
-    @who_is_codemaker = gets.chomp
+    puts "Enter 1 if you'd like the computer to be the code maker 
+      and 2 if you'd like to be the code maker:"
+    @who_is_codemaker = gets.chomp.to_i
   end
 
   def assign_guess
@@ -35,6 +35,7 @@ class Game
   end
 
   def play
+    codemaker.create_code(determine_codemaker)
     while guess != code && board.guess_number <= 12
       guess_sequence
       update_board
