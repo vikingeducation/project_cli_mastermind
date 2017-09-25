@@ -1,10 +1,10 @@
 class CodeBreaker
-  attr_reader :guess
+  attr_accessor :guess
 
   def make_guess
-    @guess = gets.chomp.upcase.split('')
+    self.guess = gets.chomp.upcase.split('')
     validate_guess
-    @guess
+    guess
   end
 
   def validate_guess
