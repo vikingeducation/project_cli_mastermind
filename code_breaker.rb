@@ -7,6 +7,8 @@ class CodeBreaker
     guess
   end
 
+  private
+
   def validate_guess
     until guess.length == 4 && guess.all? { |peg| PEGS.include?(peg) }
       puts 'Not a valid guess - try again!'

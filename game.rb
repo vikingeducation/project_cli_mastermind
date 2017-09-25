@@ -12,6 +12,12 @@ class Game
     @code = @codemaker.code
   end
 
+  def determine_codemaker
+    puts "Enter 1 if you'd like to be the code maker and 2 
+      if you'd like the computer to be the code maker:"
+    @who_is_codemaker = gets.chomp
+  end
+
   def assign_guess
     @guess = codebreaker.make_guess
   end
