@@ -35,7 +35,7 @@ class Game
   end
 
   def play
-    codemaker.create_code(determine_codemaker)
+    codemaker.create_code(determine_codemaker) 
     while guess != code && board.guess_number <= 12
       guess_sequence
       update_board
