@@ -1,8 +1,6 @@
 require 'pry'
 require_relative 'human_player'
 require_relative 'computer_player'
-require_relative 'code_maker'
-require_relative 'code_breaker'
 require_relative 'board'
 
 class Game
@@ -56,6 +54,6 @@ class Game
       guess_sequence
       update_board
     end
-    #guess == code ? (puts 'Good Job! You win!') : (puts 'Sorry, no more guesses!')
+    guess == code ? (puts 'Good Job! You win!') : (puts 'Sorry, no more guesses!')
   end
 end

@@ -1,4 +1,4 @@
-EGS = %w(R G B Y O T).freeze
+PEGS = %w(R G B Y O T).freeze
 
 class HumanPlayer
   attr_reader :code

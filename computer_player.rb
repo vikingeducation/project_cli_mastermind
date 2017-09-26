@@ -14,6 +14,7 @@ class ComputerPlayer
 
   def make_guess 
     self.guess = []
+    sleep 1.25
     4.times { self.guess << PEGS.sample }
     guess
   end
