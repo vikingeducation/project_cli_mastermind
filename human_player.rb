@@ -1,10 +1,12 @@
 EGS = %w(R G B Y O T).freeze
 
 class HumanPlayer
-  attr_reader :code, :guess
+  attr_reader :code
+  attr_accessor :guess
 
   def initialize
     @code = []
+    @guess = []
   end
 
   def prompt_for_code
