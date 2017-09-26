@@ -1,3 +1,4 @@
+require 'pry'
 require_relative 'human_player'
 require_relative 'computer_player'
 require_relative 'code_maker'
@@ -32,7 +33,7 @@ class Game
   end
 
   def assign_guess
-    @guess = codebreaker.make_guess
+    self.guess = codebreaker.make_guess
   end
 
   def guess_sequence
