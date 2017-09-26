@@ -7,16 +7,12 @@ class Game
   attr_accessor :codemaker, :codebreaker, :board, :code, :guess
   
   def initialize
-    #@codemaker = CodeMaker.new
-    #@codebreaker = CodeBreaker.new
     @board = Board.new
-    #@code = @codemaker.code
   end
 
   def determine_codemaker
     puts "Enter 1 if you'd like the computer to be the code maker 
       and any other character if you'd like to be the code maker:"
-    #@who_is_codemaker = gets.chomp.to_i
     if gets.chomp.to_i == 1
       @codemaker = ComputerPlayer.new
       @codebreaker = HumanPlayer.new
@@ -47,7 +43,6 @@ class Game
   end
 
   def play
-    #codemaker.create_code(determine_codemaker) 
     determine_codemaker
     @code = create_code
     while guess != code && board.guess_number <= 12
